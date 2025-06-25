@@ -28,9 +28,10 @@ export default function AccountingTable() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [flag, setFlag] = useState<boolean>(false);
   const [dataReady, setDataReady] = useState(false);
+  const [honorary, setHonorary] = useState(0);
 
   const [filter, setFilter] = useState<FilterAccounting>({
-    month: new Date().getMonth() + 1, // Months are 0-indexed in JavaScript
+    month: new Date().getMonth() + 1, 
     search: "",
     year: new Date().getFullYear(),
   });
@@ -111,15 +112,15 @@ export default function AccountingTable() {
             <TableHead>
               <TableRow>
                 <TableCell>Razón Social</TableCell>
-                <TableCell align="right">Periodicidad</TableCell>
-                <TableCell align="right">RFC</TableCell>
-                <TableCell align="right">Contraseña</TableCell>
-                <TableCell align="right">Obligaciones</TableCell>
-                <TableCell align="right">Total</TableCell>
-                <TableCell align="right">Cobrado</TableCell>
-                <TableCell align="right">Por Cobrar</TableCell>
-                <TableCell align="right">Fecha de cumplimiento</TableCell>
-                <TableCell align="right">Acciones</TableCell>
+                <TableCell align="center">Periodicidad</TableCell>
+                <TableCell align="center">RFC</TableCell>
+                <TableCell align="center">Contraseña</TableCell>
+                <TableCell align="center">Obligaciones</TableCell>
+                <TableCell align="center">Total</TableCell>
+                <TableCell align="center">Cobrado</TableCell>
+                <TableCell align="center">Por Cobrar</TableCell>
+                <TableCell align="center">Fecha de cumplimiento</TableCell>
+                <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -146,14 +147,14 @@ export default function AccountingTable() {
                   return (
                     <TableRow key={row.id}>
                       <TableCell>{row.customer.socialReason}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         {row.customer.periodicity}
                       </TableCell>
-                      <TableCell align="right">{row.customer.rfc}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">{row.customer.rfc}</TableCell>
+                      <TableCell align="center">
                         {row.customer.password}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         <SelectStatus
                           valorInicial={row.stateObligation}
                           setLoading={setLoading}
@@ -161,15 +162,16 @@ export default function AccountingTable() {
                           id={row.id}
                         />
                       </TableCell>
-                      <TableCell align="right">${row.honorary}</TableCell>
-                      <TableCell align="right">${totalCollected}</TableCell>
-                      <TableCell align="right">${pending}</TableCell>
-                      <TableCell align="right">{formattedDate}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">${row.honorary}</TableCell>
+                      <TableCell align="center">${totalCollected}</TableCell>
+                      <TableCell align="center">${pending}</TableCell>
+                      <TableCell align="center">{formattedDate}</TableCell>
+                      <TableCell align="center">
                         <Button
                           onClick={() => {
                             setOpen(true);
                             setSelectedId(row.id);
+                            setHonorary(pending);
                           }}
                         >
                           <PaymentIcon sx={{ color: "#09356f" }} />
@@ -188,6 +190,7 @@ export default function AccountingTable() {
         open={open}
         flag={flag}
         setFlag={setFlag}
+        honorary={honorary}
       />
     </Box>
   );

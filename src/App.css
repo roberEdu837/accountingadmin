@@ -1,7 +1,20 @@
-
 h4 {
-    color: #09356f;
-    text-align: center;
-    font-size: xx-large;
+  color: #09356f;
+  text-align: center;
+  font-size: xx-large;
 }
 
+th {
+  font-size: 1em;
+  color: #09356f;
+  text-align: left;
+  padding-left: 10px;
+  font-family: Segoe UI, Roboto, Helvetica Neue, sans-serif;
+  font-weight: 400;
+}
+
+thead {
+  font-size: 1.5em;
+  color: #09356f;
+  margin-left: 10px;
+}

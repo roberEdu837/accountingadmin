@@ -10,13 +10,15 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
+import { postClientIsSociety } from "../../services/clientInSociety.service";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  id: number | null;
+  id: number;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
+  honorary: number;
 }
 
 export default function DialogPayments({
@@ -25,16 +27,17 @@ export default function DialogPayments({
   id,
   flag,
   setFlag,
+  honorary,
 }: Props) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <Box sx={{ px: 3, pt: 2 }}>
-      <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#09356f" }}>
-        Registro de Pago de Cliente
-      </h2>
-      <p style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
-        Llena los campos para registrar un pago realizado por un cliente.
-      </p>
+        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#09356f" }}>
+          Registro de Pago de Cliente
+        </h2>
+        <p style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
+          Llena los campos para registrar un pago realizado por un cliente.
+        </p>
       </Box>
 
       <DialogContent>
@@ -44,25 +47,29 @@ export default function DialogPayments({
             amount: Yup.number()
               .typeError("Debe ser un número")
               .required("El monto es requerido")
-              .min(0.01, "Debe ser mayor que 0"),
+              .min(0.01, "Debe ser mayor que 0")
+              .max(honorary, `El monto no debe ser menor o igual al honorario`),
           })}
           onSubmit={async (values, { setSubmitting }) => {
             console.log("Form values:", values, "ID:", id);
             try {
               const payment = {
                 amount: values.amount,
-                monthlyAccountingId: id, // Asegúrate de que 'id' sea el ID correcto
+                monthlyAccountingId: id, 
               };
-              const data = await PostPayment(payment);
-              console.log("Pago enviado:", data);
+              await PostPayment(payment);
+              if (honorary == values.amount) {
+
+                await postClientIsSociety(id);
+              }
               if (setFlag) {
-                setFlag(!flag); // Alterna el estado del flag
+                setFlag(!flag); 
               }
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
             setSubmitting(false);
-            onClose(); // Cierra el diálogo después de enviar
+            onClose();
           }}
         >
           {({
