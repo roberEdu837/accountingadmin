@@ -9,7 +9,6 @@ import {
   InputLabel,
   MenuItem,
   Grid,
-  Box,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -19,6 +18,8 @@ import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
+import DialogMessageBox from "../utils/DialogMessageBox";
+import { customer } from "../../initialValues/customer";
 
 interface Props {
   open: boolean;
@@ -33,60 +34,31 @@ export default function DialogCustomers({
   setFlag,
   flag,
 }: Props) {
-  const today = new Date();
-  const localDate = new Date(
-    today.getTime() - today.getTimezoneOffset() * 60000
-  )
-    .toISOString()
-    .split("T")[0];
-  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
-  // const renewal = new Date(creationDate);
-  today.setFullYear(today.getFullYear() + 4);
-  const formatted = today.toISOString().split("T")[0];
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <Box sx={{ px: 3, pt: 2 }}>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#09356f" }}>
-          Registro de Cliente
-        </h2>
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
-          Llena los campos para agregar un nuevo cliente.
-        </p>
-      </Box>
+      <DialogMessageBox
+        title="Registro de Cliente"
+        subtitle="Llena los campos para agregar un nuevo cliente."
+      />
       <DialogContent>
         <Formik
-          initialValues={{
-            socialReason: "",
-            rfc: "",
-            password: "",
-            honorary: "",
-            periodicity: "",
-            creationDate: localDate,
-            renewalDate: formatted,
-            startOfRelationship: localDate,
-          }}
+          initialValues={customer}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               const {
-                socialReason,
-                rfc,
-                password,
                 honorary,
-                periodicity,
                 creationDate,
                 renewalDate,
                 startOfRelationship,
               } = values;
 
               const customerData: Customer = {
-                socialReason,
-                rfc,
-                password,
-                honorary: parseFloat(honorary), // Asegúrate de que Honorary
-                periodicity,
+                ...values,
+                honorary: parseFloat(honorary),
                 creationDate: new Date(creationDate).toISOString(),
                 renewalDate: new Date(renewalDate).toISOString(),
                 startOfRelationship: new Date(
@@ -99,9 +71,9 @@ export default function DialogCustomers({
               console.error("Error al enviar el formulario:", error);
             }
             setSubmitting(false);
-            if (setFlag) {
-              setFlag(!flag); // Alterna el estado del flag
-            }
+
+            if (setFlag) setFlag(!flag);
+
             ToastNotification(
               `El cliente ${values.socialReason} se creó correctamente`,
               "success"

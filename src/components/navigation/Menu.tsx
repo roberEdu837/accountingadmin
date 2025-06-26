@@ -32,7 +32,6 @@ const navItems = [
 function Menu(props: any) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
- 
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);

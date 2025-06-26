@@ -1,3 +1,5 @@
+import type { PaymentFull } from "./payments";
+
 type Payment = {
   id: number;
   amount: number;
@@ -26,5 +28,5 @@ export type MonthlyAccounting = {
   customerId: number;
   customer: Customer;
   rfcTaxPaymentDate: Date;
-  paymets: Payment[];
+  paymets: PaymentFull[];
 };

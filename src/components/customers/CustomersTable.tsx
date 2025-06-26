@@ -46,24 +46,9 @@ export default function CustomersTable() {
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="caption table">
-            <thead
-              style={{
-                fontSize: "1.5em",
-                color: "#09356f",
-                marginLeft: "10px",
-              }}
-            >
+            <thead>
               <tr>
-                <th
-                  colSpan={9}
-                  style={{
-                    color: "#09356f",
-                    textAlign: "left",
-                    paddingLeft: "10px",
-                    fontFamily: "Segoe UI, Roboto, Helvetica Neue, sans-serif",
-                    fontWeight: "300",
-                  }}
-                >
+                <th colSpan={9}>
                   <Box
                     sx={{
                       margin: 2,
@@ -115,9 +100,7 @@ export default function CustomersTable() {
                         <Button
                           onClick={() => {
                             setOpenEdit(true);
-                            console.log(row, "row");
                             setClient(row);
-                            //setSelectedId(row.id);
                           }}
                         >
                           <EditIcon sx={{ color: "#09356f" }} />

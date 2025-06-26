@@ -20,22 +20,27 @@ import DialogPayments from "../payments/DialogPayments";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import Filter from "../filter/Filter";
 import type { MonthlyAccounting } from "../../@types/customer";
-
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import type { Payment } from "../../@types/paymentPdf";
+import type { PaymentFull } from "../../@types/payments";
+import { getMonthLabel } from "../../utils/formatDate";
+import { statementPdf } from "../../services/payments.service";
 export default function AccountingTable() {
   const [Customers, setCustomers] = useState<MonthlyAccounting[] | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number>(0);
   const [flag, setFlag] = useState<boolean>(false);
   const [dataReady, setDataReady] = useState(false);
   const [honorary, setHonorary] = useState(0);
+  const [payment, setPayment] = useState<Payment[]>([]);
 
   const [filter, setFilter] = useState<FilterAccounting>({
-    month: new Date().getMonth() + 1, 
+    month: new Date().getMonth() + 1,
     search: "",
     year: new Date().getFullYear(),
   });
-  
+
   const CreateAccounting = async () => {
     await createAccounting();
   };
@@ -51,6 +56,15 @@ export default function AccountingTable() {
   useEffect(() => {
     if (dataReady) getCustomers();
   }, [dataReady, filter, loading, flag]);
+
+  const filteredPayments = (row: PaymentFull[]) => {
+    const payments = row.map((p: Payment) => ({
+      paymentDate: p.paymentDate,
+      amount: p.amount,
+    }));
+
+    return payments;
+  };
 
   const getCustomers = async () => {
     try {
@@ -85,27 +99,9 @@ export default function AccountingTable() {
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="caption table">
-            <thead
-              style={{
-                fontSize: "1.5em",
-                color: "#09356f",
-                marginLeft: "10px",
-              }}
-            >
+            <thead>
               <tr>
-                <th
-                  colSpan={9}
-                  style={{
-                    fontSize: "1",
-                    color: "#09356f",
-                    textAlign: "left",
-                    paddingLeft: "10px",
-                    fontFamily: "Segoe UI, Roboto, Helvetica Neue, sans-serif",
-                    fontWeight: "300",
-                  }}
-                >
-                  Contabilidad Mensual
-                </th>
+                <th colSpan={9}>Contabilidad Mensual</th>
               </tr>
             </thead>
 
@@ -120,7 +116,8 @@ export default function AccountingTable() {
                 <TableCell align="center">Cobrado</TableCell>
                 <TableCell align="center">Por Cobrar</TableCell>
                 <TableCell align="center">Fecha de cumplimiento</TableCell>
-                <TableCell align="center">Acciones</TableCell>
+                <TableCell align="center">Pago</TableCell>
+                <TableCell align="center">Estado de cuanta</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -175,6 +172,40 @@ export default function AccountingTable() {
                           }}
                         >
                           <PaymentIcon sx={{ color: "#09356f" }} />
+                        </Button>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          onClick={async () => {
+                            const StatementPdf = {
+                              customerName: row.customer.socialReason,
+                              rfc: row.customer.rfc,
+                              period: getMonthLabel(
+                                row.month,
+                                row.customer.periodicity === "BIMESTRAL"
+                              ),
+                              payments: filteredPayments(row.paymets),
+                            };
+
+                            const response = await statementPdf(StatementPdf);
+
+                            const blob = new Blob([response.data], {
+                              type: "application/pdf",
+                            });
+                            const url = window.URL.createObjectURL(blob);
+
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = "reporte.pdf";
+                            document.body.appendChild(a);
+                            a.click();
+
+                            // Limpieza
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                          }}
+                        >
+                          <PictureAsPdfIcon sx={{ color: "#09356f" }} />
                         </Button>
                       </TableCell>
                     </TableRow>

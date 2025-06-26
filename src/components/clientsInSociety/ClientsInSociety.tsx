@@ -6,41 +6,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import { Box, Chip } from "@mui/material";
+import { Box, Button, Chip } from "@mui/material";
 import { getClientInSociety } from "../../services/clientInSociety.service";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import Filter from "../filter/Filter";
+import DialogClientsInSociety from "./DialogDlientsInSociety";
+import PaymentIcon from "@mui/icons-material/Payment";
+import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
 
-// ✅ Función para mostrar nombre del mes o bimestre
-const getMonthLabel = (month: number, isBimonthly: boolean) => {
-  const months = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
 
-  if (isBimonthly) {
-    const firstIndex = Math.min(month, 12) - 1;
-    const secondIndex = Math.max(month - 1, 1) + 1;
-    return `${months[firstIndex]}/${months[secondIndex]}`;
-  }
-
-  return months[month - 1] || "Mes inválido";
-};
 
 export default function ClientsInSocietyTable() {
   const [flag, setFlag] = useState<boolean>(false);
   const [customers, setCustomers] = useState<any[] | undefined>();
   const [total, setTotal] = useState<number>(0);
+  const [selectedId, setSelectedId] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
     search: "",
@@ -59,17 +41,20 @@ export default function ClientsInSocietyTable() {
 
   useEffect(() => {
     getAccounting();
-  }, [filter]);
+  }, [filter,flag]);
 
   useEffect(() => {
     if (customers) {
       const totalValue = customers.reduce((acc, row) => {
         const associatePayment = (row.monthlyAccounting.honorary / 100) * 30;
+        if(row.status === true){
+          return acc;
+        }
         return acc + associatePayment;
       }, 0);
       setTotal(totalValue);
     }
-  }, [customers]);
+  }, [customers,customers]);
 
   return (
     <Box>
@@ -97,6 +82,8 @@ export default function ClientsInSocietyTable() {
                 <TableCell align="center">Periodicidad</TableCell>
                 <TableCell align="center">Estado</TableCell>
                 <TableCell align="center">Pago Asociados</TableCell>
+                <TableCell align="center">Fecha de Pago</TableCell>
+                <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
 
@@ -122,12 +109,23 @@ export default function ClientsInSocietyTable() {
                       <TableCell align="center">
                         <Chip
                           label={row.status ? "Pagado" : "Por Pagar"}
-                          color={row.status ? "success" : "default"}
+                          color={row.status ? "success" : "warning"}
                           variant="outlined"
                         />
                       </TableCell>
                       <TableCell align="center">
                         ${associatePayment.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">{formatFullDate(row.paymentDate)}</TableCell>
+                      <TableCell align="center">
+                        <Button
+                          onClick={() => {
+                            setOpen(true);
+                            setSelectedId(row.id);
+                          }}
+                        >
+                          <PaymentIcon sx={{ color: "#09356f" }} />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );
@@ -145,9 +143,16 @@ export default function ClientsInSocietyTable() {
             width: "100%",
           }}
         >
-          Total Pago Asociados: ${total.toFixed(2)}
+          Por Pagar: ${total.toFixed(2)}
         </Box>
       </Box>
+      <DialogClientsInSociety
+        id={selectedId}
+        open={open}
+        onClose={() => setOpen(false)}
+        flag={flag}
+        setFlag={setFlag}
+      />
     </Box>
   );
 }
