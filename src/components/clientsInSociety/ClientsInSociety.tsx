@@ -8,13 +8,11 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { Box, Button, Chip } from "@mui/material";
 import { getClientInSociety } from "../../services/clientInSociety.service";
-import type { FilterAccounting } from "../../@types/FilterAccounting";
-import Filter from "../filter/Filter";
 import DialogClientsInSociety from "./DialogDlientsInSociety";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
-
-
+import FilterclientsInSociety from "../filter/FilterclientsInSociety";
+import { useSelector } from "react-redux";
 
 export default function ClientsInSocietyTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -22,16 +20,19 @@ export default function ClientsInSocietyTable() {
   const [total, setTotal] = useState<number>(0);
   const [selectedId, setSelectedId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
-
-  const [filter, setFilter] = useState<FilterAccounting>({
-    month: new Date().getMonth() + 1,
-    search: "",
-    year: new Date().getFullYear(),
-  });
+  const { month, search, year, status } = useSelector(
+    (state: any) => state.filter
+  );
 
   const getAccounting = async () => {
     try {
-      const { data } = await getClientInSociety(filter);
+      console.log(status, "status");
+      const { data } = await getClientInSociety({
+        month,
+        search,
+        year,
+        status
+      });
       setCustomers(data);
       console.log(data);
     } catch (error) {
@@ -41,32 +42,24 @@ export default function ClientsInSocietyTable() {
 
   useEffect(() => {
     getAccounting();
-  }, [filter,flag]);
+  }, [year, month, search, flag,status]);
 
   useEffect(() => {
     if (customers) {
       const totalValue = customers.reduce((acc, row) => {
         const associatePayment = (row.monthlyAccounting.honorary / 100) * 30;
-        if(row.status === true){
+        if (row.status === true) {
           return acc;
         }
         return acc + associatePayment;
       }, 0);
       setTotal(totalValue);
     }
-  }, [customers,customers]);
+  }, [customers, customers]);
 
   return (
     <Box>
-      <Filter
-        year={filter.year}
-        filter={filter}
-        flag={flag}
-        month={filter.month}
-        search={filter.search}
-        setFilter={setFilter}
-        setFlag={setFlag}
-      />
+      <FilterclientsInSociety flag={flag} setFlag={setFlag} />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -116,7 +109,9 @@ export default function ClientsInSocietyTable() {
                       <TableCell align="center">
                         ${associatePayment.toFixed(2)}
                       </TableCell>
-                      <TableCell align="center">{formatFullDate(row.paymentDate)}</TableCell>
+                      <TableCell align="center">
+                        {formatFullDate(row.paymentDate)}
+                      </TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => {

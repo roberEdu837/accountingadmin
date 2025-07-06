@@ -80,7 +80,7 @@ export default function MenuListComposition() {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <Avatar alt={user.email} src="logo" sx={{bgcolor: "#f57c00",}}/>
+          <Avatar alt={user.email} src="logo" sx={{ bgcolor: "#f57c00" }} />
         </IconButton>
         <Popper
           open={open}
@@ -121,20 +121,27 @@ export default function MenuListComposition() {
                   src="use.email"
                 ></Avatar>
 
-                <Typography sx={{ mt: 1, fontWeight: "bold", fontSize: 16 }}>
+                <Typography
+                  sx={{
+                    mt: 1,
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    wordBreak: "break-word",
+                    whiteSpace: "normal",
+                  }}
+                >
                   {user.email}
                 </Typography>
-                <Typography sx={{ fontSize: 13, color: "#bbb" }}>
-                  {user.email}
-                </Typography>
+
                 <ClickAwayListener onClickAway={handleCloseAway}>
                   <MenuList
+                    sx={{ mt: 4 }}
                     autoFocusItem={open}
                     id="composition-menu"
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>Cerrar Sesion</MenuItem>
+                    <MenuItem onClick={handleClose} className="menuItem">Cerrar Sesion</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

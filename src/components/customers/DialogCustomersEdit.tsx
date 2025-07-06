@@ -9,7 +9,6 @@ import {
   InputLabel,
   MenuItem,
   Grid,
-  Box,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -19,6 +18,8 @@ import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
+import DialogMessageBox from "../utils/DialogMessageBox";
+import { months } from "../../constants/month";
 
 interface Props {
   open: boolean;
@@ -41,18 +42,12 @@ export default function DialogCustomersEdit({
   // const renewal = new Date(creationDate);
   today.setFullYear(today.getFullYear() + 4);
 
-  console.log(client, "CLIENTE");
-
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <Box sx={{ px: 3, pt: 2 }}>
-        <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#09356f" }}>
-          Actualización de Cliente
-        </h2>
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
-          Actualiza los datos del cliente.{" "}
-        </p>
-      </Box>
+      <DialogMessageBox
+        title="Actualización de Client"
+        subtitle="Actualiza los datos del cliente."
+      />
       <DialogContent>
         <Formik
           initialValues={{
@@ -71,6 +66,7 @@ export default function DialogCustomersEdit({
             startOfRelationship: client?.startOfRelationship
               ? new Date(client.startOfRelationship).toISOString().split("T")[0]
               : "",
+            month: new Date().getMonth() + 1,
           }}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
@@ -85,6 +81,7 @@ export default function DialogCustomersEdit({
                 renewalDate,
                 startOfRelationship,
                 id,
+                month
               } = values;
 
               const customerData: Customer = {
@@ -98,7 +95,10 @@ export default function DialogCustomersEdit({
                 startOfRelationship: new Date(
                   startOfRelationship
                 ).toISOString(),
+                month
               };
+
+              console.log(values,'CLUB AMERICA')
               const { data } = await patchCustomer(customerData, id);
               console.log("Cliente agregado:", data);
             } catch (error) {
@@ -125,6 +125,29 @@ export default function DialogCustomersEdit({
           }) => (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
+                <Grid size={12}>
+                  <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
+                    <InputLabel id="month-select-label">Mes</InputLabel>
+                    <Select
+                      labelId="month-select-label"
+                      id="month-select"
+                      value={values.month}
+                      label="Mes"
+                      name="month"
+                      onChange={handleChange}
+                      onAbort={handleBlur}
+                      onBlur={handleBlur}
+                    >
+                      {months
+                        .filter((item) => item.value !== 0)
+                        .map((item) => (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
@@ -270,7 +293,7 @@ export default function DialogCustomersEdit({
                 <Button onClick={onClose} color="secondary">
                   Cancelar
                 </Button>
-                <ButtonSubmit text="Agregar Cliente" />
+                <ButtonSubmit text="Actualizar Cliente" />
               </DialogActions>
             </form>
           )}

@@ -1,10 +1,10 @@
 import type { PaymentFull } from "./payments";
 
-type Payment = {
-  id: number;
-  amount: number;
-  monthlyAccountingId: number;
-};
+// type Payment = {
+//   id: number;
+//   amount: number;
+//   monthlyAccountingId: number;
+// };
 
 export type Customer = {
   id?: number;
@@ -17,6 +17,7 @@ export type Customer = {
   creationDate:string;
   renewalDate:string;
   startOfRelationship:string;
+  month?: number
 };
 
 export type MonthlyAccounting = {

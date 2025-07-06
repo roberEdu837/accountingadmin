@@ -1,7 +1,7 @@
-import type { FilterAccounting } from "../@types/FilterAccounting";
 import { axiosInstance } from "../utils/axios";
+import type { FilterState } from "../redux/slices/filterSlice";
 
-export const getClientInSociety = (filter: FilterAccounting) => {
+export const getClientInSociety = (filter: FilterState) => {
   return axiosInstance.post("client-in-societies/search", filter);
 };
 

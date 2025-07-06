@@ -15,5 +15,9 @@ export const getYears = () => {
 };
 
 export const createAccounting = () => {
-    return axiosInstance.post("monthly-accountings")
-}
+  return axiosInstance.post("monthly-accountings");
+};
+
+export const debts = () => {
+  return axiosInstance.get("client-in-societies/associated-debts");
+};

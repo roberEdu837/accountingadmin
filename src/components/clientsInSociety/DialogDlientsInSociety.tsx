@@ -86,7 +86,7 @@ export default function DialogClientsInSociety({
                 <Button onClick={onClose} color="secondary">
                   Cancelar
                 </Button>
-                <ButtonSubmit text="Agregar Cliente" />
+                <ButtonSubmit text="Agregar Pago" />
               </DialogActions>
             </form>
           )}
