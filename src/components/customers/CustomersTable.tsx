@@ -13,6 +13,11 @@ import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DialogCustomersEdit from "./DialogCustomersEdit";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {
+  getDetsAccounting,
+  getPdfAccounting,
+} from "../../services/accounting.service";
 
 export default function CustomersTable() {
   const [Accounting, setCustomers] = useState<Customer[] | undefined>();
@@ -75,7 +80,7 @@ export default function CustomersTable() {
                 <TableCell align="right">Contraseña</TableCell>
                 <TableCell align="right">Estado</TableCell>
                 <TableCell align="right">Honorario</TableCell>
-                <TableCell align="right">Acciones</TableCell>
+                <TableCell align="right">Editar</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -87,7 +92,6 @@ export default function CustomersTable() {
                       <TableCell align="right">{row.periodicity}</TableCell>
                       <TableCell align="right">{row.rfc}</TableCell>
                       <TableCell align="right">{row.password}</TableCell>
-
                       <TableCell align="right">
                         <Chip
                           label={row.status ? "Activo" : "Inactivo"}
@@ -104,6 +108,30 @@ export default function CustomersTable() {
                           }}
                         >
                           <EditIcon sx={{ color: "#09356f" }} />
+                        </Button>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          onClick={async () => {
+                            const { data } = await getDetsAccounting(row.id);
+                            const response = await getPdfAccounting(data);
+                            const blob = new Blob([response.data], {
+                              type: "application/pdf",
+                            });
+                            const url = window.URL.createObjectURL(blob);
+
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = "reporte.pdf";
+                            document.body.appendChild(a);
+                            a.click();
+
+                            // Limpieza
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                          }}
+                        >
+                          <PictureAsPdfIcon sx={{ color: "#09356f" }} />
                         </Button>
                       </TableCell>
                     </TableRow>

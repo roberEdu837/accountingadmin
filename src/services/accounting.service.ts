@@ -21,3 +21,13 @@ export const createAccounting = () => {
 export const debts = () => {
   return axiosInstance.get("client-in-societies/associated-debts");
 };
+
+export const getDetsAccounting = (id: number | undefined) => {
+  return axiosInstance.get(`monthly-accountings/debts/customer/${id}`);
+}
+
+export const getPdfAccounting = (data:any) => {
+ return axiosInstance.post('monthly-accountings/debts',data,{
+  responseType: 'blob', 
+ })
+}
