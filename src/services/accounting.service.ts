@@ -27,6 +27,7 @@ export const getDetsAccounting = (id: number | undefined) => {
 }
 
 export const getPdfAccounting = (data:any) => {
+  
  return axiosInstance.post('monthly-accountings/debts',data,{
   responseType: 'blob', 
  })
