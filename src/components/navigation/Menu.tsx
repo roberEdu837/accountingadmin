@@ -8,82 +8,53 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Toolbar from "@mui/material/Toolbar";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import MenuIcon from "@mui/icons-material/Menu";
-import Logo from "../../../public/Logo.png"; // Adjust the path as necessary
+import Logo from "../../../public/Logo.png";
 import Logout from "./Logout";
+import { navItems } from "../../utils/navItems";
 
 const drawerWidth = 240;
-const navItems = [
-  {
-    label: "Contabilidad",
-    path: "/accounting",
-  },
-  {
-    label: "Clientes",
-    path: "/customers",
-  },
-  {
-    label: "Clientes en Sociedad",
-    path: "/clientsSociety",
-  },
-];
 
 function Menu(props: any) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
+  const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ textAlign: "center", backgroundColor: "#09356f", height: "100vh" }}
+    >
       <Box sx={{ flexGrow: 1, backgroundColor: "#09356f" }}>
         <img
           style={{ width: "100px" }}
           src={Logo}
           alt="Mi Logo"
           className="logo"
+          onClick={() => navigate("/accounting")}
         />
       </Box>
-
       <Divider />
-      <List>
+      <List sx={{ width: "100%", backgroundColor: "#09356f" }}>
         {navItems.map((item) => (
-          <ListItem
-            key={item.label}
-            style={{
-              padding: "10px 20px",
-              margin: "5px 0",
-              borderRadius: "12px",
-              backgroundColor: "#f5f5f5",
-              transition: "background-color 0.3s, transform 0.2s",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#e0e0e0";
-              e.currentTarget.style.transform = "scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#f5f5f5";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <Link
-              to={item.path}
+          <>
+            <ListItem
+              key={item.label}
               style={{
-                textDecoration: "none",
-                color: "#333",
-                fontWeight: "500",
-                fontSize: "1rem",
                 width: "100%",
-                display: "block",
+                backgroundColor: "#09356f",
               }}
             >
-              {item.label}
-            </Link>
-          </ListItem>
+              {item.icon}
+              <Link to={item.path} className="link">
+                {item.label}
+              </Link>
+            </ListItem>
+            <Divider />
+          </>
         ))}
       </List>
     </Box>
@@ -100,26 +71,20 @@ function Menu(props: any) {
         component="nav"
       >
         <Toolbar>
+          <IconButton style={{ color: "white" }} onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <img
               style={{ width: "100px" }}
               src={Logo}
               alt="Mi Logo"
               className="logo"
+              onClick={() => navigate("/accounting")}
             />
           </Box>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            style={{ color: "white" }}
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-         
-          <Logout/>
+
+          <Logout />
         </Toolbar>
       </AppBar>
       <nav>

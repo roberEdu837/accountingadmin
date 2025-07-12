@@ -80,7 +80,11 @@ export default function MenuListComposition() {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <Avatar alt={user.email} src="logo" sx={{ bgcolor: "#f57c00" }} />
+          <Avatar
+            alt={user.email}
+            src="logo"
+            sx={{ bgcolor: "#fff", color: "#09356f", fontSize: "1.1em" }}
+          />
         </IconButton>
         <Popper
           open={open}
@@ -112,7 +116,7 @@ export default function MenuListComposition() {
               >
                 <Avatar
                   sx={{
-                    bgcolor: "#f57c00",
+                    bgcolor: "#09356f",
                     width: 56,
                     height: 56,
                     fontSize: 24,
@@ -130,18 +134,42 @@ export default function MenuListComposition() {
                     whiteSpace: "normal",
                   }}
                 >
+                  {user.name}
+                </Typography>
+                <Typography
+                  sx={{
+                    mt: 1,
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    wordBreak: "break-word",
+                    whiteSpace: "normal",
+                  }}
+                >
                   {user.email}
                 </Typography>
 
                 <ClickAwayListener onClickAway={handleCloseAway}>
                   <MenuList
-                    sx={{ mt: 4 }}
                     autoFocusItem={open}
                     id="composition-menu"
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose} className="menuItem">Cerrar Sesion</MenuItem>
+                    <MenuItem
+                      onClick={handleClose}
+                      className="menuItem"
+                      sx={{
+                        color: "#fff",
+                        fontWeight: "bold",
+                        backgroundColor: "#09356f",
+                        borderRadius: 1,
+                        ":hover": {
+                          color: "#09356f",
+                        },
+                      }}
+                    >
+                      Cerrar Sesion
+                    </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

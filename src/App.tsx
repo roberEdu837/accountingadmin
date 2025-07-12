@@ -16,10 +16,11 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Button,
 } from "@mui/material";
 import { setmonth, setstatus, setyear } from "./redux/slices/filterSlice";
+import LoadingScreen from "./components/utils/LoadingScreen";
+import DialogMessageBox from "./components/utils/DialogMessageBox";
 
 function DeudasChecker() {
   const location = useLocation();
@@ -35,7 +36,6 @@ function DeudasChecker() {
         try {
           const { data } = await debts();
           if (location.pathname !== "/clientsSociety") {
-            
             if (data) {
               setOpen(true);
               dispatch(setmonth(0));
@@ -54,24 +54,36 @@ function DeudasChecker() {
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>¡Tienes deudas!</DialogTitle>
+      <DialogMessageBox
+        title="Tienes Deudas con tus Clientes"
+        subtitle="Se han detectado pagos pendientes con algunos de tus clientes asociados."
+      />
+
       <DialogContent>
         <DialogContentText>
-          Hay deudas pendientes con tus clientes asociados.
+          Te recomendamos regularizar tus deudas lo antes posible.
+          Puedes consultar el detalle y gestionar los pagos a continuación.
         </DialogContentText>
       </DialogContent>
+
       <DialogActions>
+        <Button onClick={() => setOpen(false)} color="secondary">
+          Cancelar
+        </Button>
         <Button
           onClick={() => {
-            
             setOpen(false);
             if (location.pathname !== "/clientsSociety") {
               window.location.href = "/clientsSociety";
             }
           }}
           autoFocus
+          sx={{
+            bgcolor: "#09356f",
+          }}
+          variant="contained"
         >
-          Pagar
+          Ver Deudas
         </Button>
       </DialogActions>
     </Dialog>
@@ -92,7 +104,7 @@ function App() {
   }, [dispatch]);
 
   if (!isInitialized) {
-    return <h1>Cargando...</h1>;
+    return <LoadingScreen />;
   }
 
   return (

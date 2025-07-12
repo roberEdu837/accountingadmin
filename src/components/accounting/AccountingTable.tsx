@@ -20,11 +20,7 @@ import DialogPayments from "../payments/DialogPayments";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import Filter from "../filter/Filter";
 import type { MonthlyAccounting } from "../../@types/customer";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import type { Payment } from "../../@types/paymentPdf";
-import type { PaymentFull } from "../../@types/payments";
-import { getMonthLabel } from "../../utils/formatDate";
-import { statementPdf } from "../../services/payments.service";
+
 export default function AccountingTable() {
   const [Customers, setCustomers] = useState<MonthlyAccounting[] | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +29,6 @@ export default function AccountingTable() {
   const [flag, setFlag] = useState<boolean>(false);
   const [dataReady, setDataReady] = useState(false);
   const [honorary, setHonorary] = useState(0);
-  const [payment, setPayment] = useState<Payment[]>([]);
 
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
@@ -41,9 +36,7 @@ export default function AccountingTable() {
     year: new Date().getFullYear(),
   });
 
-  const CreateAccounting = async () => {
-    await createAccounting();
-  };
+  const CreateAccounting = async () => await createAccounting();
 
   useEffect(() => {
     const init = async () => {
@@ -56,15 +49,6 @@ export default function AccountingTable() {
   useEffect(() => {
     if (dataReady) getCustomers();
   }, [dataReady, filter, loading, flag]);
-
-  const filteredPayments = (row: PaymentFull[]) => {
-    const payments = row.map((p: Payment) => ({
-      paymentDate: p.paymentDate,
-      amount: p.amount,
-    }));
-
-    return payments;
-  };
 
   const getCustomers = async () => {
     try {
@@ -117,7 +101,6 @@ export default function AccountingTable() {
                 <TableCell align="center">Por Cobrar</TableCell>
                 <TableCell align="center">Fecha de cumplimiento</TableCell>
                 <TableCell align="center">Pago</TableCell>
-                <TableCell align="center">Estado de cuanta</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -172,40 +155,6 @@ export default function AccountingTable() {
                           }}
                         >
                           <PaymentIcon sx={{ color: "#09356f" }} />
-                        </Button>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Button
-                          onClick={async () => {
-                            const StatementPdf = {
-                              customerName: row.customer.socialReason,
-                              rfc: row.customer.rfc,
-                              period: getMonthLabel(
-                                row.month,
-                                row.customer.periodicity === "BIMESTRAL"
-                              ),
-                              payments: filteredPayments(row.paymets),
-                            };
-
-                            const response = await statementPdf(StatementPdf);
-
-                            const blob = new Blob([response.data], {
-                              type: "application/pdf",
-                            });
-                            const url = window.URL.createObjectURL(blob);
-
-                            const a = document.createElement("a");
-                            a.href = url;
-                            a.download = "reporte.pdf";
-                            document.body.appendChild(a);
-                            a.click();
-
-                            // Limpieza
-                            a.remove();
-                            window.URL.revokeObjectURL(url);
-                          }}
-                        >
-                          <PictureAsPdfIcon sx={{ color: "#09356f" }} />
                         </Button>
                       </TableCell>
                     </TableRow>

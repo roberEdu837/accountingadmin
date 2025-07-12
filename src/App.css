@@ -18,3 +18,19 @@ thead {
   color: #09356f;
   margin-left: 10px;
 }
+
+.link {
+  text-decoration: none;
+  color: #b0c4d4;
+  font-weight: 300;
+  font-size: 0.9rem;
+  display: block;
+  width: 100%;            
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #dfeffc;
+}
+
+
