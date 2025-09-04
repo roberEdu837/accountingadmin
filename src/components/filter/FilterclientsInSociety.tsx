@@ -15,7 +15,7 @@ import {
   getClientInSociety,
   GetDebtsAssociated,
 } from "../../services/clientInSociety.service";
-import CheckDebts from "../../utils/checkDebts";
+import CheckDebts from "../../utils/CheckDebts";
 
 interface Props {
   setCustomers: any;
