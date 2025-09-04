@@ -1,16 +1,10 @@
 import { Box, Card, Grid, useMediaQuery, useTheme } from "@mui/material";
 import LogoBox from "../../components/Login/LogoBox";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 import RegisterForm from "../../components/Forms/Register/LoginForm";
 
 export default function Register() {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
-  const { isAuthenticated } = useSelector((state: any) => state.user);
-
-  if (isAuthenticated) {
-    return <Navigate to="/accounting" />;
-  }
+  
 
   return (
     <Box
