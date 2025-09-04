@@ -23,7 +23,7 @@ interface Props {
   flag: boolean;
 }
 
-export default function FilterClientsInSociety({ setCustomers, flag }: Props) {
+export default function ClientsInSociety({ setCustomers, flag }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const today = new Date();
 
