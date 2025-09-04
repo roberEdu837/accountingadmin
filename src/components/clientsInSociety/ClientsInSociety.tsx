@@ -14,7 +14,7 @@ import {
 import DialogClientsInSociety from "./DialogDlientsInSociety";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
-import FilterclientsInSociety from "../filter/FilterClientsInSociety";
+import FilterClientsInSociety from "../filter/FilterClientsInSociety";
 
 export default function ClientsInSocietyTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -38,7 +38,7 @@ export default function ClientsInSocietyTable() {
 
   return (
     <>
-      <FilterclientsInSociety flag={flag} setCustomers={setCustomers} />
+      <FilterClientsInSociety flag={flag} setCustomers={setCustomers} />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
           <Table
