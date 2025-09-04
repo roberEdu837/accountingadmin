@@ -17,6 +17,7 @@ import {
 } from "../../services/clientInSociety.service";
 import CheckDebts from "../../utils/CheckDebts";
 
+
 interface Props {
   setCustomers: any;
   flag: boolean;
