@@ -8,5 +8,5 @@ export const customer = {
   periodicity: "",
   creationDate: currentDate(),
   renewalDate: renewalDate(),
-  startOfRelationship: currentDate(),
+  isInSociety: 0
 };

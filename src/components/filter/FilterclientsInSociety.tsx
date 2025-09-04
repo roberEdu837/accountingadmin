@@ -9,51 +9,60 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { months, years } from "../../constants/month";
 import {
-  setmonth,
-  setsearch,
-  setstatus,
-  setyear,
-} from "../../redux/slices/filterSlice";
-import { useEffect } from "react";
+  getClientInSociety,
+  GetDebtsAssociated,
+} from "../../services/clientInSociety.service";
+import CheckDebts from "../../utils/checkDebts";
 
 interface Props {
-  setFlag: (flag: boolean) => void;
+  setCustomers: any;
   flag: boolean;
 }
 
-export default function FilterclientsInSociety({ flag, setFlag }: Props) {
+export default function FilterclientsInSociety({ setCustomers, flag }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+  const today = new Date();
+
+  const [filter, setFilter] = useState({
+    search: "",
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+    status: undefined as boolean | undefined, // equivalente a monthlyPaymentCompleted
+  });
+  const [openDialogDebts, setOpenDialogDebts] = useState(false);
+
+  const getAccounting = async () => {
+    try {
+      const { month, search, year, status } = filter;
+      const { data } = await getClientInSociety({
+        month,
+        search,
+        year,
+        status,
+      });
+      setCustomers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const storedMonth = localStorage.getItem("month");
-    const storedYear = localStorage.getItem("year");
-    const storedSearch = localStorage.getItem("search");
-    const storedStatus = localStorage.getItem("status");
+    getAccounting();
+  }, [filter.year, filter.month, filter.search, filter.status, flag]);
 
-    if (storedMonth) {
-      dispatch(setmonth(parseInt(storedMonth)));
+  const getDebtsAssociated = async () => {
+    const { data } = await GetDebtsAssociated();
+    if (data) {
+      setOpenDialogDebts(true);
     }
-    if (storedYear) {
-      dispatch(setyear(parseInt(storedYear)));
-    }
-    if (storedSearch) {
-      dispatch(setsearch(storedSearch));
-    }
+  };
 
-    if (storedStatus === null || storedStatus === undefined || storedStatus === "undefined") {
-      dispatch(setstatus(undefined));
-    } else {
-      dispatch(setstatus(JSON.parse(storedStatus)));
-    }
-    
-
-  }, []);
-  const { search, year, status } = useSelector(
-    (state: any) => state.filter
-  );
-  const dispatch = useDispatch<any>();
+  useEffect(() => {
+    getDebtsAssociated();
+  },[]);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -63,25 +72,23 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
             fullWidth
             label="Buscar por razón social"
             variant="outlined"
-            value={search}
+            value={filter.search}
             onChange={(e) => {
-              dispatch(setsearch(e.target.value));
-              setFlag(!flag);
+              setFilter({ ...filter, search: e.target.value });
             }}
             sx={{ mt: isMobile ? 2 : 2 }}
           />
         </Grid>
-        {/* <Grid size={isMobile ? 12 : 2}>
+        <Grid size={isMobile ? 12 : 2}>
           <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
             <InputLabel id="month-select-label">Mes</InputLabel>
             <Select
               labelId="month-select-label"
               id="month-select"
-              value={month}
+              value={filter.month}
               label="Mes"
               onChange={(e) => {
-                dispatch(setmonth(e.target.value));
-                setFlag(!flag);
+                setFilter({ ...filter, month: e.target.value });
               }}
             >
               {months.map((item) => {
@@ -89,36 +96,37 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
               })}
             </Select>
           </FormControl>
-        </Grid> */}
+        </Grid>
         <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
           <FormControl fullWidth>
             <InputLabel id="year-select-label">Año</InputLabel>
             <Select
               labelId="year-select-label"
               id="year-select"
-              value={year}
+              value={filter.year}
               label="Año"
               onChange={(e) => {
-                dispatch(setyear(e.target.value));
-                setFlag(!flag);
+                setFilter({ ...filter, year: e.target.value });
               }}
             >
-              <MenuItem value={0}>Todos</MenuItem>
-              <MenuItem value={2025}>2025</MenuItem>
-              <MenuItem value={2026}>2026</MenuItem>
-              <MenuItem value={2027}>2027</MenuItem>
-              <MenuItem value={2028}>2028</MenuItem>
+              {years.map((item) => {
+                return <MenuItem value={item.value}>{item.label}</MenuItem>;
+              })}
             </Select>
           </FormControl>
         </Grid>
         <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
           <FormControl fullWidth>
-            <InputLabel id="status-select-label">Status</InputLabel>
+            <InputLabel id="status-select-label">Estado de pago</InputLabel>
             <Select
               labelId="status-select-label"
               id="status-select"
-              value={status === undefined ? "undefined" : status.toString()}
-              label="Status"
+              value={
+                filter.status === undefined
+                  ? "undefined"
+                  : filter.status.toString()
+              }
+              label="Estado de pago"
               onChange={(e) => {
                 const raw = e.target.value;
 
@@ -131,8 +139,7 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
                   value = true;
                 }
 
-                dispatch(setstatus(value));
-                setFlag(!flag);
+                setFilter({ ...filter, status: value });
               }}
             >
               <MenuItem value={"undefined"}>Todos</MenuItem>
@@ -142,6 +149,12 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
           </FormControl>
         </Grid>
       </Grid>
+      <CheckDebts
+        open={openDialogDebts}
+        setOpen={setOpenDialogDebts}
+        type={1}
+        setFilter={setFilter}
+      />
     </Box>
   );
 }

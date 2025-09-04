@@ -1,8 +1,8 @@
-import type { Customer } from "../@types/customer";
+import type { Customer, FilterCustomer } from "../@types/customer";
 import { axiosInstance } from "../utils/axios";
 
-export const  getCustomers = () => {
-    return axiosInstance.get('/customers');
+export const  getCustomers = (filter: FilterCustomer) => {
+    return axiosInstance.post('/customers/search',filter);
 }
 
 export const getCustomAssociates = () => {

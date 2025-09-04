@@ -1,14 +1,18 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Customer } from "../../@types/customer";
-import { Box, Button, Chip, Tooltip } from "@mui/material";
-import { getCustomers } from "../../services/customer.service";
+import {
+  Box,
+  Chip,
+  Tooltip,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+  IconButton,
+} from "@mui/material";
 import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,26 +22,26 @@ import {
   getDetsAccounting,
   getPdfAccounting,
 } from "../../services/accounting.service";
+import KeyIcon from "@mui/icons-material/Key";
+import DialogCustomersPasswords from "./DialogCustomersPasswords";
+import ModalPasswords from "../public/ModalPasswords";
+import { downloadFileFromBlob } from "./helper";
+import FilterCustomer from "../filter/FilterCustomer";
 
 export default function CustomersTable() {
-  const [Accounting, setCustomers] = useState<Customer[] | undefined>();
+  const [customer, setCustomers] = useState<Customer[]>();
   const [open, setOpen] = useState<boolean>(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [client, setClient] = useState<any>();
+  const [client, setClient] = useState<Customer | undefined>();
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalPwd, setOpenModalPwd] = useState(false);
 
-  const getAccounting = async () => {
-    try {
-      const { data } = await getCustomers();
-      setCustomers(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
 
-  useEffect(() => {
-    getAccounting();
-  }, [flag]);
+  const handleOpenModal = () => setOpenModal(true);
+
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleClickOpen = () => setOpen(true);
 
@@ -46,23 +50,62 @@ export default function CustomersTable() {
     setOpenEdit(false);
   };
 
+  const handleOpenModalPwd = (customer: Customer) => {
+    setCurrentCustomer(customer);
+    setOpenModalPwd(true);
+  };
+
+  const handleCloseModalPwd = () => {
+    setOpenModalPwd(false);
+    setCurrentCustomer(null);
+  };
+
+  const downloadFile = async (id: number | undefined) => {
+    const { data } = await getDetsAccounting(id);
+    const response = await getPdfAccounting(data);
+
+    downloadFileFromBlob(response.data, "EstadoCuenta.pdf");
+  };
+
   return (
     <Box>
+      <FilterCustomer flag={flag} setCustomers={setCustomers} />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="caption table">
+          <Table
+            sx={{
+              minWidth: 650,
+              "& th, & td": {
+                color: "#5d5a5aff",
+                padding: "12px 9px", // menos espacio en celdas
+                fontSize: "0.85rem", // letra más chica
+              },
+              "& th": {
+                fontWeight: 300,
+                fontSize: "0.80rem", // menos grueso el encabezado
+              },
+            }}
+            size="small"
+            aria-label="caption table"
+          >
             <thead>
               <tr>
                 <th colSpan={9}>
                   <Box
                     sx={{
-                      margin: 2,
+                      //margin: 2,
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between", // Para que el texto y el botón estén en los extremos
+                      justifyContent: "space-between",
                     }}
                   >
-                    <span>Clientes</span>
+                    <span
+                      style={{
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      Clientes
+                    </span>
                     <ButtonAdd
                       text="Nuevo Cliente"
                       handleClickOpen={handleClickOpen}
@@ -74,72 +117,77 @@ export default function CustomersTable() {
 
             <TableHead>
               <TableRow>
-                <TableCell>Razón Social</TableCell>
+                <TableCell>Razón social</TableCell>
                 <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">RFC</TableCell>
+                <TableCell align="center">Rfc</TableCell>
                 <TableCell align="center">Contraseña</TableCell>
-                <TableCell align="center">Estatus</TableCell>
+                <TableCell align="center">Estado</TableCell>
                 <TableCell align="center">Honorario</TableCell>
+                <TableCell align="center">En sociedad</TableCell>
                 <TableCell align="center">Opciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {Accounting &&
-                Accounting.map((row) => {
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.socialReason}</TableCell>
-                      <TableCell>{row.periodicity}</TableCell>
-                      <TableCell align="center">{row.rfc}</TableCell>
-                      <TableCell align="center">{row.password}</TableCell>
-                      <TableCell align="center">
-                        <Chip
-                          label={row.status ? "Activo" : "Inactivo"}
-                          color={row.status ? "success" : "default"}
-                          variant="outlined"
-                        />
+              {customer?.map((row) => {
+                return (
+                  <TableRow key={row.id}>
+                    <Tooltip title="Contraseñas">
+                      <TableCell onClick={() => handleOpenModalPwd(row)}>
+                        {row.socialReason.toUpperCase()}
                       </TableCell>
-                      <TableCell align="center">${row.honorary}</TableCell>
-                      <TableCell align="center">
-                        <Tooltip title="Actualizar">
+                    </Tooltip>
+                    <TableCell>{row.periodicity}</TableCell>
+                    <TableCell align="center">{row.rfc}</TableCell>
+                    <TableCell align="center">{row.password}</TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        label={row.status ? "ACTIVO" : "INACTIVO"}
+                        color={row.status ? "success" : "default"}
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell align="center">${row.honorary}</TableCell>
+                    <TableCell align="center">
+                      {row.isInSociety ? "SI" : "NO"}
+                    </TableCell>
 
-                          <Button
-                            onClick={() => {
-                              setOpenEdit(true);
-                              setClient(row);
-                            }}
-                          >
-                            <EditIcon sx={{ color: "#09356f" }} />
-                          </Button>
-                       </Tooltip>
-                       <Tooltip title="Estado de cuenta">
-                        <Button
-                          onClick={async () => {
-                            const { data } = await getDetsAccounting(row.id);
-                            const response = await getPdfAccounting(data);
-                            const blob = new Blob([response.data], {
-                              type: "application/pdf",
-                            });
-                            const url = window.URL.createObjectURL(blob);
-
-                            const a = document.createElement("a");
-                            a.href = url;
-                            a.download = "reporte.pdf";
-                            document.body.appendChild(a);
-                            a.click();
-
-                            // Limpieza
-                            a.remove();
-                            window.URL.revokeObjectURL(url);
+                    <TableCell align="center">
+                      <Tooltip title="Actualizar">
+                        <IconButton
+                          onClick={() => {
+                            setOpenEdit(true);
+                            setClient(row);
                           }}
+                          size="small"
+                        >
+                          <EditIcon sx={{ color: "#09356f" }} />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Estado de cuenta">
+                        <IconButton
+                          onClick={() => downloadFile(row.id)}
+                          size="small"
                         >
                           <PictureAsPdfIcon sx={{ color: "#09356f" }} />
-                        </Button>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Contraseñas">
+                        <IconButton
+                          onClick={() => {
+                            handleOpenModal();
+                            setClient(row);
+                          }}
+                          size="small"
+                        >
+                          <KeyIcon sx={{ color: "#09356f" }} />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -157,6 +205,18 @@ export default function CustomersTable() {
         flag={flag}
         setFlag={setFlag}
         client={client}
+      />
+      <DialogCustomersPasswords
+        onClose={handleCloseModal}
+        open={openModal}
+        customer={client}
+        isEdit={false}
+      />
+
+      <ModalPasswords
+        customer={currentCustomer}
+        handleClose={handleCloseModalPwd}
+        open={openModalPwd}
       />
     </Box>
   );

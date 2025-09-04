@@ -41,8 +41,5 @@ export const validationSchemaClient = Yup.object({
       "La fecha de renovación debe ser posterior a la de creación"
     )
     .typeError("Fecha inválida"),
-
-  startOfRelationship: Yup.date()
-    .required("La fecha de inicio de relación es requerida")
-    .typeError("Fecha inválida"),
+  
 });

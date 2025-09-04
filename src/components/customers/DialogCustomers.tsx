@@ -34,7 +34,6 @@ export default function DialogCustomers({
   setFlag,
   flag,
 }: Props) {
-
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   return (
@@ -49,36 +48,27 @@ export default function DialogCustomers({
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              const {
-                honorary,
-                creationDate,
-                renewalDate,
-                startOfRelationship,
-              } = values;
+              const { honorary, creationDate, renewalDate } = values;
 
               const customerData: Customer = {
                 ...values,
                 honorary: parseFloat(honorary),
                 creationDate: new Date(creationDate).toISOString(),
                 renewalDate: new Date(renewalDate).toISOString(),
-                startOfRelationship: new Date(
-                  startOfRelationship
-                ).toISOString(),
+                isInSociety: values.isInSociety === 0 ? false : true,
               };
               const { data } = await PostCustomer(customerData);
-              console.log("Cliente agregado:", data);
+              ToastNotification(
+                `El cliente ${data.socialReason} se creó correctamente`,
+                "success"
+              );
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
+            } finally {
+              setSubmitting(false);
+              if (setFlag) setFlag(!flag);
+              onClose();
             }
-            setSubmitting(false);
-
-            if (setFlag) setFlag(!flag);
-
-            ToastNotification(
-              `El cliente ${values.socialReason} se creó correctamente`,
-              "success"
-            );
-            onClose();
           }}
         >
           {({
@@ -213,23 +203,24 @@ export default function DialogCustomers({
                     helperText={touched.renewalDate && errors.renewalDate}
                   />
                 </Grid>
-                <Grid size={isMobile ? 12 : 6}>
-                  <TextField
-                    fullWidth
-                    label="Fecha de inicio de relación laboral"
-                    name="startOfRelationship"
-                    variant="outlined"
-                    type="date"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.startOfRelationship}
-                    error={Boolean(
-                      touched.startOfRelationship && errors.startOfRelationship
-                    )}
-                    helperText={
-                      touched.startOfRelationship && errors.startOfRelationship
-                    }
-                  />
+                <Grid  size={isMobile ? 12 : 6}>
+                  <FormControl fullWidth >
+                    <InputLabel id="month-select-label">
+                      ¿Cliente en sociedad?
+                    </InputLabel>
+                    <Select
+                      labelId="month-select-label"
+                      id="month-select"
+                      value={values.isInSociety}
+                      label="¿Cliente en sociedad?"
+                      name="isInSociety"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      <MenuItem value={0}>No</MenuItem>
+                      <MenuItem value={1}>Sí</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>

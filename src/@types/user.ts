@@ -20,3 +20,11 @@ export type UserProp ={
   token: string;
   user: UserLogin;
 }
+
+
+export type Register = {
+  username: string;
+  password: string;
+  email: string;
+  name: string;
+};

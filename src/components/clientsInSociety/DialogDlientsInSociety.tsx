@@ -17,8 +17,8 @@ interface Props {
   open: boolean;
   onClose: () => void;
   id: number;
-  setFlag?: (flag: boolean) => void;
-  flag?: boolean;
+  setFlag: (flag: boolean) => void;
+  flag: boolean;
 }
 export default function DialogClientsInSociety({
   open,

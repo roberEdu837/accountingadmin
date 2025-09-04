@@ -1,53 +1,32 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import { Box, Button, Chip } from "@mui/material";
-import { getClientInSociety } from "../../services/clientInSociety.service";
+import {
+  Box,
+  Button,
+  Chip,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+} from "@mui/material";
 import DialogClientsInSociety from "./DialogDlientsInSociety";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
-import FilterclientsInSociety from "../filter/FilterclientsInSociety";
-import { useSelector } from "react-redux";
+import FilterclientsInSociety from "../filter/FilterClientsInSociety";
 
 export default function ClientsInSocietyTable() {
   const [flag, setFlag] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<any[] | undefined>();
+  const [customers, setCustomers] = useState<any[]>();
   const [total, setTotal] = useState<number>(0);
   const [selectedId, setSelectedId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
-  const { month, search, year, status } = useSelector(
-    (state: any) => state.filter
-  );
-
-  const getAccounting = async () => {
-    try {
-      console.log(status, "status");
-      const { data } = await getClientInSociety({
-        month,
-        search,
-        year,
-        status
-      });
-      setCustomers(data);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getAccounting();
-  }, [year, month, search, flag,status]);
 
   useEffect(() => {
     if (customers) {
       const totalValue = customers.reduce((acc, row) => {
-        const associatePayment = (row.monthlyAccounting.honorary / 100) * 30;
+        const associatePayment = (row.amount / 100) * 30;
         if (row.status === true) {
           return acc;
         }
@@ -56,27 +35,66 @@ export default function ClientsInSocietyTable() {
       setTotal(totalValue);
     }
   }, [customers]);
-console.log(total)
 
   return (
-    <Box>
-      <FilterclientsInSociety flag={flag} setFlag={setFlag} />
+    <>
+      <FilterclientsInSociety flag={flag} setCustomers={setCustomers} />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="caption table">
+          <Table
+            sx={{
+              minWidth: 650,
+              "& th, & td": {
+                color: "#5d5a5aff",
+                padding: "15px 9px", // menos espacio en celdas
+                fontSize: "0.85rem", // letra más chica
+              },
+              "& th": {
+                fontWeight: 300,
+                fontSize: "0.80rem", // menos grueso el encabezado
+              },
+            }}
+            size="small"
+            aria-label="caption table"
+          >
             <thead>
               <tr>
-                <th colSpan={9}>Clientes en Sociedad</th>
+                <th colSpan={9}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      //margin: 2,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      Clientes en Sociedad
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      Adeudo: ${total.toFixed(2)}
+                    </span>
+                  </Box>
+                </th>
               </tr>
             </thead>
             <TableHead>
               <TableRow>
-                <TableCell>Razón Social</TableCell>
+                <TableCell>Razón social</TableCell>
                 <TableCell align="center">Mes</TableCell>
                 <TableCell align="center">Periodicidad</TableCell>
                 <TableCell align="center">Estado</TableCell>
-                <TableCell align="center">Pago Asociados</TableCell>
-                <TableCell align="center">F. de Pago</TableCell>
+                <TableCell align="center">Pago asociados</TableCell>
+                <TableCell align="center">Pago total</TableCell>
+                <TableCell align="center">F. de pago</TableCell>
                 <TableCell align="center">Opciones</TableCell>
               </TableRow>
             </TableHead>
@@ -84,25 +102,24 @@ console.log(total)
             <TableBody>
               {customers &&
                 customers.map((row) => {
-                  const associatePayment =
-                    (row.monthlyAccounting.honorary / 100) * 30;
+                  const associatePayment = (row.amount / 100) * 30;
                   return (
                     <TableRow key={row.id}>
                       <TableCell>
-                        {row.monthlyAccounting.customer.socialReason}
+                        {row.monthlyAccounting.customer.socialReason.toUpperCase()}
                       </TableCell>
                       <TableCell align="center">
                         {getMonthLabel(
                           row.monthlyAccounting.month,
                           row.monthlyAccounting.periodicity === "BIMESTRAL"
-                        )}
+                        ).toUpperCase()}
                       </TableCell>
                       <TableCell align="center">
                         {row.monthlyAccounting.periodicity}
                       </TableCell>
                       <TableCell align="center">
                         <Chip
-                          label={row.status ? "Pagado" : "Por Pagar"}
+                          label={row.status ? "PAGADO" : "POR PAGAR"}
                           color={row.status ? "success" : "warning"}
                           variant="outlined"
                         />
@@ -110,8 +127,9 @@ console.log(total)
                       <TableCell align="center">
                         ${associatePayment.toFixed(2)}
                       </TableCell>
+                      <TableCell align="center">${row.amount}</TableCell>
                       <TableCell align="center">
-                        {formatFullDate(row.paymentDate)}
+                        {formatFullDate(row.paymentDate).toUpperCase()}
                       </TableCell>
                       <TableCell align="center">
                         <Button
@@ -129,18 +147,6 @@ console.log(total)
             </TableBody>
           </Table>
         </TableContainer>
-
-        <Box
-          sx={{
-            marginTop: 2,
-            textAlign: "right",
-            fontSize: "1.2em",
-            color: "#09356f",
-            width: "100%",
-          }}
-        >
-          Adeudo: ${total.toFixed(2)}
-        </Box>
       </Box>
       <DialogClientsInSociety
         id={selectedId}
@@ -149,6 +155,6 @@ console.log(total)
         flag={flag}
         setFlag={setFlag}
       />
-    </Box>
+    </>
   );
 }

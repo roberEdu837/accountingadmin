@@ -60,9 +60,9 @@ export const getMonthLabel = (month: number | any, isBimonthly: boolean) => {
   return months[month - 1] || "Mes inválido";
 };
 
-export const isMarch2025OrLater = (date: string) => {
-  const d = new Date(date);
+// export const isMarch2025OrLater = (date: string) => {
+//   const d = new Date(date);
 
-  const reference = new Date("2025-03-01T00:00:00.000Z");
-  return d >= reference;
-};
+//   const reference = new Date("2025-03-01T00:00:00.000Z");
+//   return d >= reference;
+// };

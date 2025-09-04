@@ -10,9 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
-import { useEffect, useState } from "react";
-import { getYears } from "../../services/accounting.service";
-import { months } from "../../constants/month";
+import { months, years } from "../../constants/month";
 
 interface Props {
   month: number;
@@ -35,17 +33,6 @@ export default function Filter({
 }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
-  const [years, setYears] = useState([]);
-
-  const getYeArs = async () => {
-    const { data } = await getYears();
-    setYears(data);
-  };
-
-  useEffect(() => {
-    getYeArs();
-  }, []);
-
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2}>
@@ -64,13 +51,12 @@ export default function Filter({
         </Grid>
         <Grid size={isMobile ? 12 : 2}>
           <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
-            <InputLabel  id="month-select-label">Mes</InputLabel>
+            <InputLabel id="month-select-label">Mes</InputLabel>
             <Select
               labelId="month-select-label"
               id="month-select"
               value={month}
               label="Mes"
-              
               onChange={(e) => {
                 setFilter({ ...filter, month: e.target.value as number });
                 setFlag(!flag);
@@ -90,15 +76,43 @@ export default function Filter({
               id="month-select"
               value={year}
               label="Año"
-              onClick={getYeArs}
               onChange={(e) => {
                 setFilter({ ...filter, year: e.target.value as number });
                 setFlag(!flag);
               }}
             >
               {years.map((item) => {
-                return <MenuItem value={item}>{item}</MenuItem>;
+                return <MenuItem value={item.value}>{item.label}</MenuItem>;
               })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
+          <FormControl fullWidth>
+            <InputLabel id="status-select-label">Estado de pago</InputLabel>
+            <Select
+              labelId="status-select-label"
+              id="status-select"
+              value={filter.monthlyPaymentCompleted === undefined ? "undefined" : filter.monthlyPaymentCompleted.toString()}
+              label="Estado de pago"
+              onChange={(e) => {
+                const raw = e.target.value;
+
+                let value;
+                if (raw === "undefined") {
+                  value = undefined;
+                } else if (raw === "false") {
+                  value = false;
+                } else if (raw === "true") {
+                  value = true;
+                }
+                setFilter({ ...filter, monthlyPaymentCompleted: value  });
+                setFlag(!flag);
+              }}
+            >
+              <MenuItem value={"undefined"}>Todos</MenuItem>
+              <MenuItem value="false">Por Pagar</MenuItem>
+              <MenuItem value="true">Pagado</MenuItem>
             </Select>
           </FormControl>
         </Grid>

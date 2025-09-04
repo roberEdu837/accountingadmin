@@ -1,11 +1,5 @@
 import type { PaymentFull } from "./payments";
 
-// type Payment = {
-//   id: number;
-//   amount: number;
-//   monthlyAccountingId: number;
-// };
-
 export type Customer = {
   id?: number;
   socialReason: string;
@@ -14,10 +8,10 @@ export type Customer = {
   status?: boolean;
   honorary: number;
   periodicity: string;
-  creationDate:string;
-  renewalDate:string;
-  startOfRelationship:string;
-  month?: number
+  creationDate: string;
+  renewalDate: string;
+  isInSociety: boolean;
+  notificationSent?: boolean;
 };
 
 export type MonthlyAccounting = {
@@ -30,4 +24,11 @@ export type MonthlyAccounting = {
   customer: Customer;
   rfcTaxPaymentDate: Date;
   paymets: PaymentFull[];
+  periodicity: string;
+  isInSociety: boolean;
+};
+
+export type FilterCustomer = {
+  search?: string;
+  isInSociety?: boolean;
 };

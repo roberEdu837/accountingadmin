@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 
-export const ToastNotification = (message: string, type: "success"|"error"|"loading") => {
+export const ToastNotification = (message: string, type: "success"|"error"|"loading"| "warning") => {
 
   if (type === "success") {
     toast.success(message, {
@@ -12,7 +12,7 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
         fontWeight: "normal",
       },
     });
-  } else if (type === "error") {
+  } else if (type === "error" && message !== 'Request failed with status code 422') {
     toast.error(message, {
       duration: 3000,
       position: "bottom-right",
@@ -27,7 +27,17 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
       duration: 3000,
       position: "bottom-right",
       style: {
-        background: "#232323",
+        background: "#232323ff",
+        color: "#FFF",
+        fontWeight: "normal",
+      },
+    });
+  }else if(type === "warning"){
+      toast.error(message, {
+      duration: 5000,
+      position: "bottom-right",
+      style: {
+        background: "#232323ff",
         color: "#FFF",
         fontWeight: "normal",
       },

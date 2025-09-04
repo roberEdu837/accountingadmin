@@ -15,3 +15,7 @@ export const patchClientInSociety = (id: number, paymentDate: Date) => {
     status: true
   });
 };
+
+export const GetDebtsAssociated = () => {
+  return axiosInstance.get("client-in-societies/associated-debts");
+};

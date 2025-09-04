@@ -15,18 +15,19 @@ import {
   useTheme,
 } from "@mui/material";
 import { Formik } from "formik";
-import { login } from "../../../services/user.service";
+import { login, register } from "../../../services/user.service";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
-import { validationSchema } from "../../../validation";
 import Logo from "../../Login/Logo";
 import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
+import ToastNotification from "../../../utils/toast.notification";
+import { validationRegister } from "../../../validation/loginSchema";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
@@ -48,7 +49,8 @@ const LoginForm = () => {
   return (
     <Box
       sx={{
-        height: isMobile ? "100%" : "70vh",
+        minHeight: isMobile ? "100%" : "70vh",
+        height: "auto",
         p: 2,
         display: "flex",
         flexDirection: "column",
@@ -56,30 +58,58 @@ const LoginForm = () => {
       }}
     >
       {isMobile && <Logo />}
-      <Typography variant="h4" sx={{ fontSize: "xx-large", fontWeight: 300 }}>
-        Inicio de Sesión
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: 50,
+          fontSize: "2rem",
+          fontFamily: "'Roboto','Helvetica','Arial',sans-serif",
+          letterSpacing: 1,
+        }}
+      >
+        Registro
       </Typography>
 
       <Formik
         initialValues={{
           email: "",
           password: "",
+          name: "",
+          username: "",
         }}
-        validationSchema={validationSchema}
+        validationSchema={validationRegister}
         onSubmit={async (values, { setSubmitting }) => {
           const { email, password } = values;
 
           try {
-            const { data } = await login(password, email);
-            await dispatch(
-              logIn(data, () => {
-                navigate(`/accounting`, {
-                  replace: true,
-                });
-              })
-            );
-          } catch (error) {
-            console.error("Error al iniciar sesión");
+            const { data: res } = await register(values);
+            if (res) {
+              // Usuario creado correctamente
+              ToastNotification("Usuario creado correctamente.", "success");
+
+              // Sesión iniciada automáticamente y redirigiendo
+              ToastNotification(
+                "Sesión iniciada automáticamente. Serás redirigido...",
+                "success"
+              );
+
+              const { data } = await login(password, email);
+              await dispatch(
+                logIn(data, () => {
+                  navigate(`/accounting`, {
+                    replace: true,
+                  });
+                })
+              );
+            }
+          } catch (error: any) {
+            // Extraemos un mensaje legible
+            const message =
+              error?.response?.data?.message || // si viene de la API
+              error?.message || // si es un Error normal
+              "Ocurrió un error";
+
+            ToastNotification(message, "error"); // cambiar a "error" en lugar de "success"
           }
           setSubmitting(false);
         }}
@@ -97,7 +127,7 @@ const LoginForm = () => {
             <Grid size={12} sx={{ mb: 2 }}>
               <TextField
                 name="email"
-                label="Correo o Usuario"
+                label="Correo"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.email}
@@ -107,6 +137,33 @@ const LoginForm = () => {
                 variant="outlined"
               />
             </Grid>
+            <Grid size={12} sx={{ mb: 2 }}>
+              <TextField
+                name="username"
+                label="Usuario"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.username}
+                error={Boolean(touched.username && errors.username)}
+                helperText={touched.username && errors.username}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid size={12} sx={{ mb: 2 }}>
+              <TextField
+                name="name"
+                label="Nombre"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.name}
+                error={Boolean(touched.name && errors.name)}
+                helperText={touched.name && errors.name}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+
             <Grid size={12}>
               <FormControl variant="outlined" fullWidth>
                 <InputLabel htmlFor="outlined-adornment-password">
@@ -150,7 +207,7 @@ const LoginForm = () => {
             >
               <ButtonSubmit text="Iniciar Sesión" />
             </CardActions>
-            <Grid size={12}>
+             <Grid size={12}>
               <Box
                 sx={{
                   display: "flex",
@@ -160,9 +217,9 @@ const LoginForm = () => {
                 }}
               >
                 <Typography variant="body2">
-                  ¿No tienes cuenta?{" "}
-                  <Link href="/register" underline="hover">
-                    Regístrate
+                  ¿Ya tienes cuenta?{" "}
+                  <Link href="/login" underline="hover">
+                    Inicias Sesión
                   </Link>
                 </Typography>
               </Box>
@@ -173,4 +230,4 @@ const LoginForm = () => {
     </Box>
   );
 };
-export default LoginForm;
+export default RegisterForm;

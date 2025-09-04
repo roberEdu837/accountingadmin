@@ -12,8 +12,8 @@ import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
 import { postClientIsSociety } from "../../services/clientInSociety.service";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import { isMarch2025OrLater } from "../../utils/formatDate";
 import ToastNotification from "../../utils/toast.notification";
+import { patchAccounting } from "../../services/accounting.service";
 
 interface Props {
   open: boolean;
@@ -21,8 +21,8 @@ interface Props {
   id: number;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
-  honorary: number;
-  startOfRelationship: string;
+  debt: number;
+  isInSociety: boolean;
 }
 
 export default function DialogPayments({
@@ -31,8 +31,8 @@ export default function DialogPayments({
   id,
   flag,
   setFlag,
-  honorary,
-  startOfRelationship,
+  debt,
+  isInSociety,
 }: Props) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -51,35 +51,39 @@ export default function DialogPayments({
               .typeError("Debe ser un número")
               .required("El monto es requerido")
               .min(0.01, "Debe ser mayor que 0")
-              .max(honorary, `El monto no debe ser menor o igual al honorario`),
+              .max(debt, `El monto debe ser menor o igual a la deuda`),
             paymentDate: Yup.date()
               .required("La fecha de creación es requerida")
               .typeError("Fecha inválida"),
           })}
           onSubmit={async (values, { setSubmitting }) => {
             try {
+              const { amount, paymentDate } = values;
+
               const payment = {
-                paymentDate: values.paymentDate,
-                amount: values.amount,
+                paymentDate,
+                amount,
                 monthlyAccountingId: id,
               };
-              await PostPayment(payment);
-              if (
-                honorary == values.amount &&
-                isMarch2025OrLater(startOfRelationship)
-              )
-                await postClientIsSociety(id);
 
+              await PostPayment(payment);
+              ToastNotification(`El pago se agregó correctamente`, "success");
+
+              if (debt == amount && isInSociety) {
+                await postClientIsSociety(id);
+                ToastNotification(`Se agregó un registro en Cliente en Sociedad`, "success");
+              }
+              if(debt == amount){
+               await patchAccounting(id,{
+                monthlyPaymentCompleted:true
+               })
+              }
               if (setFlag) setFlag(!flag);
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
             setSubmitting(false);
             onClose();
-            ToastNotification(
-              `El pago se agregó correctamente`,
-              "success"
-            );
           }}
         >
           {({

@@ -19,14 +19,13 @@ import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import { months } from "../../constants/month";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
-  client: Customer;
+  client: Customer | undefined;
 }
 
 export default function DialogCustomersEdit({
@@ -39,7 +38,6 @@ export default function DialogCustomersEdit({
   const today = new Date();
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
-  // const renewal = new Date(creationDate);
   today.setFullYear(today.getFullYear() + 4);
 
   return (
@@ -59,14 +57,11 @@ export default function DialogCustomersEdit({
             periodicity: client?.periodicity || "",
             creationDate: client?.creationDate
               ? new Date(client.creationDate).toISOString().split("T")[0]
-              : "",
+              : new Date(),
             renewalDate: client?.renewalDate
               ? new Date(client.renewalDate).toISOString().split("T")[0]
               : "",
-            startOfRelationship: client?.startOfRelationship
-              ? new Date(client.startOfRelationship).toISOString().split("T")[0]
-              : "",
-            month: new Date().getMonth() + 1,
+            isInSociety: client?.isInSociety === false ? 0 : 1,
           }}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
@@ -79,10 +74,16 @@ export default function DialogCustomersEdit({
                 periodicity,
                 creationDate,
                 renewalDate,
-                startOfRelationship,
+                isInSociety,
                 id,
-                month
               } = values;
+
+              const clientDate = client?.creationDate
+                ? new Date(client.creationDate)
+                : null;
+              const newDate = new Date(creationDate);
+
+              if (!clientDate) return;
 
               const customerData: Customer = {
                 socialReason,
@@ -92,21 +93,18 @@ export default function DialogCustomersEdit({
                 periodicity,
                 creationDate: new Date(creationDate).toISOString(),
                 renewalDate: new Date(renewalDate).toISOString(),
-                startOfRelationship: new Date(
-                  startOfRelationship
-                ).toISOString(),
-                month
+                isInSociety: isInSociety === 0 ? false : true,
+                notificationSent: newDate > clientDate ? false : true,
               };
 
               await patchCustomer(customerData, id);
-              
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
             setSubmitting(false);
-            if (setFlag) {
-              setFlag(!flag);
-            }
+
+            if (setFlag) setFlag(!flag);
+
             ToastNotification(
               `El cliente ${values.socialReason} se actualizó correctamente`,
               "success"
@@ -124,29 +122,6 @@ export default function DialogCustomersEdit({
           }) => (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
-                <Grid size={12}>
-                  <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
-                    <InputLabel id="month-select-label">Mes de implementación</InputLabel>
-                    <Select
-                      labelId="month-select-label"
-                      id="month-select"
-                      value={values.month}
-                      label="Mes de implementación"
-                      name="month"
-                      onChange={handleChange}
-                      onAbort={handleBlur}
-                      onBlur={handleBlur}
-                    >
-                      {months
-                        .filter((item) => item.value !== 0)
-                        .map((item) => (
-                          <MenuItem key={item.value} value={item.value}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
@@ -270,22 +245,23 @@ export default function DialogCustomersEdit({
                   />
                 </Grid>
                 <Grid size={isMobile ? 12 : 6}>
-                  <TextField
-                    fullWidth
-                    label="Fecha de inicio de relación laboral"
-                    name="startOfRelationship"
-                    variant="outlined"
-                    type="date"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.startOfRelationship}
-                    error={Boolean(
-                      touched.startOfRelationship && errors.startOfRelationship
-                    )}
-                    helperText={
-                      touched.startOfRelationship && errors.startOfRelationship
-                    }
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="month-select-label">
+                      ¿Cliente en sociedad?
+                    </InputLabel>
+                    <Select
+                      labelId="month-select-label"
+                      id="month-select"
+                      value={values.isInSociety}
+                      label="¿Cliente en sociedad?"
+                      name="isInSociety"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      <MenuItem value={0}>No</MenuItem>
+                      <MenuItem value={1}>Sí</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
