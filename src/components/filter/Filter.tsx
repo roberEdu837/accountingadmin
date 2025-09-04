@@ -49,7 +49,7 @@ export default function Filter({
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2}>
-        <Grid size={isMobile ? 12 : 2}>
+        <Grid size={isMobile ? 12 : 3}>
           <TextField
             fullWidth
             label="Buscar por razón social"

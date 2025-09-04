@@ -61,7 +61,6 @@ export const setsearch = (search: string) => {
 };
 
 export const setstatus = (status: boolean | undefined | string) => {
-  console.log(status, "statusslice");
   return (dispatch: any) => {
     if (status === undefined || status === null || status === "undefined") {
       localStorage.removeItem("status");

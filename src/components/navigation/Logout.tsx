@@ -104,8 +104,6 @@ export default function MenuListComposition() {
             >
               <Paper
                 sx={{
-                  width: 200,
-                  height: 200,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -168,7 +166,7 @@ export default function MenuListComposition() {
                         },
                       }}
                     >
-                      Cerrar Sesion
+                      Cerrar Sesión
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

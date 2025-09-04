@@ -20,6 +20,7 @@ import DialogPayments from "../payments/DialogPayments";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import Filter from "../filter/Filter";
 import type { MonthlyAccounting } from "../../@types/customer";
+import { getMonthLabel } from "../../utils/formatDate";
 
 export default function AccountingTable() {
   const [Customers, setCustomers] = useState<MonthlyAccounting[] | undefined>();
@@ -29,6 +30,7 @@ export default function AccountingTable() {
   const [flag, setFlag] = useState<boolean>(false);
   const [dataReady, setDataReady] = useState(false);
   const [honorary, setHonorary] = useState(0);
+  const [startOfRelationship, setStartOfRelationship] = useState<any>("");
 
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
@@ -38,11 +40,17 @@ export default function AccountingTable() {
 
   const CreateAccounting = async () => await createAccounting();
 
-  useEffect(() => {
-    const init = async () => {
+  const init = async () => {
+    if (dataReady == false) {
+      console.log("si entra");
       await CreateAccounting();
       setDataReady(true);
-    };
+    } else {
+      console.log("no entra");
+    }
+  };
+
+  useEffect(() => {
     init();
   }, []);
 
@@ -91,15 +99,14 @@ export default function AccountingTable() {
 
             <TableHead>
               <TableRow>
-                <TableCell>Razón Social</TableCell>
+                <TableCell >Razón Social</TableCell>
                 <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">RFC</TableCell>
-                <TableCell align="center">Contraseña</TableCell>
+                <TableCell align="center"> {"Mes"}</TableCell>
                 <TableCell align="center">Obligaciones</TableCell>
-                <TableCell align="center">Total</TableCell>
-                <TableCell align="center">Cobrado</TableCell>
-                <TableCell align="center">Por Cobrar</TableCell>
-                <TableCell align="center">Fecha de cumplimiento</TableCell>
+                <TableCell align="center">F. Cumplimiento</TableCell>
+                <TableCell align="center">Monto</TableCell>
+                <TableCell align="center">Abonado</TableCell>
+                <TableCell align="center">Adeudo</TableCell>
                 <TableCell align="center">Pago</TableCell>
               </TableRow>
             </TableHead>
@@ -130,10 +137,17 @@ export default function AccountingTable() {
                       <TableCell align="center">
                         {row.customer.periodicity}
                       </TableCell>
-                      <TableCell align="center">{row.customer.rfc}</TableCell>
+                      <TableCell align="center">
+                        {getMonthLabel(
+                          row.month,
+                          row.customer.periodicity === "BIMESTRAL"
+                        )}
+                      </TableCell>
+
+                      {/* <TableCell align="center">{row.customer.rfc}</TableCell>
                       <TableCell align="center">
                         {row.customer.password}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="center">
                         <SelectStatus
                           valorInicial={row.stateObligation}
@@ -142,16 +156,19 @@ export default function AccountingTable() {
                           id={row.id}
                         />
                       </TableCell>
+                      <TableCell align="center">{formattedDate}</TableCell>
                       <TableCell align="center">${row.honorary}</TableCell>
                       <TableCell align="center">${totalCollected}</TableCell>
                       <TableCell align="center">${pending}</TableCell>
-                      <TableCell align="center">{formattedDate}</TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => {
                             setOpen(true);
                             setSelectedId(row.id);
                             setHonorary(pending);
+                            setStartOfRelationship(
+                              row.customer.startOfRelationship
+                            );
                           }}
                         >
                           <PaymentIcon sx={{ color: "#09356f" }} />
@@ -171,6 +188,7 @@ export default function AccountingTable() {
         flag={flag}
         setFlag={setFlag}
         honorary={honorary}
+        startOfRelationship={startOfRelationship}
       />
     </Box>
   );

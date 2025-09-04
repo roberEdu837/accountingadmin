@@ -55,14 +55,15 @@ function DeudasChecker() {
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogMessageBox
-        title="Tienes Deudas con tus Clientes"
-        subtitle="Se han detectado pagos pendientes con algunos de tus clientes asociados."
+        title="Revisa tus Pagos con Asociados"
+        subtitle="Tienes clientes en colaboración y es momento de repartir los ingresos."
       />
 
       <DialogContent>
-        <DialogContentText>
-          Te recomendamos regularizar tus deudas lo antes posible.
-          Puedes consultar el detalle y gestionar los pagos a continuación.
+        <DialogContentText sx={{textAlign:'justify'}}>
+          Recuerda que cada mes debes pagar a tus asociados su parte
+          correspondiente por los clientes que comparten. Puedes revisar los
+          detalles y gestionar los pagos a continuación.
         </DialogContentText>
       </DialogContent>
 

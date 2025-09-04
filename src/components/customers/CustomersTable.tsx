@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import type { Customer } from "../../@types/customer";
-import { Box, Button, Chip } from "@mui/material";
+import { Box, Button, Chip, Tooltip } from "@mui/material";
 import { getCustomers } from "../../services/customer.service";
 import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
@@ -62,7 +62,7 @@ export default function CustomersTable() {
                       justifyContent: "space-between", // Para que el texto y el botón estén en los extremos
                     }}
                   >
-                    <span>Contribuyentes</span>
+                    <span>Clientes</span>
                     <ButtonAdd
                       text="Nuevo Cliente"
                       handleClickOpen={handleClickOpen}
@@ -75,12 +75,12 @@ export default function CustomersTable() {
             <TableHead>
               <TableRow>
                 <TableCell>Razón Social</TableCell>
-                <TableCell align="right">Periodicidad</TableCell>
-                <TableCell align="right">RFC</TableCell>
-                <TableCell align="right">Contraseña</TableCell>
-                <TableCell align="right">Estado</TableCell>
-                <TableCell align="right">Honorario</TableCell>
-                <TableCell align="right">Editar</TableCell>
+                <TableCell align="center">Periodicidad</TableCell>
+                <TableCell align="center">RFC</TableCell>
+                <TableCell align="center">Contraseña</TableCell>
+                <TableCell align="center">Estatus</TableCell>
+                <TableCell align="center">Honorario</TableCell>
+                <TableCell align="center">Opciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -89,28 +89,30 @@ export default function CustomersTable() {
                   return (
                     <TableRow key={row.id}>
                       <TableCell>{row.socialReason}</TableCell>
-                      <TableCell align="right">{row.periodicity}</TableCell>
-                      <TableCell align="right">{row.rfc}</TableCell>
-                      <TableCell align="right">{row.password}</TableCell>
-                      <TableCell align="right">
+                      <TableCell>{row.periodicity}</TableCell>
+                      <TableCell align="center">{row.rfc}</TableCell>
+                      <TableCell align="center">{row.password}</TableCell>
+                      <TableCell align="center">
                         <Chip
                           label={row.status ? "Activo" : "Inactivo"}
                           color={row.status ? "success" : "default"}
                           variant="outlined"
                         />
                       </TableCell>
-                      <TableCell align="right">${row.honorary}</TableCell>
-                      <TableCell align="right">
-                        <Button
-                          onClick={() => {
-                            setOpenEdit(true);
-                            setClient(row);
-                          }}
-                        >
-                          <EditIcon sx={{ color: "#09356f" }} />
-                        </Button>
-                      </TableCell>
+                      <TableCell align="center">${row.honorary}</TableCell>
                       <TableCell align="center">
+                        <Tooltip title="Actualizar">
+
+                          <Button
+                            onClick={() => {
+                              setOpenEdit(true);
+                              setClient(row);
+                            }}
+                          >
+                            <EditIcon sx={{ color: "#09356f" }} />
+                          </Button>
+                       </Tooltip>
+                       <Tooltip title="Estado de cuenta">
                         <Button
                           onClick={async () => {
                             const { data } = await getDetsAccounting(row.id);
@@ -133,6 +135,7 @@ export default function CustomersTable() {
                         >
                           <PictureAsPdfIcon sx={{ color: "#09356f" }} />
                         </Button>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   );

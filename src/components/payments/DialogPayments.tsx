@@ -12,6 +12,8 @@ import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
 import { postClientIsSociety } from "../../services/clientInSociety.service";
 import DialogMessageBox from "../utils/DialogMessageBox";
+import { isMarch2025OrLater } from "../../utils/formatDate";
+import ToastNotification from "../../utils/toast.notification";
 
 interface Props {
   open: boolean;
@@ -20,6 +22,7 @@ interface Props {
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
   honorary: number;
+  startOfRelationship: string;
 }
 
 export default function DialogPayments({
@@ -29,6 +32,7 @@ export default function DialogPayments({
   flag,
   setFlag,
   honorary,
+  startOfRelationship,
 }: Props) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -60,14 +64,22 @@ export default function DialogPayments({
                 monthlyAccountingId: id,
               };
               await PostPayment(payment);
-              if (honorary == values.amount) await postClientIsSociety(id);
-             
+              if (
+                honorary == values.amount &&
+                isMarch2025OrLater(startOfRelationship)
+              )
+                await postClientIsSociety(id);
+
               if (setFlag) setFlag(!flag);
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
             setSubmitting(false);
             onClose();
+            ToastNotification(
+              `El pago se agregó correctamente`,
+              "success"
+            );
           }}
         >
           {({

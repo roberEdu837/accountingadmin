@@ -55,7 +55,8 @@ export default function ClientsInSocietyTable() {
       }, 0);
       setTotal(totalValue);
     }
-  }, [customers, customers]);
+  }, [customers]);
+console.log(total)
 
   return (
     <Box>
@@ -65,7 +66,7 @@ export default function ClientsInSocietyTable() {
           <Table sx={{ minWidth: 650 }} aria-label="caption table">
             <thead>
               <tr>
-                <th colSpan={9}>Contribuyentes</th>
+                <th colSpan={9}>Clientes en Sociedad</th>
               </tr>
             </thead>
             <TableHead>
@@ -75,8 +76,8 @@ export default function ClientsInSocietyTable() {
                 <TableCell align="center">Periodicidad</TableCell>
                 <TableCell align="center">Estado</TableCell>
                 <TableCell align="center">Pago Asociados</TableCell>
-                <TableCell align="center">Fecha de Pago</TableCell>
-                <TableCell align="center">Acciones</TableCell>
+                <TableCell align="center">F. de Pago</TableCell>
+                <TableCell align="center">Opciones</TableCell>
               </TableRow>
             </TableHead>
 
@@ -138,7 +139,7 @@ export default function ClientsInSocietyTable() {
             width: "100%",
           }}
         >
-          Por Pagar: ${total.toFixed(2)}
+          Adeudo: ${total.toFixed(2)}
         </Box>
       </Box>
       <DialogClientsInSociety

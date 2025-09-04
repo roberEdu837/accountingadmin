@@ -173,7 +173,7 @@ export default function DialogCustomers({
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
-                    label="Fecha de creación"
+                    label="Fecha de emisión FIEL"
                     name="creationDate"
                     variant="outlined"
                     type="date"
@@ -202,7 +202,7 @@ export default function DialogCustomers({
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
-                    label="Fecha de Renovación"
+                    label="Fecha de actualización FIEL"
                     name="renewalDate"
                     variant="outlined"
                     type="date"

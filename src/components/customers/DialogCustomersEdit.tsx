@@ -45,7 +45,7 @@ export default function DialogCustomersEdit({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
-        title="Actualización de Client"
+        title="Actualización de Cliente"
         subtitle="Actualiza los datos del cliente."
       />
       <DialogContent>
@@ -98,9 +98,8 @@ export default function DialogCustomersEdit({
                 month
               };
 
-              console.log(values,'CLUB AMERICA')
-              const { data } = await patchCustomer(customerData, id);
-              console.log("Cliente agregado:", data);
+              await patchCustomer(customerData, id);
+              
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
@@ -127,12 +126,12 @@ export default function DialogCustomersEdit({
               <Grid container spacing={2}>
                 <Grid size={12}>
                   <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
-                    <InputLabel id="month-select-label">Mes</InputLabel>
+                    <InputLabel id="month-select-label">Mes de implementación</InputLabel>
                     <Select
                       labelId="month-select-label"
                       id="month-select"
                       value={values.month}
-                      label="Mes"
+                      label="Mes de implementación"
                       name="month"
                       onChange={handleChange}
                       onAbort={handleBlur}
@@ -230,7 +229,7 @@ export default function DialogCustomersEdit({
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
-                    label="Fecha de creación"
+                    label="Fecha de emisión FIEL"
                     name="creationDate"
                     variant="outlined"
                     type="date"
@@ -259,7 +258,7 @@ export default function DialogCustomersEdit({
                 <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
-                    label="Fecha de Renovación"
+                    label="Fecha de actualización FIEL"
                     name="renewalDate"
                     variant="outlined"
                     type="date"

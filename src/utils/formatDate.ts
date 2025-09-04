@@ -35,7 +35,7 @@ export const renewalDate = () => {
 };
 
 //Devuel el label para el mes
-export const getMonthLabel = (month: number, isBimonthly: boolean) => {
+export const getMonthLabel = (month: number | any, isBimonthly: boolean) => {
   const months = [
     "Enero",
     "Febrero",
@@ -58,4 +58,11 @@ export const getMonthLabel = (month: number, isBimonthly: boolean) => {
   }
 
   return months[month - 1] || "Mes inválido";
+};
+
+export const isMarch2025OrLater = (date: string) => {
+  const d = new Date(date);
+
+  const reference = new Date("2025-03-01T00:00:00.000Z");
+  return d >= reference;
 };

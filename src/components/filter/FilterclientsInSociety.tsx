@@ -9,7 +9,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { months } from "../../constants/month";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setmonth,
@@ -51,7 +50,7 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
     
 
   }, []);
-  const { month, search, year, status } = useSelector(
+  const { search, year, status } = useSelector(
     (state: any) => state.filter
   );
   const dispatch = useDispatch<any>();
@@ -59,7 +58,7 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2}>
-        <Grid size={isMobile ? 12 : 2}>
+        <Grid size={isMobile ? 12 : 3}>
           <TextField
             fullWidth
             label="Buscar por razón social"
@@ -72,7 +71,7 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
             sx={{ mt: isMobile ? 2 : 2 }}
           />
         </Grid>
-        <Grid size={isMobile ? 12 : 2}>
+        {/* <Grid size={isMobile ? 12 : 2}>
           <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
             <InputLabel id="month-select-label">Mes</InputLabel>
             <Select
@@ -90,7 +89,7 @@ export default function FilterclientsInSociety({ flag, setFlag }: Props) {
               })}
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
           <FormControl fullWidth>
             <InputLabel id="year-select-label">Año</InputLabel>
