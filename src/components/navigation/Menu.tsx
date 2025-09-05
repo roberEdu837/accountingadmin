@@ -26,7 +26,7 @@ function Menu(props: any) {
   const drawer = (
     <Box
       onClick={handleDrawerToggle}
-      sx={{ textAlign: "center", backgroundColor: "#09356f", height: "100vh" }}
+      sx={{ textAlign: "left", backgroundColor: "#09356f", height: "100vh" }}
     >
       <Box sx={{ flexGrow: 1, backgroundColor: "#09356f" }}>
         <img

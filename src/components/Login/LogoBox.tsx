@@ -6,8 +6,8 @@ export default function LogoBox() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: "left",
+        alignItems: "left",
         height: "100%",
         backgroundColor: "#09356f",
       }}

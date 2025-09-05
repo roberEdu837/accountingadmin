@@ -45,11 +45,9 @@ export default function AccountingTable() {
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
   const [openDialogDebts, setOpenDialogDebts] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
-
   const [currentAccounting, setCurrentAccounting] = useState<
     MonthlyAccounting | undefined
   >(undefined);
-
   const [flag, setFlag] = useState(false);
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
@@ -73,7 +71,6 @@ export default function AccountingTable() {
       await createAccounting();
     } catch (err) {
       console.error(err);
-    } finally {
     }
   };
 
@@ -89,7 +86,6 @@ export default function AccountingTable() {
     } catch (err) {
       console.error(err);
       setAccountings([]);
-    } finally {
     }
   };
 
@@ -110,7 +106,7 @@ export default function AccountingTable() {
 
   const HasDebtsAccountings = async () => {
     const { data } = await hasDebtsAccountings();
-    if (data == true) {
+    if (data === true) {
       setOpenDialogDebts(true);
     }
   };
@@ -136,12 +132,14 @@ export default function AccountingTable() {
                 minWidth: 650,
                 "& th, & td": {
                   color: "#5d5a5aff",
-                  padding: "11px 9px", // menos espacio en celdas
-                  fontSize: "0.85rem", // letra más chica
+                  padding: "11px 9px",
+                  fontSize: "0.85rem",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
                 },
                 "& th": {
                   fontWeight: 300,
-                  fontSize: "0.80rem", // menos grueso el encabezado
+                  fontSize: "0.90rem",
                 },
               }}
               size="small"
@@ -149,12 +147,7 @@ export default function AccountingTable() {
             >
               <thead>
                 <tr>
-                  <th
-                    colSpan={9}
-                    style={{
-                      fontSize: "1.5rem",
-                    }}
-                  >
+                  <th colSpan={10} style={{ fontSize: "1.5rem" }}>
                     Contabilidad Mensual
                   </th>
                 </tr>
@@ -175,28 +168,20 @@ export default function AccountingTable() {
               </TableHead>
               <TableBody>
                 {accountings.map((row) => {
-                  
                   const pending = row.honorary - totalPaid(row);
-              
                   return (
                     <TableRow key={row.id}>
                       <Tooltip title="Contraseñas">
                         <TableCell
                           onClick={() => handleOpenModal(row.customer)}
+                          sx={{ maxWidth: 200 }}
                         >
-                          {row.customer?.socialReason.toUpperCase() || "-"}
+                          {row.customer?.socialReason.toUpperCase()}
                         </TableCell>
                       </Tooltip>
-                      <TableCell align="center">
-                        {row.periodicity || "-"}
-                      </TableCell>
-                      <TableCell align="center">
-                        {getMonthLabel(
-                          row.month,
-                          row.periodicity === "BIMESTRAL"
-                        ).toUpperCase()}
-                      </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">{row.periodicity}</TableCell>
+                      <TableCell align="center">{getMonthLabel(row)}</TableCell>
+                      <TableCell align="left">
                         <SelectStatus
                           valorInicial={row.stateObligation}
                           setFlag={setFlag}
@@ -204,11 +189,11 @@ export default function AccountingTable() {
                           id={row.id}
                         />
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         {formatDate(row.rfcTaxPaymentDate)}
                       </TableCell>
-                      <TableCell align="center">${row.honorary}</TableCell>
-                      <TableCell align="center">${totalPaid(row)}</TableCell>
+                      <TableCell align="left">${row.honorary}</TableCell>
+                      <TableCell align="left">${totalPaid(row)}</TableCell>
                       <TableCell align="center">
                         {pending === 0 ? (
                           <Chip
@@ -223,8 +208,8 @@ export default function AccountingTable() {
                       </TableCell>
                       <TableCell align="center">
                         {row.isInSociety ? "SI" : "NO"}
-                      </TableCell>{" "}
-                      <TableCell align="center">
+                      </TableCell>
+                      <TableCell align="left">
                         <Tooltip title="Actualizar">
                           <IconButton onClick={() => handleEditClient(row)}>
                             <EditIcon sx={{ color: "#09356f" }} />
@@ -313,6 +298,7 @@ export default function AccountingTable() {
         setFlag={setFlag}
         open={openDialogUpdate}
       />
+
       <CheckDebts
         open={openDialogDebts}
         setOpen={setOpenDialogDebts}

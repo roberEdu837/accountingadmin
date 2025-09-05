@@ -64,9 +64,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
               <TableHead>
                 <TableRow>
                   <TableCell>Sistema</TableCell>
-                  <TableCell align="center">Usuario</TableCell>
-                  <TableCell align="center">Contraseña</TableCell>
-                  <TableCell align="center">Acciones</TableCell>
+                  <TableCell align="left">Usuario</TableCell>
+                  <TableCell align="left">Contraseña</TableCell>
+                  <TableCell align="left">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -78,9 +78,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
                     <TableCell component="th" scope="row">
                       {row.systemName}
                     </TableCell>
-                    <TableCell align="center">{row.accessKey}</TableCell>
-                    <TableCell align="center">{row.password}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">{row.accessKey}</TableCell>
+                    <TableCell align="left">{row.password}</TableCell>
+                    <TableCell align="left">
                       <Tooltip title="Editar">
                         <Button>
                           <EditIcon sx={{ color: "#09356f" }} />
@@ -105,9 +105,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
               <TableHead>
                 <TableRow>
                   <TableCell>Sistema</TableCell>
-                  <TableCell align="center">Usuario</TableCell>
-                  <TableCell align="center">Contraseña</TableCell>
-                  <TableCell align="center">Acciones</TableCell>
+                  <TableCell align="left">Usuario</TableCell>
+                  <TableCell align="left">Contraseña</TableCell>
+                  <TableCell align="left">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -119,9 +119,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
                     <TableCell component="th" scope="row">
                       {row.systemName}
                     </TableCell>
-                    <TableCell align="center">{row.accessKey}</TableCell>
-                    <TableCell align="center">{row.password}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">{row.accessKey}</TableCell>
+                    <TableCell align="left">{row.password}</TableCell>
+                    <TableCell align="left">
                       <Tooltip title="Editar">
                         <Button
                           onClick={() => {

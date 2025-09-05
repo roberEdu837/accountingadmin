@@ -10,8 +10,8 @@ export default function Register() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: "left",
+        alignItems: "left",
         height: "100vh",
         p: 2,
       }}

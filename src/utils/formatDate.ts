@@ -1,3 +1,5 @@
+import type { MonthlyAccounting } from "../@types/customer";
+
 //Retorna la fecha con formaro => miércoles, 25 de junio de 2025
 export function formatFullDate(fechaISO: string, locale = "es-MX"): string {
   if (!fechaISO) {
@@ -35,7 +37,10 @@ export const renewalDate = () => {
 };
 
 //Devuel el label para el mes
-export const getMonthLabel = (month: number | any, isBimonthly: boolean) => {
+export const getMonthLabel = (accounting: MonthlyAccounting) => {
+  const { month, periodicity } = accounting;
+  const isBimonthly = periodicity === "BIMESTRAL";
+  
   const months = [
     "Enero",
     "Febrero",
@@ -54,10 +59,10 @@ export const getMonthLabel = (month: number | any, isBimonthly: boolean) => {
   if (isBimonthly) {
     const firstIndex = Math.min(month, 12) - 1;
     const secondIndex = Math.max(month - 1, 1) + 1;
-    return `${months[firstIndex]}/${months[secondIndex]}`;
+    return `${months[firstIndex]}/${months[secondIndex]}`.toUpperCase();
   }
 
-  return months[month - 1] || "Mes inválido";
+  return months[month - 1].toUpperCase() || "Mes inválido";
 };
 
 export const  formatDate =(dateString: Date): string  =>{

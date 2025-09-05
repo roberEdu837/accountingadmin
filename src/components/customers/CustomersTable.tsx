@@ -95,7 +95,7 @@ export default function CustomersTable() {
                     sx={{
                       //margin: 2,
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "left",
                       justifyContent: "space-between",
                     }}
                   >
@@ -118,13 +118,13 @@ export default function CustomersTable() {
             <TableHead>
               <TableRow>
                 <TableCell>Razón social</TableCell>
-                <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">Rfc</TableCell>
-                <TableCell align="center">Contraseña</TableCell>
-                <TableCell align="center">Estado</TableCell>
-                <TableCell align="center">Honorario</TableCell>
-                <TableCell align="center">En sociedad</TableCell>
-                <TableCell align="center">Opciones</TableCell>
+                <TableCell align="left">Periodicidad</TableCell>
+                <TableCell align="left">Rfc</TableCell>
+                <TableCell align="left">Contraseña</TableCell>
+                <TableCell align="left">Estado</TableCell>
+                <TableCell align="left">Honorario</TableCell>
+                <TableCell align="left">En sociedad</TableCell>
+                <TableCell align="left">Opciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -137,21 +137,21 @@ export default function CustomersTable() {
                       </TableCell>
                     </Tooltip>
                     <TableCell>{row.periodicity}</TableCell>
-                    <TableCell align="center">{row.rfc}</TableCell>
-                    <TableCell align="center">{row.password}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">{row.rfc}</TableCell>
+                    <TableCell align="left">{row.password}</TableCell>
+                    <TableCell align="left">
                       <Chip
                         label={row.status ? "ACTIVO" : "INACTIVO"}
                         color={row.status ? "success" : "default"}
                         variant="outlined"
                       />
                     </TableCell>
-                    <TableCell align="center">${row.honorary}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">${row.honorary}</TableCell>
+                    <TableCell align="left">
                       {row.isInSociety ? "SI" : "NO"}
                     </TableCell>
 
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Tooltip title="Actualizar">
                         <IconButton
                           onClick={() => {

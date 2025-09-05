@@ -63,7 +63,7 @@ export default function ClientsInSocietyTable() {
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "left",
                       justifyContent: "space-between",
                       //margin: 2,
                     }}
@@ -89,13 +89,13 @@ export default function ClientsInSocietyTable() {
             <TableHead>
               <TableRow>
                 <TableCell>Razón social</TableCell>
-                <TableCell align="center">Mes</TableCell>
-                <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">Estado</TableCell>
-                <TableCell align="center">Pago asociados</TableCell>
-                <TableCell align="center">Pago total</TableCell>
-                <TableCell align="center">F. de pago</TableCell>
-                <TableCell align="center">Opciones</TableCell>
+                <TableCell align="left">Mes</TableCell>
+                <TableCell align="left">Periodicidad</TableCell>
+                <TableCell align="left">Estado</TableCell>
+                <TableCell align="left">Pago asociados</TableCell>
+                <TableCell align="left">Pago total</TableCell>
+                <TableCell align="left">F. de pago</TableCell>
+                <TableCell align="left">Opciones</TableCell>
               </TableRow>
             </TableHead>
 
@@ -108,30 +108,30 @@ export default function ClientsInSocietyTable() {
                       <TableCell>
                         {row.monthlyAccounting.customer.socialReason.toUpperCase()}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         {getMonthLabel(
                           row.monthlyAccounting.month,
                           row.monthlyAccounting.periodicity === "BIMESTRAL"
                         ).toUpperCase()}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         {row.monthlyAccounting.periodicity}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         <Chip
                           label={row.status ? "PAGADO" : "POR PAGAR"}
                           color={row.status ? "success" : "warning"}
                           variant="outlined"
                         />
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         ${associatePayment.toFixed(2)}
                       </TableCell>
-                      <TableCell align="center">${row.amount}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">${row.amount}</TableCell>
+                      <TableCell align="left">
                         {formatFullDate(row.paymentDate).toUpperCase()}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         <Button
                           onClick={() => {
                             setOpen(true);
