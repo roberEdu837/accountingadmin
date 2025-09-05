@@ -179,7 +179,7 @@ export default function AccountingTable() {
                   <TableCell align="center">Monto</TableCell>
                   <TableCell align="center">Abonado</TableCell>
                   <TableCell align="center">Adeudo</TableCell>
-                  <TableCell align="center">En Sociedad</TableCell>
+                  <TableCell align="center">En sociedad</TableCell>
                   <TableCell align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
