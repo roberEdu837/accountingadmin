@@ -13,25 +13,20 @@ import type { FilterAccounting } from "../../@types/FilterAccounting";
 import { months, years } from "../../constants/month";
 
 interface Props {
-  month: number;
-  search: string;
+  
   setFilter: (filter: FilterAccounting) => void;
   setFlag: (flag: boolean) => void;
   filter: FilterAccounting;
   flag: boolean;
-  year: number;
 }
 
 export default function Filter({
-  month,
-  search,
   filter,
   flag,
   setFilter,
-  setFlag,
-  year,
-}: Props) {
+  setFlag}: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+  const { month, search, year } = filter;
 
   return (
     <Box sx={{ padding: 2 }}>

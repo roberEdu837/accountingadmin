@@ -60,9 +60,15 @@ export const getMonthLabel = (month: number | any, isBimonthly: boolean) => {
   return months[month - 1] || "Mes inválido";
 };
 
-// export const isMarch2025OrLater = (date: string) => {
-//   const d = new Date(date);
+export const  formatDate =(dateString: Date): string  =>{
+  if (!dateString) return "-";
 
-//   const reference = new Date("2025-03-01T00:00:00.000Z");
-//   return d >= reference;
-// };
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "-"; 
+
+  return date.toLocaleDateString("es-MX", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).toUpperCase();
+}

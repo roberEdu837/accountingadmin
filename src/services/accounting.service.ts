@@ -6,7 +6,7 @@ export const patchAccounting = (id: number, data: PatchAccounting) => {
   return axiosInstance.patch(`/monthly-accountings/${id}`, data);
 };
 
-export const getAccounting = (filter: FilterAccounting) => {
+export const getaccounting = (filter: FilterAccounting) => {
   return axiosInstance.post(`/monthly-accountings/search`, filter);
 };
 

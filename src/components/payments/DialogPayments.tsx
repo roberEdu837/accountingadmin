@@ -5,25 +5,24 @@ import {
   DialogActions,
   TextField,
   Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
 import { postClientIsSociety } from "../../services/clientInSociety.service";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import ToastNotification from "../../utils/toast.notification";
 import { patchAccounting } from "../../services/accounting.service";
-
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  id: number;
-  setFlag?: (flag: boolean) => void;
-  flag?: boolean;
-  debt: number;
-  isInSociety: boolean;
-}
+import {
+  getPaymentSchema,
+  getInitialValues,
+  type Props,
+} from "../../formConfig";
 
 export default function DialogPayments({
   onClose,
@@ -34,56 +33,55 @@ export default function DialogPayments({
   debt,
   isInSociety,
 }: Props) {
+  const handlePostPayment = async (values: any) => {
+    await PostPayment(values);
+    ToastNotification(`El pago se agregó correctamente`, "success");
+  };
+
+  const handlePostClientInSociety = async (id: number) => {
+    await postClientIsSociety(id);
+    ToastNotification(
+      `Se agregó un registro en Cliente en Sociedad`,
+      "success"
+    );
+  };
+
+  const handlePatchAccounting = async (id: number) => {
+    await patchAccounting(id, {
+      monthlyPaymentCompleted: true,
+    });
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogMessageBox
-        title="Registro de Pago de Cliente"
-        subtitle="  Llena los campos para registrar un pago realizado por un cliente."
+        title="Pago de cliente"
+        subtitle="Registra un nuevo pago realizado por el cliente."
       />
       <DialogContent>
         <Formik
-          initialValues={{
-            amount: 0,
-            paymentDate: new Date().toISOString().split("T")[0],
-          }}
-          validationSchema={Yup.object({
-            amount: Yup.number()
-              .typeError("Debe ser un número")
-              .required("El monto es requerido")
-              .min(0.01, "Debe ser mayor que 0")
-              .max(debt, `El monto debe ser menor o igual a la deuda`),
-            paymentDate: Yup.date()
-              .required("La fecha de creación es requerida")
-              .typeError("Fecha inválida"),
-          })}
+          initialValues={getInitialValues(id)}
+          validationSchema={getPaymentSchema(debt)}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              const { amount, paymentDate } = values;
+              const { amount } = values;
+              await handlePostPayment(values); // 1. Guardar pago
 
-              const payment = {
-                paymentDate,
-                amount,
-                monthlyAccountingId: id,
-              };
-
-              await PostPayment(payment);
-              ToastNotification(`El pago se agregó correctamente`, "success");
-
-              if (debt == amount && isInSociety) {
-                await postClientIsSociety(id);
-                ToastNotification(`Se agregó un registro en Cliente en Sociedad`, "success");
+              if (debt === amount && isInSociety) {
+                await handlePostClientInSociety(id); // 2. Cliente en sociedad
               }
-              if(debt == amount){
-               await patchAccounting(id,{
-                monthlyPaymentCompleted:true
-               })
+
+              if (debt === amount) {
+                await handlePatchAccounting(id); // 3. Contabilidad completada
               }
-              if (setFlag) setFlag(!flag);
+
+              if (setFlag) setFlag(!flag); // 4. Actualizar flag
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
+            } finally {
+              setSubmitting(false);
+              onClose();
             }
-            setSubmitting(false);
-            onClose();
           }}
         >
           {({
@@ -102,7 +100,6 @@ export default function DialogPayments({
                     margin="dense"
                     label="Monto"
                     name="amount"
-                    variant="outlined"
                     type="number"
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -122,7 +119,38 @@ export default function DialogPayments({
                     value={values.paymentDate}
                     error={Boolean(touched.paymentDate && errors.paymentDate)}
                     helperText={touched.paymentDate && errors.paymentDate}
+                    slotProps={{
+                      inputLabel: { shrink: true }, 
+                    }}
                   />
+                </Grid>
+                <Grid size={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="month-select-label">
+                      Método de Pago
+                    </InputLabel>
+                    <Select
+                      labelId="month-select-label"
+                      id="month-select"
+                      value={values.paymentMethod}
+                      label="Método de Pago"
+                      name="paymentMethod"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={Boolean(
+                        touched.paymentMethod && errors.paymentMethod
+                      )}
+                    >
+                      <MenuItem value={0}>Efectivo</MenuItem>
+                      <MenuItem value={1}>Transferencia</MenuItem>
+                      <MenuItem value={2}>Retiro sin tarjeta</MenuItem>
+                    </Select>
+                    {touched.paymentMethod && errors.paymentMethod && (
+                      <FormHelperText sx={{ color: "#d32f2f" }}>
+                        {errors.paymentMethod}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>

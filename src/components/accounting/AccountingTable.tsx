@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   createAccounting,
-  getAccounting,
+  getaccounting,
   hasDebtsAccountings,
 } from "../../services/accounting.service";
 import {
@@ -14,21 +14,24 @@ import {
   TableRow,
   Paper,
   Tooltip,
-  Typography,
   Chip,
   IconButton,
 } from "@mui/material";
 import SelectStatus from "./SelectStatus";
+import AddIcon from "@mui/icons-material/Add";
 import PaymentIcon from "@mui/icons-material/Payment";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DialogPayments from "../payments/DialogPayments";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import Filter from "../filter/Filter";
 import type { Customer, MonthlyAccounting } from "../../@types/customer";
-import { getMonthLabel } from "../../utils/formatDate";
+import { formatDate, getMonthLabel } from "../../utils/formatDate";
 import ModalPasswords from "../public/ModalPasswords";
 import DialogAccountingEdit from "./DialogAccountingEdit";
 import CheckDebts from "../../utils/CheckDebts";
+import IconWithBadge from "../utils/IconWithBadge";
+import { totalPaid } from "../../utils";
 
 export default function AccountingTable() {
   const [accountings, setAccountings] = useState<
@@ -42,12 +45,12 @@ export default function AccountingTable() {
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
   const [openDialogDebts, setOpenDialogDebts] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
+
   const [currentAccounting, setCurrentAccounting] = useState<
     MonthlyAccounting | undefined
   >(undefined);
 
   const [flag, setFlag] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
     search: "",
@@ -68,18 +71,15 @@ export default function AccountingTable() {
   const init = async () => {
     try {
       await createAccounting();
-      await fetchCustomers();
     } catch (err) {
       console.error(err);
-      setError("Error al inicializar la contabilidad");
     } finally {
     }
   };
 
-  const fetchCustomers = async () => {
+  const getAccounting = async () => {
     try {
-      setError(null);
-      const { data } = await getAccounting(filter);
+      const { data } = await getaccounting(filter);
       const ordered = data.sort(
         (a: MonthlyAccounting, b: MonthlyAccounting) =>
           (a.stateObligation === "REALIZADO" ? 1 : 0) -
@@ -88,7 +88,6 @@ export default function AccountingTable() {
       setAccountings(ordered);
     } catch (err) {
       console.error(err);
-      setError("Error al cargar clientes");
       setAccountings([]);
     } finally {
     }
@@ -99,7 +98,7 @@ export default function AccountingTable() {
   }, []);
 
   useEffect(() => {
-    fetchCustomers();
+    getAccounting();
   }, [filter, flag]);
 
   const handleEditClient = (row: MonthlyAccounting) => {
@@ -123,22 +122,13 @@ export default function AccountingTable() {
   return (
     <Box>
       <Filter
-        year={filter.year}
-        filter={filter}
         flag={flag}
-        month={filter.month}
-        search={filter.search}
-        setFilter={setFilter}
         setFlag={setFlag}
+        setFilter={setFilter}
+        filter={filter}
       />
 
       <Box sx={{ padding: 2 }}>
-        {error && (
-          <Typography color="error" sx={{ mb: 2 }}>
-            {error}
-          </Typography>
-        )}
-
         {accountings && (
           <TableContainer component={Paper}>
             <Table
@@ -151,7 +141,7 @@ export default function AccountingTable() {
                 },
                 "& th": {
                   fontWeight: 300,
-                  fontSize:"0.80rem" // menos grueso el encabezado
+                  fontSize: "0.80rem", // menos grueso el encabezado
                 },
               }}
               size="small"
@@ -185,23 +175,9 @@ export default function AccountingTable() {
               </TableHead>
               <TableBody>
                 {accountings.map((row) => {
-                  const totalCollected =
-                    row.paymets?.reduce(
-                      (acc, payment) => acc + payment.amount,
-                      0
-                    ) || 0;
-                  const pending = row.honorary - totalCollected;
-                  const formattedDate = row.rfcTaxPaymentDate
-                    ? new Date(row.rfcTaxPaymentDate).toLocaleDateString(
-                        "es-MX",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )
-                    : "-";
-
+                  
+                  const pending = row.honorary - totalPaid(row);
+              
                   return (
                     <TableRow key={row.id}>
                       <Tooltip title="Contraseñas">
@@ -228,9 +204,11 @@ export default function AccountingTable() {
                           id={row.id}
                         />
                       </TableCell>
-                      <TableCell align="center">{formattedDate.toUpperCase()}</TableCell>
+                      <TableCell align="center">
+                        {formatDate(row.rfcTaxPaymentDate)}
+                      </TableCell>
                       <TableCell align="center">${row.honorary}</TableCell>
-                      <TableCell align="center">${totalCollected}</TableCell>
+                      <TableCell align="center">${totalPaid(row)}</TableCell>
                       <TableCell align="center">
                         {pending === 0 ? (
                           <Chip
@@ -261,7 +239,41 @@ export default function AccountingTable() {
                               setOpenPayment(true);
                             }}
                           >
-                            <PaymentIcon sx={{ color: "#09356f" }} />
+                            <IconWithBadge
+                              parentIcon={
+                                <PaymentIcon
+                                  sx={{ color: "#09356f", fontSize: "1.8rem" }}
+                                />
+                              }
+                              childIcon={
+                                <AddIcon
+                                  sx={{ color: "#09356f", fontSize: "1rem" }}
+                                />
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Ver pagos">
+                          <IconButton
+                            onClick={() => {
+                              setSelectedId(row.id);
+                              setDebt(pending);
+                              setIsInSociety(row.isInSociety);
+                              setOpenPayment(true);
+                            }}
+                          >
+                            <IconWithBadge
+                              parentIcon={
+                                <PaymentIcon
+                                  sx={{ color: "#09356f", fontSize: "1.8rem" }}
+                                />
+                              }
+                              childIcon={
+                                <VisibilityIcon
+                                  sx={{ color: "#09356f", fontSize: "1rem" }}
+                                />
+                              }
+                            />
                           </IconButton>
                         </Tooltip>
                       </TableCell>

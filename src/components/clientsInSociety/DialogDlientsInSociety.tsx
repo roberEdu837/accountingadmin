@@ -9,7 +9,7 @@ import {
 import { Formik } from "formik";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import ButtonSubmit from "../utils/Button";
-import { initialValues } from "../../initialValues/clientsInSociety";
+import { initialValues } from "../../formConfig/clientsInSociety";
 import { patchClientInSociety } from "../../services/clientInSociety.service";
 import ToastNotification from "../../utils/toast.notification";
 

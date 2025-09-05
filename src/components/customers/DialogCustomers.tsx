@@ -19,7 +19,7 @@ import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import { customer } from "../../initialValues/customer";
+import { customer } from "../../formConfig/customer";
 
 interface Props {
   open: boolean;
