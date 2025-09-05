@@ -111,7 +111,7 @@ export default function Filter({
               }}
             >
               <MenuItem value={"undefined"}>Todos</MenuItem>
-              <MenuItem value="false">Por Pagar</MenuItem>
+              <MenuItem value="false">Por cobrar</MenuItem>
               <MenuItem value="true">Pagado</MenuItem>
             </Select>
           </FormControl>
