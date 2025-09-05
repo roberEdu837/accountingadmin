@@ -42,7 +42,7 @@ export default function DialogCustomersPasswords({
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogMessageBox
         title={isEdit ? "Editar Contraseña" : "Registrar Contraseña"}
         subtitle={
@@ -62,7 +62,6 @@ export default function DialogCustomersPasswords({
             systemName: password?.systemName ? password?.systemName : "",
             accessKey: password?.accessKey ? password?.accessKey : "",
             password: password?.password ? password?.password : "",
-            description: password?.description ? password?.description : "",
             customerId: password?.customerId
               ? password.customerId
               : customer?.id
@@ -84,8 +83,12 @@ export default function DialogCustomersPasswords({
               if (setFlag) setFlag(!flag);
               ToastNotification(
                 isEdit
-                  ? `La contraseña para el cliente "${customer?.socialReason || password?.customer.socialReason}" se actualizó correctamente`
-                  : `La contraseña para el cliente "${customer?.socialReason || password?.customer.socialReason}" se creó correctamente`,
+                  ? `La contraseña para el cliente "${
+                      customer?.socialReason || password?.customer.socialReason
+                    }" se actualizó correctamente`
+                  : `La contraseña para el cliente "${
+                      customer?.socialReason || password?.customer.socialReason
+                    }" se creó correctamente`,
                 "success"
               );
 
@@ -103,7 +106,7 @@ export default function DialogCustomersPasswords({
           }) => (
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
-                <Grid size={isMobile ? 12 : 6}>
+                <Grid size={12}>
                   <TextField
                     fullWidth
                     margin="dense"
@@ -133,7 +136,7 @@ export default function DialogCustomersPasswords({
                     helperText={touched.accessKey && errors.accessKey}
                   />
                 </Grid>
-                <Grid size={12}>
+                <Grid size={isMobile ? 12 : 6}>
                   <TextField
                     fullWidth
                     margin="dense"
@@ -146,23 +149,6 @@ export default function DialogCustomersPasswords({
                     value={values.password}
                     error={Boolean(touched.password && errors.password)}
                     helperText={touched.password && errors.password}
-                  />
-                </Grid>
-                <Grid size={12}>
-                  <TextField
-                    fullWidth
-                    multiline
-                    margin="dense"
-                    label="Descripción"
-                    name="description"
-                    variant="outlined"
-                    type="text"
-                    rows={3}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.description}
-                    error={Boolean(touched.description && errors.description)}
-                    helperText={touched.description && errors.description}
                   />
                 </Grid>
               </Grid>
