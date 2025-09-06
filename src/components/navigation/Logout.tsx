@@ -106,7 +106,7 @@ export default function MenuListComposition() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "left",
+                  alignItems: "center",
                   borderRadius: 2,
                   boxShadow: 5,
                   p: 2,

@@ -6,8 +6,8 @@ export default function Logo() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "left",
-        alignItems: "left",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <img src={logoImg} alt="Mi Logo" width={200} className="logo" />

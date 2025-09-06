@@ -52,7 +52,7 @@ const LoginForm = () => {
         p: 2,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "left",
+        justifyContent: "center",
       }}
     >
       {isMobile && <Logo />}
@@ -146,7 +146,7 @@ const LoginForm = () => {
             </Grid>
 
             <CardActions
-              sx={{ display: "flex", justifyContent: "left", mt: 2 }}
+              sx={{ display: "flex", justifyContent: "center", mt: 2 }}
             >
               <ButtonSubmit text="Iniciar Sesión" />
             </CardActions>

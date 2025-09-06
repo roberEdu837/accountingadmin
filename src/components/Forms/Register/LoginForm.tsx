@@ -54,7 +54,7 @@ const RegisterForm = () => {
         p: 2,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "left",
+        justifyContent: "center",
       }}
     >
       {isMobile && <Logo />}
@@ -203,7 +203,7 @@ const RegisterForm = () => {
             </Grid>
 
             <CardActions
-              sx={{ display: "flex", justifyContent: "left", mt: 2 }}
+              sx={{ display: "flex", justifyContent: "center", mt: 2 }}
             >
               <ButtonSubmit text="Iniciar Sesión" />
             </CardActions>
@@ -211,15 +211,15 @@ const RegisterForm = () => {
               <Box
                 sx={{
                   display: "flex",
-                  textAlign: "left",
-                  justifyContent: "left",
+                  textAlign: "center",
+                  justifyContent: "center",
                   mt: 2,
                 }}
               >
                 <Typography variant="body2">
                   ¿Ya tienes cuenta?{" "}
                   <Link href="/login" underline="hover">
-                    Inicias Sesión
+                    Inicia Sesión
                   </Link>
                 </Typography>
               </Box>

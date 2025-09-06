@@ -16,8 +16,8 @@ export default function Login() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "left",
-        alignItems: "left",
+        justifyContent: "center",
+        alignItems: "center",
         height: "100vh",
         p: 2,
       }}
