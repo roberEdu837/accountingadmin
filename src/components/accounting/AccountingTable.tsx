@@ -32,6 +32,7 @@ import DialogAccountingEdit from "./DialogAccountingEdit";
 import CheckDebts from "../../utils/CheckDebts";
 import IconWithBadge from "../utils/IconWithBadge";
 import { totalPaid } from "../../utils";
+import DialogPaymentsList from "../payments/DialogPaymentsList";
 
 export default function AccountingTable() {
   const [accountings, setAccountings] = useState<
@@ -44,6 +45,7 @@ export default function AccountingTable() {
   const [openModal, setOpenModal] = useState(false);
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
   const [openDialogDebts, setOpenDialogDebts] = useState(false);
+  const [openDialogPaymentsList, setOpenDialogPaymentsList] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
   const [currentAccounting, setCurrentAccounting] = useState<
     MonthlyAccounting | undefined
@@ -241,10 +243,8 @@ export default function AccountingTable() {
                         <Tooltip title="Ver pagos">
                           <IconButton
                             onClick={() => {
-                              setSelectedId(row.id);
-                              setDebt(pending);
-                              setIsInSociety(row.isInSociety);
-                              setOpenPayment(true);
+                              setOpenDialogPaymentsList(true);
+                              setCurrentAccounting(row);
                             }}
                           >
                             <IconWithBadge
@@ -305,6 +305,7 @@ export default function AccountingTable() {
         type={0}
         setFilter={setFilter}
       />
+      <DialogPaymentsList accounting={currentAccounting} setAccountings={setAccountings} handleClose={() => setOpenDialogPaymentsList(false) } open={openDialogPaymentsList}/>
     </Box>
   );
 }

@@ -54,48 +54,6 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogMessageBox
-          title={`Contraseñas asociadas al cliente ${customer?.socialReason}`}
-          subtitle=""
-        />
-
-        <DialogContent>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Sistema</TableCell>
-                  <TableCell align="left">Usuario</TableCell>
-                  <TableCell align="left">Contraseña</TableCell>
-                  <TableCell align="left">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {passwords.map((row: any) => (
-                  <TableRow
-                    key={row.systemName}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.systemName}
-                    </TableCell>
-                    <TableCell align="left">{row.accessKey}</TableCell>
-                    <TableCell align="left">{row.password}</TableCell>
-                    <TableCell align="left">
-                      <Tooltip title="Editar">
-                        <Button>
-                          <EditIcon sx={{ color: "#09356f" }} />
-                        </Button>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogMessageBox
           title="Contraseñas asociadas"
           subtitle={`Cliente: ${customer?.socialReason || ""}`}
         />
@@ -105,9 +63,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
               <TableHead>
                 <TableRow>
                   <TableCell>Sistema</TableCell>
-                  <TableCell align="left">Usuario</TableCell>
-                  <TableCell align="left">Contraseña</TableCell>
-                  <TableCell align="left">Acciones</TableCell>
+                  <TableCell align="center">Usuario</TableCell>
+                  <TableCell align="center">Contraseña</TableCell>
+                  <TableCell align="center">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -119,9 +77,9 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
                     <TableCell component="th" scope="row">
                       {row.systemName}
                     </TableCell>
-                    <TableCell align="left">{row.accessKey}</TableCell>
-                    <TableCell align="left">{row.password}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">{row.accessKey}</TableCell>
+                    <TableCell align="center">{row.password}</TableCell>
+                    <TableCell align="center">
                       <Tooltip title="Editar">
                         <Button
                           onClick={() => {

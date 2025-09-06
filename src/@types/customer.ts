@@ -1,4 +1,4 @@
-import type { PaymentFull } from "./payments";
+import type { Payments } from "./payments";
 
 export type Customer = {
   id?: number;
@@ -23,7 +23,7 @@ export type MonthlyAccounting = {
   customerId: number;
   customer: Customer;
   rfcTaxPaymentDate: Date;
-  paymets: PaymentFull[];
+  paymets: Payments[];
   periodicity: string;
   isInSociety: boolean;
 };

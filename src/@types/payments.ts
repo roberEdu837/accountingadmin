@@ -3,9 +3,10 @@ export type createPayment = {
  monthlyAccountingId: number;
 }
 
-export type PaymentFull = {
- id: number,
+export type Payments = {
+ id?: number,
  amount: number;
  monthlyAccountingId: number;
  paymentDate: string;
+ paymentMethod: number;
 }

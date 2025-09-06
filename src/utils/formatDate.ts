@@ -65,7 +65,7 @@ export const getMonthLabel = (accounting: MonthlyAccounting) => {
   return months[month - 1].toUpperCase() || "Mes inválido";
 };
 
-export const  formatDate =(dateString: Date): string  =>{
+export const  formatDate =(dateString: Date | string): string  =>{
   if (!dateString) return "-";
 
   const date = new Date(dateString);
