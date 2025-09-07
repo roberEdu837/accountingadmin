@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   Table,
@@ -8,12 +7,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
 } from "@mui/material";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import Paper from "@mui/material/Paper";
-import EditIcon from "@mui/icons-material/Edit";
-import { type Payments } from "../../@types";
 import type { MonthlyAccounting } from "../../@types/customer";
 import { formatDate, paymentMethods } from "../../utils";
 
@@ -32,9 +28,9 @@ function DialogPaymentsList({ handleClose, open, accounting }: Props) {
 
   //   const [openModal, setOpenModal] = useState(false);
 
-  const handleOpenModal = (row: Payments[]) => {
-    //setOpenModal(true);
-  };
+  // const handleOpenModal = (row: Payments[]) => {
+  //   //setOpenModal(true);
+  // };
 
   //   const handleCloseModal = () => {
   //     setOpenModal(false);
