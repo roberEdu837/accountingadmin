@@ -18,8 +18,6 @@ export const createAccounting = () => {
   return axiosInstance.post("monthly-accountings");
 };
 
-
-
 export const getDetsAccounting = (id: number | undefined) => {
   return axiosInstance.get(`monthly-accountings/debts/customer/${id}`);
 }

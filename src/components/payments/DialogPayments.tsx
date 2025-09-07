@@ -34,6 +34,7 @@ export default function DialogPayments({
   isInSociety,
 }: Props) {
   const handlePostPayment = async (values: any) => {
+    console.log(values);
     await PostPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");
   };
@@ -51,6 +52,7 @@ export default function DialogPayments({
       monthlyPaymentCompleted: true,
     });
   };
+  
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -92,6 +94,7 @@ export default function DialogPayments({
             errors,
             touched,
           }) => (
+            console.log(values),
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid size={12}>

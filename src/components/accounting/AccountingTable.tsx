@@ -182,7 +182,12 @@ export default function AccountingTable() {
                         </TableCell>
                       </Tooltip>
                       <TableCell align="left">{row.periodicity}</TableCell>
-                      <TableCell align="center">{getMonthLabel(row)}</TableCell>
+                      <TableCell align="center">
+                        {getMonthLabel(
+                          row.month,
+                          row.periodicity === "BIMESTRAL"
+                        )}
+                      </TableCell>
                       <TableCell align="left">
                         <SelectStatus
                           valorInicial={row.stateObligation}
@@ -305,7 +310,12 @@ export default function AccountingTable() {
         type={0}
         setFilter={setFilter}
       />
-      <DialogPaymentsList accounting={currentAccounting} setAccountings={setAccountings} handleClose={() => setOpenDialogPaymentsList(false) } open={openDialogPaymentsList}/>
+      <DialogPaymentsList
+        accounting={currentAccounting}
+        setAccountings={setAccountings}
+        handleClose={() => setOpenDialogPaymentsList(false)}
+        open={openDialogPaymentsList}
+      />
     </Box>
   );
 }

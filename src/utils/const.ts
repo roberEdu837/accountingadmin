@@ -1,5 +1,5 @@
 export const paymentMethods = [
   "Efectivo",
   "Transferencia",
-  "Retiro" // solo retiro, sin tarjeta
+  "Retiro sin tarjeta" // solo retiro, sin tarjeta
 ];

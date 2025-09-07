@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { getTodayDate } from "../utils";
 
 export const getPaymentSchema = (debt: number) => {
   return Yup.object({
@@ -18,7 +19,7 @@ export const getPaymentSchema = (debt: number) => {
 
 export const getInitialValues = (id: number) => ({
   amount: 0,
-  paymentDate: new Date().toISOString().split("T")[0],
+  paymentDate: getTodayDate(),
   paymentMethod: null as string | null,
   monthlyAccountingId: id,
 });
