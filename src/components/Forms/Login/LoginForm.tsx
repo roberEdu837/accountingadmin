@@ -154,8 +154,8 @@ const LoginForm = () => {
               <Box
                 sx={{
                   display: "flex",
-                  textAlign: "left",
-                  justifyContent: "left",
+                  textAlign: "center",
+                  justifyContent: "center",
                   mt: 2,
                 }}
               >

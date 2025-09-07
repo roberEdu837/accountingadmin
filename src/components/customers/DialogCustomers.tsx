@@ -20,6 +20,7 @@ import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { customer } from "../../formConfig/customer";
+import { addFourYears } from "../../utils";
 
 interface Props {
   open: boolean;
@@ -48,13 +49,9 @@ export default function DialogCustomers({
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              const { honorary, creationDate, renewalDate } = values;
 
               const customerData: Customer = {
                 ...values,
-                honorary: parseFloat(honorary),
-                creationDate: new Date(creationDate).toISOString(),
-                renewalDate: new Date(renewalDate).toISOString(),
                 isInSociety: values.isInSociety === 0 ? false : true,
               };
               const { data } = await PostCustomer(customerData);
@@ -171,10 +168,7 @@ export default function DialogCustomers({
                     onChange={(e) => {
                       const creationDate = e.target.value;
                       handleChange(e); // Actualiza CreationDate normalmente
-                      // Calcular fecha 4 años adelante
-                      const renewal = new Date(creationDate);
-                      renewal.setFullYear(renewal.getFullYear() + 4);
-                      const formatted = renewal.toISOString().split("T")[0];
+                      const formatted = addFourYears(creationDate);
 
                       // Actualiza RenewalDate manualmente
                       handleChange({

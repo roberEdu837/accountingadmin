@@ -19,13 +19,14 @@ import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
+import { addFourYears, getTodayDate } from "../../utils";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
-  client: Customer | undefined;
+  client?: Customer;
 }
 
 export default function DialogCustomersEdit({
@@ -55,49 +56,20 @@ export default function DialogCustomersEdit({
             password: client?.password || "",
             honorary: client?.honorary || 0,
             periodicity: client?.periodicity || "",
-            creationDate: client?.creationDate
-              ? new Date(client.creationDate).toISOString().split("T")[0]
-              : new Date(),
-            renewalDate: client?.renewalDate
-              ? new Date(client.renewalDate).toISOString().split("T")[0]
-              : "",
+            creationDate: client?.creationDate || getTodayDate(),
+            renewalDate: client?.renewalDate || addFourYears(getTodayDate()),
             isInSociety: client?.isInSociety === false ? 0 : 1,
           }}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              const {
-                socialReason,
-                rfc,
-                password,
-                honorary,
-                periodicity,
-                creationDate,
-                renewalDate,
-                isInSociety,
-                id,
-              } = values;
-
-              const clientDate = client?.creationDate
-                ? new Date(client.creationDate)
-                : null;
-              const newDate = new Date(creationDate);
-
-              if (!clientDate) return;
-
-              const customerData: Customer = {
-                socialReason,
-                rfc,
-                password,
-                honorary: honorary,
-                periodicity,
-                creationDate: new Date(creationDate).toISOString(),
-                renewalDate: new Date(renewalDate).toISOString(),
-                isInSociety: isInSociety === 0 ? false : true,
-                notificationSent: newDate > clientDate ? false : true,
+              const data: Customer = {
+                ...values,
+                isInSociety: values.isInSociety === 0 ? false : true,
+                notificationSent: client?.creationDate !== values.creationDate ? false : client?.notificationSent,
               };
 
-              await patchCustomer(customerData, id);
+              await patchCustomer(data, values.id);
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             }
@@ -212,10 +184,7 @@ export default function DialogCustomersEdit({
                     onChange={(e) => {
                       const creationDate = e.target.value;
                       handleChange(e); // Actualiza CreationDate normalmente
-                      // Calcular fecha 4 años adelante
-                      const renewal = new Date(creationDate);
-                      renewal.setFullYear(renewal.getFullYear() + 4);
-                      const formatted = renewal.toISOString().split("T")[0];
+                      const formatted = addFourYears(creationDate);
 
                       // Actualiza RenewalDate manualmente
                       handleChange({

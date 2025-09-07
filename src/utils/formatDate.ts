@@ -85,3 +85,9 @@ export function getTodayDate() {
   return `${year}-${month}-${day}`;
 }
 
+export function addFourYears(baseDate: string): string {
+  const [year, month, day] = baseDate.split("-");
+  const newYear = Number(year) + 4;
+  return `${newYear}-${month}-${day}`;
+}
+

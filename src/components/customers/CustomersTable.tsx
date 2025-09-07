@@ -33,7 +33,7 @@ export default function CustomersTable() {
   const [open, setOpen] = useState<boolean>(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [client, setClient] = useState<Customer | undefined>();
+  const [client, setClient] = useState<Customer>({} as Customer);
   const [openModal, setOpenModal] = useState(false);
   const [openModalPwd, setOpenModalPwd] = useState(false);
 

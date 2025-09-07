@@ -1,12 +1,12 @@
-import { currentDate, renewalDate } from "../utils/formatDate";
+import { addFourYears, getTodayDate } from "../utils/formatDate";
 
 export const customer = {
   socialReason: "",
   rfc: "",
   password: "",
-  honorary: "",
+  honorary: 0,
   periodicity: "",
-  creationDate: currentDate(),
-  renewalDate: renewalDate(),
+  creationDate: getTodayDate(),
+  renewalDate: addFourYears(getTodayDate()),
   isInSociety: 0
 };

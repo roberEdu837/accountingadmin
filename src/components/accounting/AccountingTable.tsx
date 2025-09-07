@@ -16,6 +16,8 @@ import {
   Tooltip,
   Chip,
   IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import SelectStatus from "./SelectStatus";
 import AddIcon from "@mui/icons-material/Add";
@@ -50,6 +52,8 @@ export default function AccountingTable() {
   const [currentAccounting, setCurrentAccounting] = useState<
     MonthlyAccounting | undefined
   >(undefined);
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+
   const [flag, setFlag] = useState(false);
   const [filter, setFilter] = useState<FilterAccounting>({
     month: new Date().getMonth() + 1,
@@ -71,6 +75,7 @@ export default function AccountingTable() {
   const init = async () => {
     try {
       await createAccounting();
+      getAccounting();
     } catch (err) {
       console.error(err);
     }
@@ -136,8 +141,8 @@ export default function AccountingTable() {
                   color: "#5d5a5aff",
                   padding: "11px 9px",
                   fontSize: "0.85rem",
-                  whiteSpace: "normal",
-                  wordBreak: "break-word",
+                  whiteSpace: isMobile ? "nowrap" : "normal",
+                  wordBreak: isMobile ? "" : "break-word",
                 },
                 "& th": {
                   fontWeight: 300,
@@ -149,9 +154,7 @@ export default function AccountingTable() {
             >
               <thead>
                 <tr>
-                  <th colSpan={10} style={{ fontSize: "1.5rem" }}>
-                    Contabilidad Mensual
-                  </th>
+                  <th style={{ fontSize: "1.5rem" }}>Contabilidad Mensual</th>
                 </tr>
               </thead>
               <TableHead>
@@ -164,7 +167,7 @@ export default function AccountingTable() {
                   <TableCell align="center">Monto</TableCell>
                   <TableCell align="center">Abonado</TableCell>
                   <TableCell align="center">Adeudo</TableCell>
-                  <TableCell align="center">En sociedad</TableCell>
+                  <TableCell align="center">Sociedad?</TableCell>
                   <TableCell align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -181,14 +184,14 @@ export default function AccountingTable() {
                           {row.customer?.socialReason.toUpperCase()}
                         </TableCell>
                       </Tooltip>
-                      <TableCell align="left">{row.periodicity}</TableCell>
+                      <TableCell align="center">{row.periodicity}</TableCell>
                       <TableCell align="center">
                         {getMonthLabel(
                           row.month,
                           row.periodicity === "BIMESTRAL"
-                        )}
+                        ).toUpperCase()}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         <SelectStatus
                           valorInicial={row.stateObligation}
                           setFlag={setFlag}
@@ -196,11 +199,11 @@ export default function AccountingTable() {
                           id={row.id}
                         />
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {formatDate(row.rfcTaxPaymentDate)}
                       </TableCell>
-                      <TableCell align="left">${row.honorary}</TableCell>
-                      <TableCell align="left">${totalPaid(row)}</TableCell>
+                      <TableCell align="center">${row.honorary}</TableCell>
+                      <TableCell align="center">${totalPaid(row)}</TableCell>
                       <TableCell align="center">
                         {pending === 0 ? (
                           <Chip
