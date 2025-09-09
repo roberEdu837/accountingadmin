@@ -276,6 +276,7 @@ export default function AccountingTable() {
                             />
                           </IconButton>
                         </Tooltip>
+                        
                       </TableCell>
                     </TableRow>
                   );

@@ -67,9 +67,6 @@ export default function DialogAccountingEdit({
             try {
               if (!accounting) return null;
               const { honorary, periodicity, isInSociety } = values;
-              console.log(honorary)
-              console.log(accounting.honorary )
-
               await patchAccounting(accounting.id, {
                 honorary,
                 periodicity,

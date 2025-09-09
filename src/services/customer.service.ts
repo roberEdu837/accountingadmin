@@ -16,3 +16,7 @@ export const PostCustomer = (customer: Customer) => {
 export const patchCustomer = (customer: Customer, id: number) => {
  return axiosInstance.patch(`/customers/${id}`,customer)
 }
+
+export const desactivateCustomer = (id: number | undefined, status: boolean) => {
+ return axiosInstance.patch(`/customers/${id}`, {status: status})
+}

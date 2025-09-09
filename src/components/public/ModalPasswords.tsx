@@ -40,7 +40,7 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
   };
 
   const getPasswords = async () => {
-    if (customer.id) {
+    if (customer?.id) {
       const { data } = await getPasswordsById(customer.id);
       setPasswords(data);
     }

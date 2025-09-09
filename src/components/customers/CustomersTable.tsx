@@ -24,6 +24,10 @@ import ModalPasswords from "../public/ModalPasswords";
 import FilterCustomer from "../filter/FilterCustomer";
 import DialogPdf from "./DialogPdf";
 import AddIcon from "@mui/icons-material/Add";
+import BlockIcon from "@mui/icons-material/Block";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+import { desactivateCustomer } from "../../services/customer.service";
 
 export default function CustomersTable() {
   const [customer, setCustomers] = useState<Customer[]>();
@@ -58,6 +62,10 @@ export default function CustomersTable() {
     setCurrentCustomer(null);
   };
 
+  const handleDesactivate = async (id: number | undefined, status: boolean) => {
+    await desactivateCustomer(id, status);
+    setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
+  };
 
   return (
     <Box>
@@ -161,7 +169,7 @@ export default function CustomersTable() {
                       <Tooltip title="Estado de cuenta">
                         <IconButton
                           onClick={() => {
-                            setOpenDialogPdf(true)
+                            setOpenDialogPdf(true);
                             setCurrentCustomer(row);
                           }}
                           size="small"
@@ -179,6 +187,18 @@ export default function CustomersTable() {
                           size="small"
                         >
                           <KeyIcon sx={{ color: "#09356f" }} />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={row.status ?"Desactivar":"Activar"}>
+                        <IconButton
+                          onClick={() => handleDesactivate(row.id, !row.status)}
+                          size="small"
+                        >
+                          {!row.status ? (
+                            <CheckCircleIcon sx={{ color: "#09356f" }} />
+                          ) : (
+                            <BlockIcon sx={{ color: "#09356f" }} />
+                          )}
                         </IconButton>
                       </Tooltip>
                     </TableCell>

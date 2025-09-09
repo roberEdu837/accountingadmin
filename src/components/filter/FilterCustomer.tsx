@@ -22,12 +22,14 @@ function FilterCustomer({ flag, setCustomers }: Props) {
 
   const [search, setSearch] = useState("");
   const [isInSociety, setisInSociety] = useState<boolean | undefined>(undefined);
+  const [status, setStatus] = useState<boolean>(true);
 
   const getAccounting = async () => {
     try {
       const { data } = await getCustomers({
         isInSociety,
         search,
+        status,
       });
       setCustomers(data);
     } catch (error) {
@@ -37,7 +39,7 @@ function FilterCustomer({ flag, setCustomers }: Props) {
 
   useEffect(() => {
     getAccounting();
-  }, [flag, search, isInSociety]);
+  }, [flag, search, isInSociety, status]);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -55,7 +57,8 @@ function FilterCustomer({ flag, setCustomers }: Props) {
           />
         </Grid>
 
-        <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
+       
+         <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
           <FormControl fullWidth>
             <InputLabel id="status-select-label">Cliente asociado</InputLabel>
             <Select
@@ -90,6 +93,28 @@ function FilterCustomer({ flag, setCustomers }: Props) {
               <MenuItem value="undefined">Todos</MenuItem>
               <MenuItem value="true">Sí</MenuItem>
               <MenuItem value="false">No</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+         <Grid size={isMobile ? 12 : 2} sx={{ mt: isMobile ? 0 : 2 }}>
+          <FormControl fullWidth>
+            <InputLabel id="status-select-label">Cliente asociado</InputLabel>
+            <Select
+              labelId="status-select-label"
+              id="status-select"
+              value={
+                status === true
+                  ? "true"
+                  : "false"
+              }
+              label="Cliente asociado"
+              onChange={(e) => {
+                const raw = e.target.value;
+                setStatus(raw === "true" ? true : false);
+              }}
+            >
+              <MenuItem value="true">Activos</MenuItem>
+              <MenuItem value="false">Inactivos</MenuItem>
             </Select>
           </FormControl>
         </Grid>

@@ -31,4 +31,5 @@ export type MonthlyAccounting = {
 export type FilterCustomer = {
   search?: string;
   isInSociety?: boolean;
+  status: boolean;
 };
