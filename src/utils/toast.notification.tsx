@@ -5,7 +5,7 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
   if (type === "success") {
     toast.success(message, {
       duration: 3000,
-      position: "bottom-left",
+      position: "bottom-right",
       style: {
         background: "#232323",
         color: "#FFF",
@@ -15,7 +15,7 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
   } else if (type === "error" && message !== 'Request failed with status code 422') {
     toast.error(message, {
       duration: 3000,
-      position: "bottom-left",
+      position: "bottom-right",
       style: {
         background: "#232323",
         color: "#FFF",
@@ -25,7 +25,7 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
   } else if (type === "loading") {
     toast.loading(message, {
       duration: 3000,
-      position: "bottom-left",
+      position: "bottom-right",
       style: {
         background: "#232323ff",
         color: "#FFF",
@@ -35,7 +35,7 @@ export const ToastNotification = (message: string, type: "success"|"error"|"load
   }else if(type === "warning"){
       toast.error(message, {
       duration: 5000,
-      position: "bottom-left",
+      position: "bottom-right",
       style: {
         background: "#232323ff",
         color: "#FFF",

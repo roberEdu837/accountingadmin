@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { getTodayDate } from "../utils";
 
 export const getPaymentSchema = (debt: number) => {
+  console.log(debt,'aqui');
   return Yup.object({
     amount: Yup.number()
       .typeError("Debe ser un número")

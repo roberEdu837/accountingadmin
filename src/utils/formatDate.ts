@@ -6,6 +6,8 @@ export function formatFullDate(fechaISO: string, locale = "es-MX"): string {
   }
 
   const localdate = new Date(fechaISO.replace(/Z$/, ""));
+  localdate.setDate(localdate.getDate() + 1); // suma 1 día
+
   return localdate.toLocaleDateString(locale, {
     weekday: "long",
     year: "numeric",
@@ -37,7 +39,6 @@ export const renewalDate = () => {
 
 //Devuel el label para el mes
 export const getMonthLabel = (month: number,isBimonthly:boolean) => {
-
   
   const months = [
     "Enero",
@@ -55,11 +56,8 @@ export const getMonthLabel = (month: number,isBimonthly:boolean) => {
   ];
 
   if (isBimonthly) {
-    const firstIndex = Math.min(month, 12) - 1;
-    const secondIndex = Math.max(month - 1, 1) + 1;
-    return `${months[firstIndex]}/${months[secondIndex]}`.toUpperCase();
+    return `${months[month-1]}/${months[month]}`.toUpperCase();
   }
-  console.log(months[month - 1]);
 
   return months[month - 1] || "Mes inválido";
 };
@@ -68,6 +66,8 @@ export const  formatDate =(dateString: Date | string): string  =>{
   if (!dateString) return "-";
 
   const date = new Date(dateString);
+  date.setDate(date.getDate() + 1); // suma 1 día
+
   if (isNaN(date.getTime())) return "-"; 
 
   return date.toLocaleDateString("es-MX", {

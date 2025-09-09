@@ -1,40 +1,61 @@
 import {
   Dialog,
   DialogContent,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import Paper from "@mui/material/Paper";
 import type { MonthlyAccounting } from "../../@types/customer";
 import { formatDate, paymentMethods } from "../../utils";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import { getPaymentsByAccountingId } from "../../services/payments.service";
+import ToastNotification from "../../utils/toast.notification";
+import { use, useEffect, useState } from "react";
 interface Props {
   open: boolean;
   handleClose: any;
   accounting: MonthlyAccounting | undefined;
-  setAccountings?: any;
+  setAccountings: any;
+  setFlag: (flag: boolean) => void;
+  flag: boolean;
 }
 
-function DialogPaymentsList({ handleClose, open, accounting }: Props) {
-  //   const { paymets, customer } = accounting;
-  //   const { socialReason } = customer;
-  //   const [flag, setFlag] = useState(false);
-  //const [payments, setPayments] = useState<Payments[]>([]);
+function DialogPaymentsList({
+  handleClose,
+  open,
+  accounting,
+  flag,
+  setFlag,
+  setAccountings,
+}: Props) {
+  const [payments, setPayments] = useState<any[]>([]);
 
-  //   const [openModal, setOpenModal] = useState(false);
+  useEffect(() => {
+    setPayments(accounting?.paymets || []);
+  }, [accounting]);
 
-  // const handleOpenModal = (row: Payments[]) => {
-  //   //setOpenModal(true);
-  // };
+  const deletePayment = async (id: number | undefined) => {
+    if (!id) return;
 
-  //   const handleCloseModal = () => {
-  //     setOpenModal(false);
-  //   };
+    await getPaymentsByAccountingId(id);
+
+    ToastNotification(`El pago se eliminó correctamente`, "success");
+
+    // 3. Actualizamos en el padre (setAccountings probablemente tiene la lista de accountings completa)
+    const payment = payments.filter((payment) => {
+      console.log("Comparando", payment.id, id);
+      return payment.id !== id;
+    })
+    setPayments(payment);
+      setFlag(!flag);
+  };
 
   return (
     <>
@@ -52,10 +73,11 @@ function DialogPaymentsList({ handleClose, open, accounting }: Props) {
                   <TableCell align="center">Monto</TableCell>
                   <TableCell align="center">Fecha de pago</TableCell>
                   <TableCell align="center">Metodo de pago</TableCell>
+                  <TableCell align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {accounting?.paymets?.map((row) => (
+                {payments?.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -71,13 +93,13 @@ function DialogPaymentsList({ handleClose, open, accounting }: Props) {
                       {paymentMethods[row.paymentMethod] || "Desconocido"}
                     </TableCell>
 
-                    {/* <TableCell align="center">
-                      <Tooltip title="Editar">
-                        <Button onClick={() => handleOpenModal(row)}>
-                          <EditIcon sx={{ color: "#09356f" }} />
-                        </Button>
+                    <TableCell align="center">
+                      <Tooltip title="Eliminar">
+                        <IconButton onClick={() => deletePayment(row.id)}>
+                          <DeleteIcon sx={{ color: "#09356f" }} />
+                        </IconButton>
                       </Tooltip>
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

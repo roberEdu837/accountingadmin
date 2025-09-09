@@ -15,7 +15,7 @@ export const getYears = () => {
 };
 
 export const createAccounting = () => {
-  return axiosInstance.post("monthly-accountings");
+  return axiosInstance.post("monthly-accountings/generate");
 };
 
 export const getDetsAccounting = (id: number | undefined) => {

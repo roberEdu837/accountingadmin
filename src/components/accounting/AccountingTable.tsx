@@ -55,10 +55,15 @@ export default function AccountingTable() {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   const [flag, setFlag] = useState(false);
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1; // 1-12
+  const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year =
+    currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
   const [filter, setFilter] = useState<FilterAccounting>({
-    month: new Date().getMonth() + 1,
+    month: previousMonth,
     search: "",
-    year: new Date().getFullYear(),
+    year: year,
     monthlyPaymentCompleted: undefined,
   });
 
@@ -141,7 +146,7 @@ export default function AccountingTable() {
                   color: "#5d5a5aff",
                   padding: "11px 9px",
                   fontSize: "0.85rem",
-                  whiteSpace: isMobile ? "nowrap" : "normal",
+                  whiteSpace: isMobile ? "nowrap" : "nowrap",
                   wordBreak: isMobile ? "" : "break-word",
                 },
                 "& th": {
@@ -161,6 +166,7 @@ export default function AccountingTable() {
                 <TableRow>
                   <TableCell>Razón Social</TableCell>
                   <TableCell align="center">Periodicidad</TableCell>
+                  <TableCell align="center">Año</TableCell>
                   <TableCell align="center">Mes</TableCell>
                   <TableCell align="center">Obligaciones</TableCell>
                   <TableCell align="center">F. Cumplimiento</TableCell>
@@ -179,12 +185,13 @@ export default function AccountingTable() {
                       <Tooltip title="Contraseñas">
                         <TableCell
                           onClick={() => handleOpenModal(row.customer)}
-                          sx={{ maxWidth: 200 }}
+                          //sx={{ maxWidth: 200 }}
                         >
                           {row.customer?.socialReason.toUpperCase()}
                         </TableCell>
                       </Tooltip>
                       <TableCell align="center">{row.periodicity}</TableCell>
+                      <TableCell align="center">{row.year}</TableCell>
                       <TableCell align="center">
                         {getMonthLabel(
                           row.month,
@@ -318,6 +325,8 @@ export default function AccountingTable() {
         setAccountings={setAccountings}
         handleClose={() => setOpenDialogPaymentsList(false)}
         open={openDialogPaymentsList}
+        flag={flag}
+        setFlag={setFlag}
       />
     </Box>
   );

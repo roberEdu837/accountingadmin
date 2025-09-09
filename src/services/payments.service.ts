@@ -11,3 +11,7 @@ export const statementPdf = (statement: any) => {
   });
 };
 
+export const getPaymentsByAccountingId = (id: number) => {
+  return axiosInstance.delete(`/paymets/${id}`);
+}
+

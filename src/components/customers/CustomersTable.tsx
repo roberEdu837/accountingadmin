@@ -77,12 +77,13 @@ export default function CustomersTable() {
               minWidth: 650,
               "& th, & td": {
                 color: "#5d5a5aff",
-                padding: "12px 9px", // menos espacio en celdas
-                fontSize: "0.85rem", // letra más chica
+                padding: "12px 9px",
+                fontSize: "0.85rem", 
+                 whiteSpace: "nowrap",
               },
               "& th": {
                 fontWeight: 300,
-                fontSize: "0.80rem", // menos grueso el encabezado
+                fontSize: "0.80rem", 
               },
             }}
             size="small"

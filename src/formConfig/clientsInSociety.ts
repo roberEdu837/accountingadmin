@@ -1,3 +1,5 @@
+import { getTodayDate } from "../utils";
+
 export let initialValues = {
-  paymentDate: new Date().toISOString().split("T")[0],
+  paymentDate: getTodayDate(),
 };

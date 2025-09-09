@@ -26,11 +26,15 @@ interface Props {
 export default function ClientsInSociety({ setCustomers, flag }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const today = new Date();
+  const currentMonth = today.getMonth() + 1; // 1-12
+  const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year =
+    currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
 
   const [filter, setFilter] = useState({
     search: "",
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
+    year: year,
+    month: previousMonth,
     status: undefined as boolean | undefined, // equivalente a monthlyPaymentCompleted
   });
   const [openDialogDebts, setOpenDialogDebts] = useState(false);

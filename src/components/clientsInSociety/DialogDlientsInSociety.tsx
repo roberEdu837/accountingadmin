@@ -38,8 +38,8 @@ export default function DialogClientsInSociety({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
-        title="Registro de Pago a Contador Asociado"
-        subtitle="Llena los campos para registrar si ya se le ha pagado al contador asociado la parte correspondiente por el cliente."
+        title="Registro de Fecha de Pago"
+        subtitle="Indica la fecha en la que se realizó el pago al contador asociado."
       />
 
       <DialogContent>
