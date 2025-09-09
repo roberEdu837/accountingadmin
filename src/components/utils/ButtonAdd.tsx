@@ -1,31 +1,36 @@
 import { IconButton, Tooltip } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";interface Props {
+interface Props {
   text: string;
   handleClickOpen: () => void;
+  icon: React.ReactNode;
+  disabled?: boolean;
 }
 
-export default function ButtonAdd({  handleClickOpen }: Props) {
+export default function ButtonAdd({
+  handleClickOpen,
+  text,
+  icon,
+  disabled,
+}: Props) {
   return (
-    
-
-<Tooltip title="Agregar cliente">
-  <IconButton
-    onClick={handleClickOpen}
-    sx={{
-      backgroundColor: "#09356f",
-      color: "white",
-      borderRadius: "50%",
-      boxShadow: 2,
-      transition: "all 0.3s ease",
-      "&:hover": {
-        backgroundColor: "#072c5b",
-        boxShadow: 4,
-      },
-    }}
-  >
-    <AddIcon />
-  </IconButton>
-</Tooltip>
-
+    <Tooltip title={text}>
+      <IconButton
+        disabled={disabled}
+        onClick={handleClickOpen}
+        sx={{
+          backgroundColor: "#09356f",
+          color: "white",
+          borderRadius: "50%",
+          boxShadow: 2,
+          transition: "all 0.3s ease",
+          "&:hover": {
+            backgroundColor: "#072c5b",
+            boxShadow: 4,
+          },
+        }}
+      >
+        {icon}
+      </IconButton>
+    </Tooltip>
   );
 }

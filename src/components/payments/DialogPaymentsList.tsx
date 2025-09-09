@@ -33,7 +33,6 @@ function DialogPaymentsList({
   accounting,
   flag,
   setFlag,
- 
 }: Props) {
   const [payments, setPayments] = useState<any[]>([]);
 
@@ -50,20 +49,20 @@ function DialogPaymentsList({
 
     // 3. Actualizamos en el padre (setAccountings probablemente tiene la lista de accountings completa)
     const payment = payments.filter((payment) => {
-      console.log("Comparando", payment.id, id);
       return payment.id !== id;
-    })
+    });
     setPayments(payment);
-      setFlag(!flag);
+    setFlag(!flag);
   };
 
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogMessageBox
-          title="Contraseñas asociadas"
-          subtitle={`Cliente: ${accounting?.customer.socialReason}`}
+          title="Pagos asociados"
+          subtitle={`Cliente: ${accounting?.customer?.socialReason || ""}`}
         />
+
         <DialogContent>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -26,6 +26,7 @@ export default function DialogMessageBox({ title, subtitle }: Props) {
       >
         {subtitle}
       </p>
+      
     </Box>
   );
 }

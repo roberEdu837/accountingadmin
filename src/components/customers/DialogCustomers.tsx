@@ -102,7 +102,15 @@ export default function DialogCustomers({
                     variant="outlined"
                     type="text"
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      const rfc = e.target.value.toUpperCase();
+                      handleChange({
+                        target: {
+                          name: "rfc",
+                          value: rfc,
+                        },
+                      });
+                    }}
                     value={values.rfc}
                     error={Boolean(touched.rfc && errors.rfc)}
                     helperText={touched.rfc && errors.rfc}

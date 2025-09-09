@@ -20,6 +20,7 @@ import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { addFourYears, getTodayDate } from "../../utils";
+import {  getCreationDate } from "../../utils/formatDate";
 
 interface Props {
   open: boolean;
@@ -56,8 +57,8 @@ export default function DialogCustomersEdit({
             password: client?.password || "",
             honorary: client?.honorary || 0,
             periodicity: client?.periodicity || "",
-            creationDate: client?.creationDate || getTodayDate(),
-            renewalDate: client?.renewalDate || addFourYears(getTodayDate()),
+            creationDate: getCreationDate(client?.creationDate || getTodayDate()),
+            renewalDate: getCreationDate(client?.renewalDate || getTodayDate()),
             isInSociety: client?.isInSociety === false ? 0 : 1,
           }}
           validationSchema={validationSchemaClient}

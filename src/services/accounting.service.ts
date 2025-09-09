@@ -18,17 +18,11 @@ export const createAccounting = () => {
   return axiosInstance.post("monthly-accountings/generate");
 };
 
-export const getDetsAccounting = (id: number | undefined) => {
-  return axiosInstance.get(`monthly-accountings/debts/customer/${id}`);
-}
-
-export const getPdfAccounting = (data:any) => {
-  
- return axiosInstance.post('monthly-accountings/debts',data,{
+export const getPdfAccountingPayments = (id: number | undefined, month: number) => {
+  return axiosInstance.get(`monthly-accountings/debts/customer/${id}/pdf/month/${month}`,{
   responseType: 'blob', 
- })
+ });
 }
-
 
 export const  hasDebtsAccountings = () => {
   return axiosInstance.get('monthly-accountings/has-debts')

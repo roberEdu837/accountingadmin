@@ -41,7 +41,7 @@ export default function AccountingTable() {
     MonthlyAccounting[] | undefined
   >();
   const [openPayment, setOpenPayment] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number>(0);
   const [debt, setDebt] = useState<number>(0);
   const [isInSociety, setIsInSociety] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
@@ -173,7 +173,7 @@ export default function AccountingTable() {
                   <TableCell align="center">Monto</TableCell>
                   <TableCell align="center">Abonado</TableCell>
                   <TableCell align="center">Adeudo</TableCell>
-                  <TableCell align="center">Sociedad?</TableCell>
+                  <TableCell align="center">En sociedad</TableCell>
                   <TableCell align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -286,7 +286,7 @@ export default function AccountingTable() {
         )}
       </Box>
 
-      {selectedId && (
+     
         <DialogPayments
           onClose={() => setOpenPayment(false)}
           id={selectedId}
@@ -296,7 +296,6 @@ export default function AccountingTable() {
           debt={debt}
           isInSociety={isInSociety}
         />
-      )}
 
       {currentCustomer && (
         <ModalPasswords

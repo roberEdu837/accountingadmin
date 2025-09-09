@@ -18,15 +18,12 @@ import ButtonAdd from "../utils/ButtonAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DialogCustomersEdit from "./DialogCustomersEdit";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {
-  getDetsAccounting,
-  getPdfAccounting,
-} from "../../services/accounting.service";
 import KeyIcon from "@mui/icons-material/Key";
 import DialogCustomersPasswords from "./DialogCustomersPasswords";
 import ModalPasswords from "../public/ModalPasswords";
-import { downloadFileFromBlob } from "./helper";
 import FilterCustomer from "../filter/FilterCustomer";
+import DialogPdf from "./DialogPdf";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CustomersTable() {
   const [customer, setCustomers] = useState<Customer[]>();
@@ -36,6 +33,7 @@ export default function CustomersTable() {
   const [client, setClient] = useState<Customer>({} as Customer);
   const [openModal, setOpenModal] = useState(false);
   const [openModalPwd, setOpenModalPwd] = useState(false);
+  const [openDialogPdf, setOpenDialogPdf] = useState(false);
 
   const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
 
@@ -60,12 +58,6 @@ export default function CustomersTable() {
     setCurrentCustomer(null);
   };
 
-  const downloadFile = async (id: number | undefined) => {
-    const { data } = await getDetsAccounting(id);
-    const response = await getPdfAccounting(data);
-
-    downloadFileFromBlob(response.data, "EstadoCuenta.pdf");
-  };
 
   return (
     <Box>
@@ -78,12 +70,12 @@ export default function CustomersTable() {
               "& th, & td": {
                 color: "#5d5a5aff",
                 padding: "12px 9px",
-                fontSize: "0.85rem", 
-                 whiteSpace: "nowrap",
+                fontSize: "0.85rem",
+                whiteSpace: "nowrap",
               },
               "& th": {
                 fontWeight: 300,
-                fontSize: "0.80rem", 
+                fontSize: "0.80rem",
               },
             }}
             size="small"
@@ -110,6 +102,7 @@ export default function CustomersTable() {
                     <ButtonAdd
                       text="Nuevo Cliente"
                       handleClickOpen={handleClickOpen}
+                      icon={<AddIcon />}
                     />
                   </Box>
                 </th>
@@ -119,13 +112,13 @@ export default function CustomersTable() {
             <TableHead>
               <TableRow>
                 <TableCell>Razón social</TableCell>
-                <TableCell align="left">Periodicidad</TableCell>
-                <TableCell align="left">Rfc</TableCell>
-                <TableCell align="left">Contraseña</TableCell>
-                <TableCell align="left">Estado</TableCell>
-                <TableCell align="left">Honorario</TableCell>
-                <TableCell align="left">En sociedad</TableCell>
-                <TableCell align="left">Opciones</TableCell>
+                <TableCell align="center">Periodicidad</TableCell>
+                <TableCell align="center">RFC</TableCell>
+                <TableCell align="center">Contraseña</TableCell>
+                <TableCell align="center">Estado</TableCell>
+                <TableCell align="center">Honorario</TableCell>
+                <TableCell align="center">En sociedad</TableCell>
+                <TableCell align="center">Opciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -138,21 +131,21 @@ export default function CustomersTable() {
                       </TableCell>
                     </Tooltip>
                     <TableCell>{row.periodicity}</TableCell>
-                    <TableCell align="left">{row.rfc}</TableCell>
-                    <TableCell align="left">{row.password}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">{row.rfc}</TableCell>
+                    <TableCell align="center">{row.password}</TableCell>
+                    <TableCell align="center">
                       <Chip
                         label={row.status ? "ACTIVO" : "INACTIVO"}
                         color={row.status ? "success" : "default"}
                         variant="outlined"
                       />
                     </TableCell>
-                    <TableCell align="left">${row.honorary}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">${row.honorary}</TableCell>
+                    <TableCell align="center">
                       {row.isInSociety ? "SI" : "NO"}
                     </TableCell>
 
-                    <TableCell align="left">
+                    <TableCell align="center">
                       <Tooltip title="Actualizar">
                         <IconButton
                           onClick={() => {
@@ -167,7 +160,10 @@ export default function CustomersTable() {
 
                       <Tooltip title="Estado de cuenta">
                         <IconButton
-                          onClick={() => downloadFile(row.id)}
+                          onClick={() => {
+                            setOpenDialogPdf(true)
+                            setCurrentCustomer(row);
+                          }}
                           size="small"
                         >
                           <PictureAsPdfIcon sx={{ color: "#09356f" }} />
@@ -218,6 +214,11 @@ export default function CustomersTable() {
         customer={currentCustomer}
         handleClose={handleCloseModalPwd}
         open={openModalPwd}
+      />
+      <DialogPdf
+        open={openDialogPdf}
+        onClose={() => setOpenDialogPdf(false)}
+        customer={currentCustomer}
       />
     </Box>
   );
