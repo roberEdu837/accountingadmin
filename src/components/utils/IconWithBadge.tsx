@@ -14,12 +14,12 @@ function IconWithBadge({ parentIcon, childIcon }: Props) {
           sx={{
             position: "absolute",
             bottom: 0,
-            left: 0,
+            right: 0,
             backgroundColor: "white",
             borderRadius: "50%",
             display: "flex",
-            alignItems: "left",
-            justifyContent: "left",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {childIcon}

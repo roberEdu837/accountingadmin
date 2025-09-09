@@ -24,7 +24,7 @@ export const getPdfAccountingPayments = (id: number | undefined, month: number) 
  });
 }
 
-export const  hasDebtsAccountings = () => {
+export const  getHasDebtsAccountings = () => {
   return axiosInstance.get('monthly-accountings/has-debts')
 }
 

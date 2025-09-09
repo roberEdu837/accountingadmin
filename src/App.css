@@ -33,4 +33,43 @@ thead {
   color: #dfeffc;
 }
 
+.myTable {
+  min-width: 650px;
+}
+
+.myTable th,
+.myTable td {
+  color: #5d5a5aff;
+  padding: 11px 9px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+.myTable th {
+  font-weight: 300;
+  font-size: 0.90rem;
+}
+
+.icon-default {
+  color: #09356f;
+  font-size: 1.8rem;
+}
+
+.icon-children {
+  color: #09356f;
+  font-size: 1rem;
+}
+
+.icon-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
