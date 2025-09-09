@@ -17,7 +17,7 @@ import { formatDate, paymentMethods } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getPaymentsByAccountingId } from "../../services/payments.service";
 import ToastNotification from "../../utils/toast.notification";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 interface Props {
   open: boolean;
   handleClose: any;
@@ -33,7 +33,7 @@ function DialogPaymentsList({
   accounting,
   flag,
   setFlag,
-  setAccountings,
+ 
 }: Props) {
   const [payments, setPayments] = useState<any[]>([]);
 
