@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import logoImg from "../../../public/Logo2.png";
+import { HRContable_White } from "../../assets/images";
 
 export default function Logo() {
   return (
@@ -10,7 +10,7 @@ export default function Logo() {
         alignItems: "center",
       }}
     >
-      <img src={logoImg} alt="Mi Logo" width={200} className="logo" />
+      <img src={HRContable_White} alt="Mi Logo" width={200} className="logo" />
     </Box>
   );
 }

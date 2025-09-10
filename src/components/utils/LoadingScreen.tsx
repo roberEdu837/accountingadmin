@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Logo from "../../../public/Logo2.png";
+import { HRContable_Blue } from "../../assets/images";
 
 export default function LoadingScreen() {
   return (
@@ -13,7 +13,7 @@ export default function LoadingScreen() {
       }}
     >
       <img
-        src={Logo}
+        src={HRContable_Blue}
         alt="Logo"
         style={{
           width: "100px",

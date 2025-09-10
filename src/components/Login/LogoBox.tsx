@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Logo from "../../../public/Logo.png";
+import { HRContable_White } from "../../assets/images";
 
 export default function LogoBox() {
   return (
@@ -14,7 +14,7 @@ export default function LogoBox() {
     >
       <img
         style={{ width: "200px" }}
-        src={Logo}
+        src={HRContable_White}
         alt="Mi Logo"
         className="logo"
       />

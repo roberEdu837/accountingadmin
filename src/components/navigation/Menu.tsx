@@ -10,9 +10,9 @@ import ListItem from "@mui/material/ListItem";
 import Toolbar from "@mui/material/Toolbar";
 import { Link, useNavigate } from "react-router";
 import MenuIcon from "@mui/icons-material/Menu";
-import Logo from "../../../public/Logo.png";
 import Logout from "./Logout";
-import { NavItems } from "../utils/navItems";
+import { HRContable_White } from "../../assets/images";
+import { NavItems } from "../utils/NavItems";
 
 const drawerWidth = 240;
 
@@ -31,7 +31,7 @@ function Menu(props: any) {
       <Box sx={{ flexGrow: 1, backgroundColor: "#09356f" }}>
         <img
           style={{ width: "100px" }}
-          src={Logo}
+          src={HRContable_White}
           alt="Mi Logo"
           className="logo"
           onClick={() => navigate("/accounting")}
@@ -77,7 +77,7 @@ function Menu(props: any) {
           <Box sx={{ flexGrow: 1 }}>
             <img
               style={{ width: "100px" }}
-              src={Logo}
+              src={HRContable_White}
               alt="Mi Logo"
               className="logo"
               onClick={() => navigate("/accounting")}
