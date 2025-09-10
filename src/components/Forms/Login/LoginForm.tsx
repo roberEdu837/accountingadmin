@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
 import { validationSchema } from "../../../validation";
-import Logo from "../../Login/Logo";
+import Logo from "../../login/Logo";
 import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";

@@ -29,7 +29,7 @@ interface Props {
   flag?: boolean;
 }
 
-export default function DialogAccountingEdit({
+export default function DialogUpdate({
   handelClose,
   open,
   accounting,

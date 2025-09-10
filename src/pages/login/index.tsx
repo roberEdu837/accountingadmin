@@ -1,5 +1,5 @@
 import { Box, Card, Grid, useMediaQuery, useTheme } from "@mui/material";
-import LogoBox from "../../components/Login/LogoBox";
+import LogoBox from "../../components/login/LogoBox";
 import LoginForm from "../../components/Forms/Login/LoginForm";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
