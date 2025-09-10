@@ -20,7 +20,11 @@ import { useModal } from "../../hooks";
 import type { Customer, MonthlyAccounting } from "../../@types/customer";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import CheckDebts from "../utils/CheckDebts";
-import { createAccounting, getaccounting, getHasDebtsAccountings } from "../../services";
+import {
+  createAccounting,
+  getaccounting,
+  getHasDebtsAccountings,
+} from "../../services";
 
 export default function AccountingTable() {
   // --- Modales genéricos ---
