@@ -10,6 +10,8 @@ import {
   TableCell,
   TableBody,
   Table,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import DialogClientsInSociety from "./PaymentDateGenerator";
 import PaymentIcon from "@mui/icons-material/Payment";
@@ -17,6 +19,7 @@ import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
 import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import { getClientInSociety } from "../../services";
+import { columnsclientsInSociety } from "../../constants";
 
 export default function SocietyClientsTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -35,6 +38,7 @@ export default function SocietyClientsTable() {
     month: previousMonth,
     monthlyPaymentCompleted: undefined, // ahora ok, porque FilterAccounting permite boolean | undefined
   });
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   useEffect(() => {
     if (customers) {
@@ -77,24 +81,9 @@ export default function SocietyClientsTable() {
         flag={flag}
         type=""
       />
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         <TableContainer component={Paper}>
-          <Table
-            sx={{
-              minWidth: 650,
-              "& th, & td": {
-                color: "#5d5a5aff",
-                padding: "15px 9px", // menos espacio en celdas
-                fontSize: "0.85rem", // letra más chica
-              },
-              "& th": {
-                fontWeight: 300,
-                fontSize: "0.80rem", // menos grueso el encabezado
-              },
-            }}
-            size="small"
-            aria-label="caption table"
-          >
+          <Table className="myTable" size="small" aria-label="caption table">
             <thead>
               <tr>
                 <th colSpan={9}>
@@ -103,7 +92,6 @@ export default function SocietyClientsTable() {
                       display: "flex",
                       alignItems: "left",
                       justifyContent: "space-between",
-                      //margin: 2,
                     }}
                   >
                     <span
@@ -126,14 +114,11 @@ export default function SocietyClientsTable() {
             </thead>
             <TableHead>
               <TableRow>
-                <TableCell>Razón social</TableCell>
-                <TableCell align="center">Mes</TableCell>
-                <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">Estado</TableCell>
-                <TableCell align="center">Pago asociados</TableCell>
-                <TableCell align="center">Pago total</TableCell>
-                <TableCell align="center">F. de pago</TableCell>
-                <TableCell align="center">Opciones</TableCell>
+                {columnsclientsInSociety?.map((col) => (
+                  <TableCell key={col.key} align={col.align as any}>
+                    {col.label}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
 
@@ -157,6 +142,7 @@ export default function SocietyClientsTable() {
                       </TableCell>
                       <TableCell align="center">
                         <Chip
+                          sx={{ minWidth: 100 }}
                           label={row.status ? "PAGADO" : "POR PAGAR"}
                           color={row.status ? "success" : "warning"}
                           variant="outlined"

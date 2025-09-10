@@ -12,6 +12,8 @@ import {
   TableBody,
   Table,
   IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
@@ -28,6 +30,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { desactivateCustomer } from "../../services/customer.service";
 import { useModal } from "../../hooks";
+import { columnsClients } from "../../constants";
 
 export default function CustomerTable() {
   const updateModal = useModal<Customer | undefined>();
@@ -36,6 +39,7 @@ export default function CustomerTable() {
   const openDialogPdf = useModal<Customer>();
   const [customer, setCustomers] = useState<Customer[]>();
   const [flag, setFlag] = useState(false);
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   const handleDesactivate = async (id: number | undefined, status: boolean) => {
     await desactivateCustomer(id, status);
@@ -45,7 +49,7 @@ export default function CustomerTable() {
   return (
     <Box>
       <FilterCustomer flag={flag} setCustomers={setCustomers} />
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         <TableContainer component={Paper}>
           <Table className="myTable" size="small" aria-label="caption table">
             <thead>
@@ -77,14 +81,11 @@ export default function CustomerTable() {
 
             <TableHead>
               <TableRow>
-                <TableCell>Razón social</TableCell>
-                <TableCell align="center">Periodicidad</TableCell>
-                <TableCell align="center">RFC</TableCell>
-                <TableCell align="center">Contraseña</TableCell>
-                <TableCell align="center">Estado</TableCell>
-                <TableCell align="center">Honorario</TableCell>
-                <TableCell align="center">En sociedad</TableCell>
-                <TableCell align="center">Opciones</TableCell>
+                {columnsClients?.map((col) => (
+                  <TableCell key={col.key} align={col.align as any}>
+                    {col.label}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>

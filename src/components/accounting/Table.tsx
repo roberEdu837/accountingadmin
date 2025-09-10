@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   Box,
   TableCell,
@@ -8,6 +7,8 @@ import {
   TableHead,
   TableRow,
   Paper,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import DialogPayments from "../payments/DialogPayments";
 import DialogPaymentsList from "../payments/DialogPaymentsList";
@@ -53,6 +54,7 @@ export default function AccountingTable() {
     year: year,
     monthlyPaymentCompleted: undefined,
   });
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
   // --- Fetch de accountings ---
   const getAccounting = async () => {
@@ -90,9 +92,9 @@ export default function AccountingTable() {
   };
 
   const checkDebts = async () => {
-    const { data } = await getHasDebtsAccountings(); // esta es la importada
+    const { data } = await getHasDebtsAccountings();
     if (data === true) {
-      checkModal.openModal(true);
+      checkModal.openModal(data);
     }
   };
 
@@ -102,7 +104,6 @@ export default function AccountingTable() {
 
   return (
     <Box>
-      {/* Filtro */}
       <Filter
         flag={flag}
         setFlag={setFlag}
@@ -111,25 +112,40 @@ export default function AccountingTable() {
         type="Accounting"
       />
 
-      {/* Tabla */}
-      <Box sx={{ padding: 3 }}>
-        {accountings.length > 0 && (
-          <TableContainer component={Paper}>
-            <Table className="myTable" size="small" aria-label="caption table">
-              <thead>
-                <tr>
-                  <th style={{ fontSize: "1.5rem" }}>Contabilidad Mensual</th>
-                </tr>
-              </thead>
-              <TableHead>
-                <TableRow>
-                  {columnsAccounting.map((col) => (
-                    <TableCell key={col.key} align={col.align as any}>
-                      {col.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
+      <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
+        <TableContainer component={Paper} sx={{ width: "100%" }}>
+          <Table className="myTable" size="small" stickyHeader>
+            <thead>
+              <tr>
+                <th colSpan={9}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "left",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      Contabilidad Mensual
+                    </span>
+                  </Box>
+                </th>
+              </tr>
+            </thead>
+            <TableHead>
+              <TableRow>
+                {columnsAccounting?.map((col) => (
+                  <TableCell key={col.key} align={col.align as any}>
+                    {col.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            {accountings && (
               <AccountingTableBody
                 accountings={accountings}
                 openModalPasswords={passwordsModal.openModal}
@@ -140,12 +156,12 @@ export default function AccountingTable() {
                 flag={flag}
                 setFlag={setFlag}
               />
-            </Table>
-          </TableContainer>
-        )}
+            )}
+          </Table>
+        </TableContainer>
       </Box>
 
-      {/* Modal de pago */}
+      {/* Modales */}
       {paymentModal.data && (
         <DialogPayments
           onClose={paymentModal.closeModal}
@@ -163,7 +179,7 @@ export default function AccountingTable() {
         handleClose={passwordsModal.closeModal}
         open={passwordsModal.open}
       />
-      {/* Modal de edición */}
+
       <DialogAccountingEdit
         accounting={editAccountingModal.data ?? undefined}
         handelClose={editAccountingModal.closeModal}
@@ -172,7 +188,6 @@ export default function AccountingTable() {
         open={editAccountingModal.open}
       />
 
-      {/* Lista de pagos */}
       <DialogPaymentsList
         accounting={paymentsListModal.data}
         handleClose={paymentsListModal.closeModal}
