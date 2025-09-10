@@ -1,5 +1,5 @@
 import type { Customer } from "../@types/customer";
-import { addFourYears, getCreationDate, getTodayDate } from "../utils/formatDate";
+import { addFourYears, getTodayDate } from "../utils/formatDate";
 
 export const customer = {
   socialReason: "",
@@ -12,9 +12,8 @@ export const customer = {
   isInSociety: 0,
 };
 
-export function customerInitialValues(c?: Customer) {
-  if (!c) return customer;
-
+export function customerInitialValues(c?: Customer | undefined) {
+  if (!c?.id) return customer;
   const {
     id,
     socialReason,
@@ -34,11 +33,8 @@ export function customerInitialValues(c?: Customer) {
     password: password || "",
     honorary: honorary || 0,
     periodicity: periodicity || "",
-    creationDate: getCreationDate(creationDate || getTodayDate()),
-    renewalDate: getCreationDate(renewalDate || getTodayDate()),
+    creationDate: creationDate,
+    renewalDate: renewalDate,
     isInSociety: isInSociety === false ? 0 : 1,
   };
 }
-
-
-

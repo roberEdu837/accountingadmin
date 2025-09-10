@@ -1,2 +1,2 @@
 export {columnsAccounting} from './columns'
-export {iconLargeStyle,iconSmallStyle} from './styles'
+export {iconLargeStyle,iconSmallStyle,iconLargeStyleWhite} from './styles'

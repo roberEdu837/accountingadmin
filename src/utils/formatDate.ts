@@ -91,18 +91,4 @@ export function addFourYears(baseDate: string): string {
   return `${newYear}-${month}-${day}`;
 }
 
-export function addFourYearsDate(baseDate: string | Date): string {
-  const date = typeof baseDate === "string" ? new Date(baseDate) : baseDate;
-  const newYear = date.getFullYear() + 4;
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() va de 0 a 11
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${newYear}-${month}-${day}`;
-}
 
-export function getCreationDate(baseDate: string | Date): string {
-  const date = typeof baseDate === "string" ? new Date(baseDate) : baseDate;
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}

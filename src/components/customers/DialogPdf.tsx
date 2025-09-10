@@ -24,7 +24,7 @@ import ToastNotification from "../../utils/toast.notification";
 interface PdfProps {
   open: boolean;
   onClose: () => void;
-  customer: Customer;
+  customer: Customer | undefined;
 }
 
 export default function DialogPdf({ onClose, open, customer }: PdfProps) {

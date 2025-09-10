@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogActions,
@@ -13,7 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Formik } from "formik";
-import { PostCustomer } from "../../services/customer.service";
+import { patchCustomer, PostCustomer } from "../../services/customer.service";
 import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
@@ -21,13 +20,14 @@ import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { addFourYears } from "../../utils";
 import { customerInitialValues } from "../../formConfig";
+import { Icons } from "../../constants/Icons";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
-  customer: Customer | undefined
+  customer: Customer | undefined;
 }
 
 export default function DialogCustomers({
@@ -35,34 +35,63 @@ export default function DialogCustomers({
   open,
   setFlag,
   flag,
-  customer
+  customer,
 }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+
+  const handleCreateCustomer = async (v: any) => {
+    const customerData: Customer = {
+      ...v,
+      isInSociety: v.isInSociety === 0 ? false : true,
+    };
+    const { data } = await PostCustomer(customerData);
+    ToastNotification(
+      `El cliente ${data.socialReason} se creó correctamente`,
+      "success"
+    );
+  };
+
+  const handleUpdateCustomer = async (values: any) => {
+    const data: Customer = {
+      ...values,
+      isInSociety: values.isInSociety === 0 ? false : true,
+      notificationSent:
+        customer?.creationDate !== values.creationDate
+          ? false
+          : customer?.notificationSent,
+    };
+
+    await patchCustomer(data, values.id);
+    ToastNotification(
+      `El cliente ${values.socialReason} se actualizó correctamente`,
+      "success"
+    );
+  };
+  console.log(customer);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
-        title="Registro de Cliente"
-        subtitle="Llena los campos para agregar un nuevo cliente."
+        title={customer?.id ? "Actualizar Cliente" : "Registro de Cliente"}
+        subtitle={
+          customer?.id
+            ? "Modifica los campos para actualizar al cliente."
+            : "Llena los campos para agregar un nuevo cliente."
+        }
       />
+
       <DialogContent>
         <Formik
           initialValues={customerInitialValues(customer)}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-
-              const customerData: Customer = {
-                ...values,
-                isInSociety: values.isInSociety === 0 ? false : true,
-              };
-              const { data } = await PostCustomer(customerData);
-              ToastNotification(
-                `El cliente ${data.socialReason} se creó correctamente`,
-                "success"
-              );
+              if (customer?.id) {
+                await handleUpdateCustomer(values);
+              } else {
+                await handleCreateCustomer(values);
+              }
             } catch (error) {
-              console.error("Error al enviar el formulario:", error);
             } finally {
               setSubmitting(false);
               if (setFlag) setFlag(!flag);
@@ -207,8 +236,8 @@ export default function DialogCustomers({
                     helperText={touched.renewalDate && errors.renewalDate}
                   />
                 </Grid>
-                <Grid  size={isMobile ? 12 : 6}>
-                  <FormControl fullWidth >
+                <Grid size={isMobile ? 12 : 6}>
+                  <FormControl fullWidth>
                     <InputLabel id="month-select-label">
                       ¿Cliente en sociedad?
                     </InputLabel>
@@ -228,10 +257,10 @@ export default function DialogCustomers({
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
-                <Button onClick={onClose} color="secondary">
-                  Cancelar
-                </Button>
-                <ButtonSubmit text="Agregar Cliente" />
+                <ButtonSubmit
+                  text={customer?.id ? "Actualizar" : "Agregar"}
+                  icon={customer?.id ?Icons.editWhite: Icons.addWhite}
+                />
               </DialogActions>
             </form>
           )}

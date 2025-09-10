@@ -31,73 +31,28 @@ import { useModal } from "../../hooks";
 
 export default function CustomersTable() {
   const updateModal = useModal<Customer | undefined>();
+  const openModalPwd = useModal<Customer | undefined>();
+  const openModaCreatePwd = useModal<Customer>();
+  const openDialogPdf = useModal<Customer>();
   const [customer, setCustomers] = useState<Customer[]>();
-  const [open, setOpen] = useState<boolean>(false);
   const [flag, setFlag] = useState(false);
-  const [client, setClient] = useState<Customer>({} as Customer);
-  const [openModal, setOpenModal] = useState(false);
-  const [openModalPwd, setOpenModalPwd] = useState(false);
-  const [openDialogPdf, setOpenDialogPdf] = useState(false);
-
-  const [currentCustomer, setCurrentCustomer] = useState<any | null>(null);
-
-  const handleOpenModal = () => setOpenModal(true);
-
-  const handleCloseModal = () => setOpenModal(false);
-
-  const handleClickOpen = () => setOpen(true);
-
-  // const handleClose = () => {
-  //   updateModal.
-  //   setOpen(false);
-  //   setOpenEdit(false);
-  // };
-
-  const handleOpenModalPwd = (customer: Customer) => {
-    setCurrentCustomer(customer);
-    setOpenModalPwd(true);
-  };
-
-  const handleCloseModalPwd = () => {
-    setOpenModalPwd(false);
-    setCurrentCustomer(null);
-  };
 
   const handleDesactivate = async (id: number | undefined, status: boolean) => {
     await desactivateCustomer(id, status);
     setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
   };
 
-  console.log(updateModal)
-
   return (
     <Box>
       <FilterCustomer flag={flag} setCustomers={setCustomers} />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
-          <Table
-            sx={{
-              minWidth: 650,
-              "& th, & td": {
-                color: "#5d5a5aff",
-                padding: "12px 9px",
-                fontSize: "0.85rem",
-                whiteSpace: "nowrap",
-              },
-              "& th": {
-                fontWeight: 300,
-                fontSize: "0.80rem",
-              },
-            }}
-            size="small"
-            aria-label="caption table"
-          >
+          <Table className="myTable" size="small" aria-label="caption table">
             <thead>
               <tr>
                 <th colSpan={9}>
                   <Box
                     sx={{
-                      //margin: 2,
                       display: "flex",
                       alignItems: "left",
                       justifyContent: "space-between",
@@ -137,7 +92,7 @@ export default function CustomersTable() {
                 return (
                   <TableRow key={row.id}>
                     <Tooltip title="Contraseñas">
-                      <TableCell onClick={() => handleOpenModalPwd(row)}>
+                      <TableCell onClick={() => openModalPwd.openModal(row)}>
                         {row.socialReason.toUpperCase()}
                       </TableCell>
                     </Tooltip>
@@ -170,10 +125,7 @@ export default function CustomersTable() {
 
                       <Tooltip title="Estado de cuenta">
                         <IconButton
-                          onClick={() => {
-                            setOpenDialogPdf(true);
-                            setCurrentCustomer(row);
-                          }}
+                          onClick={() => openDialogPdf.openModal(row)}
                           size="small"
                         >
                           <PictureAsPdfIcon sx={{ color: "#09356f" }} />
@@ -183,8 +135,7 @@ export default function CustomersTable() {
                       <Tooltip title="Contraseñas">
                         <IconButton
                           onClick={() => {
-                            handleOpenModal();
-                            setClient(row);
+                            openModaCreatePwd.openModal(row);
                           }}
                           size="small"
                         >
@@ -219,29 +170,22 @@ export default function CustomersTable() {
         customer={updateModal.data}
       />
 
-      {/* <DialogCustomersEdit
-        onClose={handleClose}
-        open={openEdit}
-        flag={flag}
-        setFlag={setFlag}
-        client={client}
-      /> */}
       <DialogCustomersPasswords
-        onClose={handleCloseModal}
-        open={openModal}
-        customer={client}
+        onClose={openModaCreatePwd.closeModal}
+        open={openModaCreatePwd.open}
+        customer={openModaCreatePwd.data}
         isEdit={false}
       />
 
       <ModalPasswords
-        customer={currentCustomer}
-        handleClose={handleCloseModalPwd}
-        open={openModalPwd}
+        customer={openModalPwd.data}
+        handleClose={openModalPwd.closeModal}
+        open={openModalPwd.open}
       />
       <DialogPdf
-        open={openDialogPdf}
-        onClose={() => setOpenDialogPdf(false)}
-        customer={currentCustomer}
+        open={openDialogPdf.open}
+        onClose={openDialogPdf.closeModal}
+        customer={openDialogPdf.data}
       />
     </Box>
   );

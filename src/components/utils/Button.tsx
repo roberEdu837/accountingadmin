@@ -1,9 +1,10 @@
 import { Button } from "@mui/material";
 interface Props{
     text: string
+    icon:React.ReactNode;
 }
 
-export default function ButtonSubmit({text}: Props) {
+export default function ButtonSubmit({text,icon}: Props) {
   return (
     <Button
       type="submit"
@@ -26,6 +27,8 @@ export default function ButtonSubmit({text}: Props) {
       }}
     >
       {text}
+      {" "}
+      {icon}
     </Button>
   );
 }

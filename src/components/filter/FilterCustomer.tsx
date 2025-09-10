@@ -26,6 +26,7 @@ function FilterCustomer({ flag, setCustomers }: Props) {
 
   const getAccounting = async () => {
     try {
+      console.log('sie enya')
       const { data } = await getCustomers({
         isInSociety,
         search,
