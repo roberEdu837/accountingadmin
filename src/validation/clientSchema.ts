@@ -17,10 +17,6 @@ export const validationSchemaClient = Yup.object({
       return RFC_MORAL.test(upperValue) || RFC_FISICA.test(upperValue);
     }),
 
-  password: Yup.string()
-    .required("La contraseña es requerida")
-    .min(4, "Debe tener al menos 4 caracteres"),
-
   honorary: Yup.number()
     .typeError("Debe ser un número")
     .required("El monto de honorarios es requerido")

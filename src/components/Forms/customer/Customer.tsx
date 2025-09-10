@@ -127,21 +127,6 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
               <TextField
                 fullWidth
                 margin="dense"
-                label="Contraseña"
-                name="password"
-                variant="outlined"
-                type="text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.password}
-                error={Boolean(touched.password && errors.password)}
-                helperText={touched.password && errors.password}
-              />
-            </Grid>
-            <Grid size={isMobile ? 12 : 6}>
-              <TextField
-                fullWidth
-                margin="dense"
                 label="Honorarios"
                 name="honorary"
                 variant="outlined"
@@ -154,11 +139,12 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
               />
             </Grid>
             <Grid size={isMobile ? 12 : 6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
+              <FormControl fullWidth sx={{mt:1}}>
+                <InputLabel id="demo-simple-select-label" >
                   Periodicidad
                 </InputLabel>
                 <Select
+                
                   labelId="demo-simple-select-label"
                   value={values.periodicity}
                   label="Periodicidad"

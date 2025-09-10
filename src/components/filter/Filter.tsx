@@ -32,12 +32,14 @@ export default function Filter({
 
   return (
     <Box sx={headerStyles}>
+      
       <Box sx={{ flexGrow: 1, ml: isMobile ? 0 : 4 }}>
         <Grid container spacing={1}>
-          <Grid size={isMobile ? 12 : 2}>
+          <Grid size={isMobile ? 12 : 3}>
             <TextField
               size={isMobile ? "small" : "medium"}
               fullWidth
+              
               label="Buscar por razón social"
               variant="outlined"
               value={search}
@@ -45,10 +47,10 @@ export default function Filter({
                 setFilter({ ...filter, search: e.target.value });
                 setFlag(!flag);
               }}
-              sx={{ mt: isMobile ? 2 : 2 }}
+              sx={{ mt: isMobile ? 2 : 2,}}
             />
           </Grid>
-          <Grid size={isMobile ? 12 : 2}>
+          <Grid size={isMobile ? 12 : 1.5}>
             <FormControl fullWidth sx={{ mt: isMobile ? 0 : 2 }}>
               <InputLabel id="month-select-label">Mes</InputLabel>
               <Select
@@ -69,7 +71,7 @@ export default function Filter({
               </Select>
             </FormControl>
           </Grid>
-          <Grid size={isMobile ? 12 : 1.8} sx={{ mt: isMobile ? 0 : 2 }}>
+          <Grid size={isMobile ? 12 : 1.5} sx={{ mt: isMobile ? 0 : 2 }}>
             <FormControl fullWidth>
               <InputLabel id="month-select-label">Año</InputLabel>
               <Select
@@ -90,12 +92,14 @@ export default function Filter({
               </Select>
             </FormControl>
           </Grid>
-          <Grid size={isMobile ? 12 : 1.5} sx={{ mt: isMobile ? 0 : 2 }}>
+          <Grid size={isMobile ? 12 : 1.8} sx={{ mt: isMobile ? 0 : 2 }}>
             <FormControl fullWidth>
               <InputLabel id="status-select-label">Estado de pago</InputLabel>
               <Select
                 size={isMobile ? "small" : "medium"}
                 fullWidth
+                    sx={{ minWidth: 120 }}
+
                 labelId="status-select-label"
                 id="status-select"
                 value={

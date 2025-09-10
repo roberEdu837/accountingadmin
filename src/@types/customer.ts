@@ -4,7 +4,6 @@ export type Customer = {
   id?: number;
   socialReason: string;
   rfc: string;
-  password: string;
   status?: boolean;
   honorary: number;
   periodicity: string;

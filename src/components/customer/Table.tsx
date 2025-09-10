@@ -49,6 +49,7 @@ export default function CustomerTable() {
   return (
     <Box>
       <FilterCustomer flag={flag} setCustomers={setCustomers} />
+
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         <TableContainer component={Paper}>
           <Table className="myTable" size="small" aria-label="caption table">
@@ -69,11 +70,6 @@ export default function CustomerTable() {
                     >
                       Clientes
                     </span>
-                    <ButtonAdd
-                      text="Nuevo Cliente"
-                      handleClickOpen={updateModal.openModal}
-                      icon={<AddIcon />}
-                    />
                   </Box>
                 </th>
               </tr>
@@ -99,7 +95,6 @@ export default function CustomerTable() {
                     </Tooltip>
                     <TableCell>{row.periodicity}</TableCell>
                     <TableCell align="center">{row.rfc}</TableCell>
-                    <TableCell align="center">{row.password}</TableCell>
                     <TableCell align="center">
                       <Chip
                         label={row.status ? "ACTIVO" : "INACTIVO"}
@@ -162,6 +157,20 @@ export default function CustomerTable() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 16,
+            right: 20,
+            zIndex: 1200,
+          }}
+        >
+          <ButtonAdd
+            text="Nuevo Cliente"
+            handleClickOpen={updateModal.openModal}
+            icon={<AddIcon />}
+          />
+        </Box>
       </Box>
       <DialogCustomers
         onClose={updateModal.closeModal}

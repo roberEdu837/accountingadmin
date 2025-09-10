@@ -4,7 +4,6 @@ import { addFourYears, getTodayDate } from "../utils/formatDate";
 export const customer = {
   socialReason: "",
   rfc: "",
-  password: "",
   honorary: 0,
   periodicity: "",
   creationDate: getTodayDate(),
@@ -18,7 +17,6 @@ export function customerInitialValues(c?: Customer | undefined) {
     id,
     socialReason,
     rfc,
-    password,
     honorary,
     periodicity,
     creationDate,
@@ -30,7 +28,6 @@ export function customerInitialValues(c?: Customer | undefined) {
     id: id || 0,
     socialReason: socialReason || "",
     rfc: rfc || "",
-    password: password || "",
     honorary: honorary || 0,
     periodicity: periodicity || "",
     creationDate: creationDate,

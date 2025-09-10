@@ -27,7 +27,6 @@ export const columnsClients = [
   { key: "socialReason", label: "RAZÓN SOCIAL", align: "left" },
   { key: "periodicity", label: "PERIODICIDAD", align: "center" },
   { key: "rfc", label: "RFC", align: "center" },
-  { key: "password", label: "CONTRASEÑA", align: "center" },
   { key: "state", label: "ESTADO", align: "center" },
   { key: "honorary", label: "HONORARIO", align: "center" },
   { key: "inSociety", label: "EN SOCIEDAD", align: "center" },
