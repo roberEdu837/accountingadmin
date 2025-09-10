@@ -1,4 +1,4 @@
-import TableClientsInSociety from "../../components/clientsInSociety/TableClientsInSociety";
+import TableClientsInSociety from "../../components/clientsInSociety/Table";
 
 
 export default function ClientsSociety() {

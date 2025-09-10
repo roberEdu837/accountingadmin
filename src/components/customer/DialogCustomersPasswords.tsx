@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import ButtonSubmit from "../utils/Button";
-import ToastNotification from "../utils/Toast.notification";
+import ToastNotification from "../utils/ToastNotification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { validationSchemaPassword } from "../../validation/passwordSchema";
 import type { Customer } from "../../@types/customer";
 import type { PasswordDTO } from "../../@types/passwors";
-import { Icons } from "../../constants/Icons";
+import { Icons } from "../utils/Icons";
 import { patchPasswordById, postPasswordByCustomer } from "../../services";
 
 interface Props {

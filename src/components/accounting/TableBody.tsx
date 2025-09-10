@@ -10,7 +10,7 @@ import SelectStatus from "./StatusSelector";
 import IconWithBadge from "../utils/IconWithBadge";
 import { totalPaid, formatDate, getMonthLabel } from "../../utils";
 import type { Customer, MonthlyAccounting } from "../../@types/customer";
-import { Icons } from "../../constants/Icons";
+import { Icons } from "../utils/Icons";
 interface Props {
   accountings?: MonthlyAccounting[];
   openModalPasswords: (customer: Customer) => void;

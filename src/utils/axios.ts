@@ -1,5 +1,5 @@
 import axios from "axios";
-import ToastNotification from "../components/utils/Toast.notification";
+import ToastNotification from "../components/utils/ToastNotification";
 import { ExpiredToken } from "./jwt";
 
 export const axiosInstance = axios.create({

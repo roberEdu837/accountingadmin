@@ -1,6 +1,6 @@
 import { Box, Card, Grid, useMediaQuery, useTheme } from "@mui/material";
 import LogoBox from "../../components/login/LogoBox";
-import RegisterForm from "../../components/Forms/Register/RegisterForm";
+import RegisterForm from "../../components/Forms/Register/Register";
 
 export default function Register() {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));

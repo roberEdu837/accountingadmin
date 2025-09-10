@@ -15,11 +15,11 @@ import { Formik } from "formik";
 import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
-import ToastNotification from "../utils/Toast.notification";
+import ToastNotification from "../utils/ToastNotification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { addFourYears } from "../../utils";
 import { customerInitialValues } from "../../formConfig";
-import { Icons } from "../../constants/Icons";
+import { Icons } from "../utils/Icons";
 import { patchCustomer, postCustomer } from "../../services";
 
 interface Props {

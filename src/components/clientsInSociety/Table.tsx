@@ -11,14 +11,14 @@ import {
   TableBody,
   Table,
 } from "@mui/material";
-import DialogClientsInSociety from "./DialogDlientsInSociety";
+import DialogClientsInSociety from "./PaymentDateGenerator";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
 import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import { getClientInSociety } from "../../services";
 
-export default function TableClientsInSociety() {
+export default function SocietyClientsTable() {
   const [flag, setFlag] = useState<boolean>(false);
   const [customers, setCustomers] = useState<any[]>();
   const [total, setTotal] = useState<number>(0);

@@ -13,13 +13,13 @@ import {
 import { Formik } from "formik";
 import ButtonSubmit from "../utils/Button";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import ToastNotification from "../utils/Toast.notification";
+import ToastNotification from "../utils/ToastNotification";
 import {
   getPaymentSchema,
   getInitialValues,
   type Props,
 } from "../../formConfig";
-import { Icons } from "../../constants/Icons";
+import { Icons } from "../utils/Icons";
 import { patchAccounting, postClientIsSociety, postPayment } from "../../services";
 
 export default function DialogPayments({

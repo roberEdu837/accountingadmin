@@ -22,9 +22,9 @@ import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import ToastNotification from "../../utils/Toast.notification";
+import ToastNotification from "../../utils/ToastNotification";
 import { validationRegister } from "../../../validation/loginSchema";
-import { Icons } from "../../../constants/Icons";
+import { Icons } from "../../utils/Icons";
 import { login, register } from "../../../services";
 
 const RegisterForm = () => {

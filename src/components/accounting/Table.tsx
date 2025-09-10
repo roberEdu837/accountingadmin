@@ -12,7 +12,7 @@ import {
 import DialogPayments from "../payments/DialogPayments";
 import DialogPaymentsList from "../payments/DialogPaymentsList";
 import Filter from "../filter/Filter";
-import ModalPasswords from "../public/ModalPasswords";
+import ModalPasswords from "../password/CustomersPasswords";
 import DialogAccountingEdit from "./DialogUpdate";
 import { columnsAccounting } from "../../constants";
 import AccountingTableBody from "./TableBody";

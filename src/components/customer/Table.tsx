@@ -19,7 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import KeyIcon from "@mui/icons-material/Key";
 import DialogCustomersPasswords from "./DialogCustomersPasswords";
-import ModalPasswords from "../public/ModalPasswords";
+import ModalPasswords from "../password/CustomersPasswords";
 import FilterCustomer from "../filter/FilterCustomer";
 import DialogPdf from "./DialogPdf";
 import AddIcon from "@mui/icons-material/Add";
@@ -29,7 +29,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { desactivateCustomer } from "../../services/customer.service";
 import { useModal } from "../../hooks";
 
-export default function CustomersTable() {
+export default function CustomerTable() {
   const updateModal = useModal<Customer | undefined>();
   const openModalPwd = useModal<Customer | undefined>();
   const openModaCreatePwd = useModal<Customer>();

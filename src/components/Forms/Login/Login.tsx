@@ -23,7 +23,7 @@ import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import { Icons } from "../../../constants/Icons";
+import { Icons } from "../../utils/Icons";
 import { login } from "../../../services";
 
 const LoginForm = () => {

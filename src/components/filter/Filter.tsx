@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
-import { months, years } from "../../constants/month";
+import { months, years } from "../../constants";
 
 interface Props {
   

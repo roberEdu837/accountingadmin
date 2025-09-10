@@ -9,9 +9,9 @@ import { Formik } from "formik";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import ButtonSubmit from "../utils/Button";
 import { initialValues } from "../../formConfig/clientsInSociety";
-import ToastNotification from "../utils/Toast.notification";
+import ToastNotification from "../utils/ToastNotification";
 import { patchClientInSociety } from "../../services";
-import { Icons } from "../../constants/Icons";
+import { Icons } from "../utils/Icons";
 
 interface Props {
   open: boolean;
@@ -20,7 +20,7 @@ interface Props {
   setFlag: (flag: boolean) => void;
   flag: boolean;
 }
-export default function DialogClientsInSociety({
+export default function PaymentDateGenerator({
   open,
   onClose,
   setFlag,

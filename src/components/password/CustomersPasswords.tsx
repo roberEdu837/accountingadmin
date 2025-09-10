@@ -15,29 +15,24 @@ import Paper from "@mui/material/Paper";
 import type { Customer } from "../../@types/customer";
 import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import DialogCustomersPasswords from "../customers/DialogCustomersPasswords";
+import DialogCustomersPasswords from "../customer/DialogCustomersPasswords";
 import type { PasswordDTO } from "../../@types/passwors";
 import { getPasswordsById } from "../../services";
+import { useModal } from "../../hooks";
 
 interface ModalPasswordsProps {
   open: boolean;
   handleClose: any;
   customer: Customer | undefined;
 }
-function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
+export default function CustomersPasswords({
+  handleClose,
+  open,
+  customer,
+}: ModalPasswordsProps) {
   const [passwords, setPasswords] = useState<PasswordDTO[]>([]);
-  const [password, setPassword] = useState<PasswordDTO>();
   const [flag, setFlag] = useState(false);
-
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const openModal = useModal<PasswordDTO>();
 
   const getPasswords = async () => {
     if (customer?.id) {
@@ -81,12 +76,7 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
                     <TableCell align="center">{row.password}</TableCell>
                     <TableCell align="center">
                       <Tooltip title="Editar">
-                        <Button
-                          onClick={() => {
-                            handleOpenModal();
-                            setPassword(row);
-                          }}
-                        >
+                        <Button onClick={() => openModal.openModal(row)}>
                           <EditIcon sx={{ color: "#09356f" }} />
                         </Button>
                       </Tooltip>
@@ -99,15 +89,13 @@ function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
         </DialogContent>
       </Dialog>
       <DialogCustomersPasswords
-        onClose={handleCloseModal}
-        open={openModal}
+        onClose={openModal.closeModal}
+        open={openModal.open}
         isEdit={true}
-        password={password}
+        password={openModal.data}
         setFlag={setFlag}
         flag={flag}
       />
     </>
   );
 }
-
-export default ModalPasswords;

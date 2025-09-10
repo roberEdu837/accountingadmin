@@ -15,7 +15,7 @@ import Paper from "@mui/material/Paper";
 import type { MonthlyAccounting } from "../../@types/customer";
 import { formatDate, paymentMethods } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ToastNotification from "../utils/Toast.notification";
+import ToastNotification from "../utils/ToastNotification";
 import { useEffect, useState } from "react";
 import { getPaymentsByAccountingId } from "../../services";
 interface Props {
