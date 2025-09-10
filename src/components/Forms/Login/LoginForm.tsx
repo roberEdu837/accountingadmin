@@ -7,7 +7,6 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  Link,
   OutlinedInput,
   TextField,
   Typography,
@@ -15,7 +14,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Formik } from "formik";
-import { login } from "../../../services/user.service";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
@@ -25,6 +23,8 @@ import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
+import { Icons } from "../../../constants/Icons";
+import { login } from "../../../services";
 
 const LoginForm = () => {
   const dispatch = useDispatch<any>();
@@ -148,25 +148,8 @@ const LoginForm = () => {
             <CardActions
               sx={{ display: "flex", justifyContent: "center", mt: 2 }}
             >
-              <ButtonSubmit text="Iniciar Sesión" />
+              <ButtonSubmit text="Iniciar Sesión" icon={Icons.payment}/>
             </CardActions>
-            <Grid size={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  mt: 2,
-                }}
-              >
-                <Typography variant="body2">
-                  ¿No tienes cuenta?{" "}
-                  <Link href="/register" underline="hover">
-                    Regístrate
-                  </Link>
-                </Typography>
-              </Box>
-            </Grid>
           </form>
         )}
       </Formik>

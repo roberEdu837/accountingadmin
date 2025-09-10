@@ -18,8 +18,8 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import ToastNotification from "../utils/Toast.notification";
 import type { MonthlyAccounting } from "../../@types/customer";
 import InfoIcon from "@mui/icons-material/Info";
-import { patchAccounting } from "../../services/accounting.service";
 import { Icons } from "../../constants/Icons";
+import { patchAccounting } from "../../services";
 
 interface Props {
   open: boolean;

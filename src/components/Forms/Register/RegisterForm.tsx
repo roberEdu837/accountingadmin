@@ -7,7 +7,6 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  Link,
   OutlinedInput,
   TextField,
   Typography,
@@ -15,7 +14,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Formik } from "formik";
-import { login, register } from "../../../services/user.service";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
@@ -26,6 +24,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import ToastNotification from "../../utils/Toast.notification";
 import { validationRegister } from "../../../validation/loginSchema";
+import { Icons } from "../../../constants/Icons";
+import { login, register } from "../../../services";
 
 const RegisterForm = () => {
   const dispatch = useDispatch<any>();
@@ -205,25 +205,8 @@ const RegisterForm = () => {
             <CardActions
               sx={{ display: "flex", justifyContent: "center", mt: 2 }}
             >
-              <ButtonSubmit text="Iniciar Sesión" />
+              <ButtonSubmit text="Registrar" icon={Icons.payment} />
             </CardActions>
-             <Grid size={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  mt: 2,
-                }}
-              >
-                <Typography variant="body2">
-                  ¿Ya tienes cuenta?{" "}
-                  <Link href="/login" underline="hover">
-                    Inicia Sesión
-                  </Link>
-                </Typography>
-              </Box>
-            </Grid>
           </form>
         )}
       </Formik>

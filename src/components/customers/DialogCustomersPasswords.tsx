@@ -12,13 +12,10 @@ import ButtonSubmit from "../utils/Button";
 import ToastNotification from "../utils/Toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { validationSchemaPassword } from "../../validation/passwordSchema";
-import {
-  postPasswordByCustomer,
-  patchPasswordById,
-} from "../../services/passwords.service";
 import type { Customer } from "../../@types/customer";
 import type { PasswordDTO } from "../../@types/passwors";
 import { Icons } from "../../constants/Icons";
+import { patchPasswordById, postPasswordByCustomer } from "../../services";
 
 interface Props {
   open: boolean;

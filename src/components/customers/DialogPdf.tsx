@@ -15,12 +15,12 @@ import {
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { useEffect, useState } from "react";
 import { monthsPdf } from "../../constants/month";
-import { getPdfAccountingPayments } from "../../services/accounting.service";
 import { downloadFileFromBlob } from "./helper";
 import ButtonAdd from "../utils/ButtonAdd";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../utils/Toast.notification";
+import { getPdfAccountingPayments } from "../../services";
 interface PdfProps {
   open: boolean;
   onClose: () => void;

@@ -14,10 +14,10 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import Paper from "@mui/material/Paper";
 import type { Customer } from "../../@types/customer";
 import { useEffect, useState } from "react";
-import { getPasswordsById } from "../../services/passwords.service";
 import EditIcon from "@mui/icons-material/Edit";
 import DialogCustomersPasswords from "../customers/DialogCustomersPasswords";
 import type { PasswordDTO } from "../../@types/passwors";
+import { getPasswordsById } from "../../services";
 
 interface ModalPasswordsProps {
   open: boolean;

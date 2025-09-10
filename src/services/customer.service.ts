@@ -9,7 +9,7 @@ export const getCustomAssociates = () => {
     return axiosInstance.get('/customers/associates');
 }
 
-export const PostCustomer = (customer: Customer) => {
+export const postCustomer = (customer: Customer) => {
  return axiosInstance.post('/customers', customer);
 }
 

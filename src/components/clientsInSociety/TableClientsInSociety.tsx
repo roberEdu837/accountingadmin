@@ -14,9 +14,9 @@ import {
 import DialogClientsInSociety from "./DialogDlientsInSociety";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
-import { getClientInSociety } from "../../services/clientInSociety.service";
 import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
+import { getClientInSociety } from "../../services";
 
 export default function TableClientsInSociety() {
   const [flag, setFlag] = useState<boolean>(false);

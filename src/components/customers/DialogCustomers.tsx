@@ -12,7 +12,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Formik } from "formik";
-import { patchCustomer, PostCustomer } from "../../services/customer.service";
 import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
@@ -21,6 +20,7 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import { addFourYears } from "../../utils";
 import { customerInitialValues } from "../../formConfig";
 import { Icons } from "../../constants/Icons";
+import { patchCustomer, postCustomer } from "../../services";
 
 interface Props {
   open: boolean;
@@ -44,7 +44,7 @@ export default function DialogCustomers({
       ...v,
       isInSociety: v.isInSociety === 0 ? false : true,
     };
-    const { data } = await PostCustomer(customerData);
+    const { data } = await postCustomer(customerData);
     ToastNotification(
       `El cliente ${data.socialReason} se creó correctamente`,
       "success"

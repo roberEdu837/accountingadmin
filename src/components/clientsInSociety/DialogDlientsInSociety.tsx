@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,8 +9,9 @@ import { Formik } from "formik";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import ButtonSubmit from "../utils/Button";
 import { initialValues } from "../../formConfig/clientsInSociety";
-import { patchClientInSociety } from "../../services/clientInSociety.service";
 import ToastNotification from "../utils/Toast.notification";
+import { patchClientInSociety } from "../../services";
+import { Icons } from "../../constants/Icons";
 
 interface Props {
   open: boolean;
@@ -83,10 +83,7 @@ export default function DialogClientsInSociety({
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
-                <Button onClick={onClose} color="secondary">
-                  Cancelar
-                </Button>
-                <ButtonSubmit text="Agregar Pago" />
+                <ButtonSubmit text="Agregar" icon={Icons.addWhite} />
               </DialogActions>
             </form>
           )}

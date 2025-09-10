@@ -11,18 +11,16 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Formik } from "formik";
-import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
-import { postClientIsSociety } from "../../services/clientInSociety.service";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import ToastNotification from "../utils/Toast.notification";
-import { patchAccounting } from "../../services/accounting.service";
 import {
   getPaymentSchema,
   getInitialValues,
   type Props,
 } from "../../formConfig";
 import { Icons } from "../../constants/Icons";
+import { patchAccounting, postClientIsSociety, postPayment } from "../../services";
 
 export default function DialogPayments({
   onClose,
@@ -34,7 +32,7 @@ export default function DialogPayments({
   isInSociety,
 }: Props) {
   const handlePostPayment = async (values: any) => {
-    await PostPayment(values);
+    await postPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");
   };
 

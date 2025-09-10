@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Chip, Menu, MenuItem } from "@mui/material";
-import { patchAccounting } from "../../services/accounting.service";
+import { patchAccounting } from "../../services";
 
 const opciones = ["PENDIENTE", "INCONCLUSO", "REALIZADO"];
 const colores: Record<string, "error" | "warning" | "success"> = {

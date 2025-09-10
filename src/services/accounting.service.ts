@@ -10,9 +10,6 @@ export const getaccounting = (filter: FilterAccounting) => {
   return axiosInstance.post(`/monthly-accountings/search`, filter);
 };
 
-export const getYears = () => {
-  return axiosInstance.get("monthly-accountings/years");
-};
 
 export const createAccounting = () => {
   return axiosInstance.post("monthly-accountings/generate");
