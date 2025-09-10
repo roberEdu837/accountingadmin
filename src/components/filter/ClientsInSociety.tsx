@@ -16,7 +16,7 @@ import {
   GetDebtsAssociated,
 } from "../../services/clientInSociety.service";
 import CheckDebts from "../../utils/CheckDebts";
-
+import { useModal } from "../../hooks";
 
 interface Props {
   setCustomers: any;
@@ -30,23 +30,23 @@ export default function ClientsInSociety({ setCustomers, flag }: Props) {
   const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
   const year =
     currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
+  const checkModal = useModal();
 
   const [filter, setFilter] = useState({
     search: "",
     year: year,
     month: previousMonth,
-    status: undefined as boolean | undefined, // equivalente a monthlyPaymentCompleted
+    monthlyPaymentCompleted: undefined as boolean | undefined, // equivalente a monthlyPaymentCompleted
   });
-  const [openDialogDebts, setOpenDialogDebts] = useState(false);
 
   const getAccounting = async () => {
     try {
-      const { month, search, year, status } = filter;
+      const { month, search, year, monthlyPaymentCompleted } = filter;
       const { data } = await getClientInSociety({
         month,
         search,
         year,
-        status,
+        monthlyPaymentCompleted,
       });
       setCustomers(data);
     } catch (error) {
@@ -56,18 +56,24 @@ export default function ClientsInSociety({ setCustomers, flag }: Props) {
 
   useEffect(() => {
     getAccounting();
-  }, [filter.year, filter.month, filter.search, filter.status, flag]);
+  }, [
+    filter.year,
+    filter.month,
+    filter.search,
+    filter.monthlyPaymentCompleted,
+    flag,
+  ]);
 
   const getDebtsAssociated = async () => {
     const { data } = await GetDebtsAssociated();
     if (data) {
-      setOpenDialogDebts(true);
+      checkModal.openModal(true)
     }
   };
 
   useEffect(() => {
     getDebtsAssociated();
-  },[]);
+  }, []);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -127,9 +133,9 @@ export default function ClientsInSociety({ setCustomers, flag }: Props) {
               labelId="status-select-label"
               id="status-select"
               value={
-                filter.status === undefined
+                filter.monthlyPaymentCompleted === undefined
                   ? "undefined"
-                  : filter.status.toString()
+                  : filter.monthlyPaymentCompleted.toString()
               }
               label="Estado de pago"
               onChange={(e) => {
@@ -144,7 +150,7 @@ export default function ClientsInSociety({ setCustomers, flag }: Props) {
                   value = true;
                 }
 
-                setFilter({ ...filter, status: value });
+                setFilter({ ...filter, monthlyPaymentCompleted: value });
               }}
             >
               <MenuItem value={"undefined"}>Todos</MenuItem>
@@ -155,8 +161,8 @@ export default function ClientsInSociety({ setCustomers, flag }: Props) {
         </Grid>
       </Grid>
       <CheckDebts
-        open={openDialogDebts}
-        setOpen={setOpenDialogDebts}
+        open={checkModal.open}
+        handleClose={checkModal.closeModal}
         type={1}
         setFilter={setFilter}
       />

@@ -9,13 +9,12 @@ import DialogMessageBox from "../components/utils/DialogMessageBox";
 
 interface Props {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  handleClose: () => void;
   type: number;
   setFilter: any;
-  // 0: contabilidad terminada pero no pagada, 1: pagos con asociados
 }
 
-export default function CheckDebts({ open, setOpen, setFilter, type }: Props) {
+export default function CheckDebts({ open, handleClose, setFilter, type }: Props) {
   const dialogInfo =
     type === 1
       ? {
@@ -36,7 +35,7 @@ export default function CheckDebts({ open, setOpen, setFilter, type }: Props) {
         };
 
   const handleClick = () => {
-    setOpen(false);
+    handleClose();
     if (type === 0) {
       setFilter({
         month: 0,
@@ -49,13 +48,13 @@ export default function CheckDebts({ open, setOpen, setFilter, type }: Props) {
         month: 0,
         search: "",
         year: 0,
-        status: false,
+        monthlyPaymentCompleted: false,
       });
     }
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={() => (false)} fullWidth maxWidth="sm">
       <DialogMessageBox
         title={dialogInfo.title}
         subtitle={dialogInfo.subtitle}
@@ -68,7 +67,7 @@ export default function CheckDebts({ open, setOpen, setFilter, type }: Props) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={() => setOpen(false)} color="secondary">
+        <Button onClick={() => handleClose()} color="secondary">
           Cancelar
         </Button>
         <Button

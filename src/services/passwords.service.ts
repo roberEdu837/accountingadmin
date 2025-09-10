@@ -9,6 +9,6 @@ export const postPasswordByCustomer = (data: Password) => {
   return axiosInstance.post("passwords", data);
 };
 
-export const putPasswordById = (id: number, data: Password) => {
-  return axiosInstance.put(`passwords/${id}`, data);
+export const patchPasswordById = (id: number, data: Password) => {
+  return axiosInstance.patch(`passwords/${id}`, data);
 };

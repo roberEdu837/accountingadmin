@@ -8,60 +8,44 @@ import {
   Box,
   TableCell,
   Table,
-  TableBody,
   TableContainer,
   TableHead,
   TableRow,
   Paper,
-  Tooltip,
-  Chip,
-  IconButton,
 } from "@mui/material";
-import SelectStatus from "./SelectStatus";
-import AddIcon from "@mui/icons-material/Add";
-import PaymentIcon from "@mui/icons-material/Payment";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
 import DialogPayments from "../payments/DialogPayments";
-import type { FilterAccounting } from "../../@types/FilterAccounting";
+import DialogPaymentsList from "../payments/DialogPaymentsList";
 import Filter from "../filter/Filter";
-import type { Customer, MonthlyAccounting } from "../../@types/customer";
-import { formatDate, getMonthLabel } from "../../utils/formatDate";
 import ModalPasswords from "../public/ModalPasswords";
 import DialogAccountingEdit from "./DialogAccountingEdit";
+import { columnsAccounting } from "../../constants";
+import AccountingTableBody from "./AccountingTableBody";
+import { useModal } from "../../hooks";
+import type { Customer, MonthlyAccounting } from "../../@types/customer";
+import type { FilterAccounting } from "../../@types/FilterAccounting";
 import CheckDebts from "../../utils/CheckDebts";
-import IconWithBadge from "../utils/IconWithBadge";
-import { totalPaid } from "../../utils";
-import DialogPaymentsList from "../payments/DialogPaymentsList";
-import {
-  columnsAccounting,
-  iconLargeStyle,
-  iconSmallStyle,
-} from "../../constants";
 
 export default function AccountingTable() {
-  const [accountings, setAccountings] = useState<
-    MonthlyAccounting[] | undefined
-  >();
-  const [openPayment, setOpenPayment] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<number>(0);
-  const [debt, setDebt] = useState<number>(0);
-  const [isInSociety, setIsInSociety] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [openDialogUpdate, setOpenDialogUpdate] = useState(false);
-  const [openDialogDebts, setOpenDialogDebts] = useState(false);
-  const [openDialogPaymentsList, setOpenDialogPaymentsList] = useState(false);
-  const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
-  const [currentAccounting, setCurrentAccounting] = useState<
-    MonthlyAccounting | undefined
-  >(undefined);
+  // --- Modales genéricos ---
+  const editAccountingModal = useModal<MonthlyAccounting>();
+  const passwordsModal = useModal<Customer>();
+  const paymentModal = useModal<{
+    id: number;
+    debt: number;
+    isInSociety: boolean;
+  }>();
+  const paymentsListModal = useModal<MonthlyAccounting>();
+  const checkModal = useModal();
 
+  const [accountings, setAccountings] = useState<MonthlyAccounting[]>([]);
   const [flag, setFlag] = useState(false);
+
   const today = new Date();
-  const currentMonth = today.getMonth() + 1; // 1-12
+  const currentMonth = today.getMonth() + 1;
   const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
   const year =
     currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
+
   const [filter, setFilter] = useState<FilterAccounting>({
     month: previousMonth,
     search: "",
@@ -69,32 +53,7 @@ export default function AccountingTable() {
     monthlyPaymentCompleted: undefined,
   });
 
-  const handleOpenModal = (customer: Customer) => {
-    setCurrentCustomer(customer);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setCurrentCustomer(null);
-  };
-
-  const init = async () => {
-    try {
-      await createAccounting();
-      getAccounting();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleAddPayment = (row: MonthlyAccounting, pending: number) => {
-    setSelectedId(row.id);
-    setDebt(pending);
-    setIsInSociety(row.isInSociety);
-    setOpenPayment(true);
-  };
-
+  // --- Fetch de accountings ---
   const getAccounting = async () => {
     try {
       const { data } = await getaccounting(filter);
@@ -110,41 +69,49 @@ export default function AccountingTable() {
   };
 
   useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
-    getAccounting();
+    (async () => {
+      try {
+        await createAccounting();
+        await getAccounting();
+      } catch (err) {
+        console.error(err);
+      }
+    })();
   }, [filter, flag]);
 
-  const handleEditClient = (row: MonthlyAccounting) => {
-    setOpenDialogUpdate(true);
-    setCurrentAccounting(row);
+  // --- Handlers ---
+  const handleAddPayment = (row: MonthlyAccounting, pending: number) => {
+    paymentModal.openModal({
+      id: row.id,
+      debt: pending,
+      isInSociety: row.isInSociety,
+    });
   };
 
-  const handleCloseDialogUpdate = () => setOpenDialogUpdate(false);
-
-  const hasDebtsAccountings = async () => {
-    const { data } = await getHasDebtsAccountings();
-    if (data) {
-      setOpenDialogDebts(true);
+  const checkDebts = async () => {
+    const { data } = await getHasDebtsAccountings(); // esta es la importada
+    if (data === true) {
+      checkModal.openModal(true);
     }
   };
 
   useEffect(() => {
-    hasDebtsAccountings();
+    checkDebts();
   }, []);
 
   return (
     <Box>
+      {/* Filtro */}
       <Filter
         flag={flag}
         setFlag={setFlag}
         setFilter={setFilter}
         filter={filter}
       />
+
+      {/* Tabla */}
       <Box sx={{ padding: 3 }}>
-        {accountings && (
+        {accountings.length > 0 && (
           <TableContainer component={Paper}>
             <Table className="myTable" size="small" aria-label="caption table">
               <thead>
@@ -161,133 +128,62 @@ export default function AccountingTable() {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {accountings.map((row) => {
-                  const { honorary, id, year, stateObligation } = row;
-                  const { customer, month, periodicity, rfcTaxPaymentDate } =
-                    row;
-                  const pending = honorary - totalPaid(row);
-                  return (
-                    <TableRow key={id}>
-                      <Tooltip title="Contraseñas">
-                        <TableCell onClick={() => handleOpenModal(customer)}>
-                          {customer?.socialReason.toUpperCase()}
-                        </TableCell>
-                      </Tooltip>
-                      <TableCell align="center">{periodicity}</TableCell>
-                      <TableCell align="center">{year}</TableCell>
-                      <TableCell align="center">
-                        {getMonthLabel(
-                          month,
-                          periodicity === "BIMESTRAL"
-                        ).toUpperCase()}
-                      </TableCell>
-                      <TableCell align="center">
-                        <SelectStatus
-                          valorInicial={stateObligation}
-                          setFlag={setFlag}
-                          flag={flag}
-                          id={id}
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        {formatDate(rfcTaxPaymentDate)}
-                      </TableCell>
-                      <TableCell align="center">${honorary}</TableCell>
-                      <TableCell align="center">${totalPaid(row)}</TableCell>
-                      <TableCell align="center">
-                        {pending === 0 ? (
-                          <Chip
-                            label="Pagado"
-                            color="success"
-                            size="small"
-                            variant="outlined"
-                          />
-                        ) : (
-                          `$${pending}`
-                        )}
-                      </TableCell>
-                      <TableCell align="center">
-                        {isInSociety ? "SI" : "NO"}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Tooltip title="Actualizar">
-                          <IconButton onClick={() => handleEditClient(row)}>
-                            <EditIcon sx={iconLargeStyle} />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Agregar pago">
-                          <IconButton
-                            onClick={() => handleAddPayment(row, pending)}
-                          >
-                            <IconWithBadge
-                              parentIcon={<PaymentIcon sx={iconLargeStyle} />}
-                              childIcon={<AddIcon sx={iconSmallStyle} />}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Ver pagos">
-                          <IconButton
-                            onClick={() => {
-                              setOpenDialogPaymentsList(true);
-                              setCurrentAccounting(row);
-                            }}
-                          >
-                            <IconWithBadge
-                              parentIcon={<PaymentIcon sx={iconLargeStyle} />}
-                              childIcon={<VisibilityIcon sx={iconSmallStyle} />}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
+              <AccountingTableBody
+                accountings={accountings}
+                openModalPasswords={passwordsModal.openModal}
+                openModalEditAccounting={editAccountingModal.openModal}
+                handleAddPayment={handleAddPayment}
+                setCurrentAccounting={paymentsListModal.setData}
+                handleOpenPaymentsList={paymentsListModal.openModal}
+                flag={flag}
+                setFlag={setFlag}
+              />
             </Table>
           </TableContainer>
         )}
       </Box>
 
-      <DialogPayments
-        onClose={() => setOpenPayment(false)}
-        id={selectedId}
-        open={openPayment}
-        flag={flag}
-        setFlag={setFlag}
-        debt={debt}
-        isInSociety={isInSociety}
-      />
-
-      {currentCustomer && (
-        <ModalPasswords
-          customer={currentCustomer}
-          handleClose={handleCloseModal}
-          open={openModal}
+      {/* Modal de pago */}
+      {paymentModal.data && (
+        <DialogPayments
+          onClose={paymentModal.closeModal}
+          id={paymentModal.data.id}
+          debt={paymentModal.data.debt}
+          isInSociety={paymentModal.data.isInSociety}
+          open={paymentModal.open}
+          flag={flag}
+          setFlag={setFlag}
         />
       )}
 
+      <ModalPasswords
+        customer={passwordsModal.data}
+        handleClose={passwordsModal.closeModal}
+        open={passwordsModal.open}
+      />
+      {/* Modal de edición */}
       <DialogAccountingEdit
-        accounting={currentAccounting ?? undefined}
-        handelClose={handleCloseDialogUpdate}
+        accounting={editAccountingModal.data ?? undefined}
+        handelClose={editAccountingModal.closeModal}
         flag={flag}
         setFlag={setFlag}
-        open={openDialogUpdate}
+        open={editAccountingModal.open}
+      />
+
+      {/* Lista de pagos */}
+      <DialogPaymentsList
+        accounting={paymentsListModal.data}
+        handleClose={paymentsListModal.closeModal}
+        open={paymentsListModal.open}
+        flag={flag}
+        setFlag={setFlag}
       />
 
       <CheckDebts
-        open={openDialogDebts}
-        setOpen={setOpenDialogDebts}
+        open={checkModal.open}
+        handleClose={checkModal.closeModal}
         type={0}
         setFilter={setFilter}
-      />
-      <DialogPaymentsList
-        accounting={currentAccounting}
-        setAccountings={setAccountings}
-        handleClose={() => setOpenDialogPaymentsList(false)}
-        open={openDialogPaymentsList}
-        flag={flag}
-        setFlag={setFlag}
       />
     </Box>
   );

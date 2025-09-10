@@ -33,7 +33,6 @@ export default function DialogPayments({
   debt,
   isInSociety,
 }: Props) {
-  console.log(debt);
   const handlePostPayment = async (values: any) => {
     await PostPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");

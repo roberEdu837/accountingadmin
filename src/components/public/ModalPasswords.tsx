@@ -22,7 +22,7 @@ import type { PasswordDTO } from "../../@types/passwors";
 interface ModalPasswordsProps {
   open: boolean;
   handleClose: any;
-  customer: Customer;
+  customer: Customer | null;
 }
 function ModalPasswords({ handleClose, open, customer }: ModalPasswordsProps) {
   const [passwords, setPasswords] = useState<PasswordDTO[]>([]);

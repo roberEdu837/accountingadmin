@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { filterSlice, userSlice } from "./slices";
+import {  userSlice } from "./slices";
 
 const store = configureStore({
     reducer: {
         user: userSlice,
-        filter: filterSlice
     },
 })
 

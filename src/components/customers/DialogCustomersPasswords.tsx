@@ -15,7 +15,7 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import { validationSchemaPassword } from "../../validation/passwordSchema";
 import {
   postPasswordByCustomer,
-  putPasswordById,
+  patchPasswordById,
 } from "../../services/passwords.service";
 import type { Customer } from "../../@types/customer";
 import type { PasswordDTO } from "../../@types/passwors";
@@ -72,7 +72,7 @@ export default function DialogCustomersPasswords({
           onSubmit={async (values, { setSubmitting }) => {
             try {
               if (isEdit && password?.id) {
-                await putPasswordById(password?.id, values);
+                await patchPasswordById(password?.id, values);
               } else {
                 await postPasswordByCustomer(values);
               }
