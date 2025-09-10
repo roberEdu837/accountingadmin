@@ -54,7 +54,7 @@ export default function CheckDebts({ open, handleClose, setFilter, type }: Props
   };
 
   return (
-    <Dialog open={open} onClose={() => (false)} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogMessageBox
         title={dialogInfo.title}
         subtitle={dialogInfo.subtitle}

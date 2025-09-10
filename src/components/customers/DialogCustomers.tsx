@@ -19,14 +19,15 @@ import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
 import ToastNotification from "../../utils/toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import { customer } from "../../formConfig/customer";
 import { addFourYears } from "../../utils";
+import { customerInitialValues } from "../../formConfig";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
+  customer: Customer | undefined
 }
 
 export default function DialogCustomers({
@@ -34,6 +35,7 @@ export default function DialogCustomers({
   open,
   setFlag,
   flag,
+  customer
 }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
 
@@ -45,7 +47,7 @@ export default function DialogCustomers({
       />
       <DialogContent>
         <Formik
-          initialValues={customer}
+          initialValues={customerInitialValues(customer)}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
             try {

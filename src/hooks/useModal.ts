@@ -2,15 +2,16 @@ import { useState } from "react";
 
 export function useModal<T>() {
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T | undefined>(undefined);
 
-  const openModal = (item: T) => {
-    setData(item);
-    setOpen(true);
-  };
+ const openModal = (item?: T) => {
+  if (item) setData(item);
+  setOpen(true);
+};
+
 
   const closeModal = () => {
-    setData(null);
+    setData(undefined);
     setOpen(false);
   };
 

@@ -66,7 +66,7 @@ export const  formatDate =(dateString: Date | string): string  =>{
   if (!dateString) return "-";
 
   const date = new Date(dateString);
-  date.setDate(date.getDate()); // suma 1 día
+  date.setDate(date.getDate()+1);
 
   if (isNaN(date.getTime())) return "-"; 
 

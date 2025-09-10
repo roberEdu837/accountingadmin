@@ -16,7 +16,6 @@ import {
 import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
 import EditIcon from "@mui/icons-material/Edit";
-import DialogCustomersEdit from "./DialogCustomersEdit";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import KeyIcon from "@mui/icons-material/Key";
 import DialogCustomersPasswords from "./DialogCustomersPasswords";
@@ -28,11 +27,12 @@ import BlockIcon from "@mui/icons-material/Block";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { desactivateCustomer } from "../../services/customer.service";
+import { useModal } from "../../hooks";
 
 export default function CustomersTable() {
+  const updateModal = useModal<Customer | undefined>();
   const [customer, setCustomers] = useState<Customer[]>();
   const [open, setOpen] = useState<boolean>(false);
-  const [openEdit, setOpenEdit] = useState(false);
   const [flag, setFlag] = useState(false);
   const [client, setClient] = useState<Customer>({} as Customer);
   const [openModal, setOpenModal] = useState(false);
@@ -47,10 +47,11 @@ export default function CustomersTable() {
 
   const handleClickOpen = () => setOpen(true);
 
-  const handleClose = () => {
-    setOpen(false);
-    setOpenEdit(false);
-  };
+  // const handleClose = () => {
+  //   updateModal.
+  //   setOpen(false);
+  //   setOpenEdit(false);
+  // };
 
   const handleOpenModalPwd = (customer: Customer) => {
     setCurrentCustomer(customer);
@@ -66,6 +67,8 @@ export default function CustomersTable() {
     await desactivateCustomer(id, status);
     setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
   };
+
+  console.log(updateModal)
 
   return (
     <Box>
@@ -109,7 +112,7 @@ export default function CustomersTable() {
                     </span>
                     <ButtonAdd
                       text="Nuevo Cliente"
-                      handleClickOpen={handleClickOpen}
+                      handleClickOpen={updateModal.openModal}
                       icon={<AddIcon />}
                     />
                   </Box>
@@ -157,8 +160,7 @@ export default function CustomersTable() {
                       <Tooltip title="Actualizar">
                         <IconButton
                           onClick={() => {
-                            setOpenEdit(true);
-                            setClient(row);
+                            updateModal.openModal(row);
                           }}
                           size="small"
                         >
@@ -189,7 +191,7 @@ export default function CustomersTable() {
                           <KeyIcon sx={{ color: "#09356f" }} />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title={row.status ?"Desactivar":"Activar"}>
+                      <Tooltip title={row.status ? "Desactivar" : "Activar"}>
                         <IconButton
                           onClick={() => handleDesactivate(row.id, !row.status)}
                           size="small"
@@ -210,19 +212,20 @@ export default function CustomersTable() {
         </TableContainer>
       </Box>
       <DialogCustomers
-        onClose={handleClose}
-        open={open}
+        onClose={updateModal.closeModal}
+        open={updateModal.open}
         flag={flag}
         setFlag={setFlag}
+        customer={updateModal.data}
       />
 
-      <DialogCustomersEdit
+      {/* <DialogCustomersEdit
         onClose={handleClose}
         open={openEdit}
         flag={flag}
         setFlag={setFlag}
         client={client}
-      />
+      /> */}
       <DialogCustomersPasswords
         onClose={handleCloseModal}
         open={openModal}

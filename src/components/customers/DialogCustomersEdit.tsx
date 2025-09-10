@@ -37,10 +37,7 @@ export default function DialogCustomersEdit({
   flag,
   client,
 }: Props) {
-  const today = new Date();
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
-
-  today.setFullYear(today.getFullYear() + 4);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">

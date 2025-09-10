@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 interface Props {
   open: boolean;
   handleClose: any;
-  accounting: MonthlyAccounting | null;
+  accounting: MonthlyAccounting | undefined;
   setFlag: (flag: boolean) => void;
   flag: boolean;
 }
@@ -34,7 +34,7 @@ function DialogPaymentsList({
   setFlag,
 }: Props) {
   const [payments, setPayments] = useState<any[]>([]);
-  console.log(accounting)
+  console.log(accounting);
 
   useEffect(() => {
     setPayments(accounting?.paymets || []);
