@@ -107,6 +107,7 @@ export default function AccountingTable() {
         setFlag={setFlag}
         setFilter={setFilter}
         filter={filter}
+        type="Accounting"
       />
 
       {/* Tabla */}

@@ -14,7 +14,9 @@ import {
 import DialogClientsInSociety from "./DialogDlientsInSociety";
 import PaymentIcon from "@mui/icons-material/Payment";
 import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
-import ClientsInSociety from "../filter/ClientsInSociety";
+import { getClientInSociety } from "../../services/clientInSociety.service";
+import Filter from "../filter/Filter";
+import type { FilterAccounting } from "../../@types/FilterAccounting";
 
 export default function ClientsInSocietyTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -22,6 +24,17 @@ export default function ClientsInSocietyTable() {
   const [total, setTotal] = useState<number>(0);
   const [selectedId, setSelectedId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1; // 1-12
+  const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year =
+    currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
+  const [filter, setFilter] = useState<FilterAccounting>({
+    search: "",
+    year: year,
+    month: previousMonth,
+    monthlyPaymentCompleted: undefined, // ahora ok, porque FilterAccounting permite boolean | undefined
+  });
 
   useEffect(() => {
     if (customers) {
@@ -36,9 +49,34 @@ export default function ClientsInSocietyTable() {
     }
   }, [customers]);
 
+  const getAccounting = async () => {
+    try {
+      const { month, search, year, monthlyPaymentCompleted } = filter;
+      const { data } = await getClientInSociety({
+        month,
+        search,
+        year,
+        monthlyPaymentCompleted,
+      });
+      setCustomers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getAccounting();
+  }, [filter, flag]);
+
   return (
     <>
-      <ClientsInSociety flag={flag} setCustomers={setCustomers} />
+      <Filter
+        filter={filter}
+        setFilter={setFilter}
+        setFlag={setFlag}
+        flag={flag}
+        type=""
+      />
       <Box sx={{ padding: 2 }}>
         <TableContainer component={Paper}>
           <Table

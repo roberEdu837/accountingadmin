@@ -67,7 +67,6 @@ export default function DialogCustomers({
       "success"
     );
   };
-  console.log(customer);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -82,6 +81,7 @@ export default function DialogCustomers({
 
       <DialogContent>
         <Formik
+          enableReinitialize={true}
           initialValues={customerInitialValues(customer)}
           validationSchema={validationSchemaClient}
           onSubmit={async (values, { setSubmitting }) => {
@@ -93,9 +93,9 @@ export default function DialogCustomers({
               }
             } catch (error) {
             } finally {
+              onClose();
               setSubmitting(false);
               if (setFlag) setFlag(!flag);
-              onClose();
             }
           }}
         >
@@ -259,7 +259,7 @@ export default function DialogCustomers({
               <DialogActions sx={{ px: 0, pt: 2 }}>
                 <ButtonSubmit
                   text={customer?.id ? "Actualizar" : "Agregar"}
-                  icon={customer?.id ?Icons.editWhite: Icons.addWhite}
+                  icon={customer?.id ? Icons.editWhite : Icons.addWhite}
                 />
               </DialogActions>
             </form>

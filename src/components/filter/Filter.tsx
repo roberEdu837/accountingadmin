@@ -18,9 +18,11 @@ interface Props {
   setFlag: (flag: boolean) => void;
   filter: FilterAccounting;
   flag: boolean;
+  type:string;
 }
 
 export default function Filter({
+  type,
   filter,
   flag,
   setFilter,
@@ -106,7 +108,7 @@ export default function Filter({
               }}
             >
               <MenuItem value={"undefined"}>Todos</MenuItem>
-              <MenuItem value="false">Por cobrar</MenuItem>
+              <MenuItem value="false">{type === 'Accounting'? 'Por cobrar':'Por pagar'} </MenuItem>
               <MenuItem value="true">Pagado</MenuItem>
             </Select>
           </FormControl>
