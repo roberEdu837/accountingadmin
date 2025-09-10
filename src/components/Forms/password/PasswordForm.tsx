@@ -1,5 +1,4 @@
 import { Formik } from "formik";
-import { validationSchemaPassword } from "../../../validation/passwordSchema";
 import { patchPasswordById, postPasswordByCustomer } from "../../../services";
 import ToastNotification from "../../utils/ToastNotification";
 import {
@@ -13,6 +12,7 @@ import ButtonSubmit from "../../utils/Button";
 import { Icons } from "../../utils/Icons";
 import type { PasswordDTO } from "../../../@types/passwors";
 import type { Customer } from "../../../@types/customer";
+import { getInitialValuesPwd, validationSchemaPwd } from "../../../formConfig";
 interface Props {
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
@@ -34,17 +34,8 @@ export default function PasswordForm({
 
   return (
     <Formik
-      initialValues={{
-        systemName: password?.systemName ? password?.systemName : "",
-        accessKey: password?.accessKey ? password?.accessKey : "",
-        password: password?.password ? password?.password : "",
-        customerId: password?.customerId
-          ? password.customerId
-          : customer?.id
-          ? customer.id
-          : 0,
-      }}
-      validationSchema={validationSchemaPassword}
+      initialValues={getInitialValuesPwd(customer, password)}
+      validationSchema={validationSchemaPwd}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           if (isEdit && password?.id) {
