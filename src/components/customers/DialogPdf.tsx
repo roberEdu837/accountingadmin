@@ -20,7 +20,7 @@ import { downloadFileFromBlob } from "./helper";
 import ButtonAdd from "../utils/ButtonAdd";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import type { Customer } from "../../@types/customer";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 interface PdfProps {
   open: boolean;
   onClose: () => void;

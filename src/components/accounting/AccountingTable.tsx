@@ -23,7 +23,7 @@ import AccountingTableBody from "./AccountingTableBody";
 import { useModal } from "../../hooks";
 import type { Customer, MonthlyAccounting } from "../../@types/customer";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
-import CheckDebts from "../../utils/CheckDebts";
+import CheckDebts from "../utils/CheckDebts";
 
 export default function AccountingTable() {
   // --- Modales genéricos ---

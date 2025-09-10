@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogActions,
@@ -10,7 +9,7 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import ButtonSubmit from "../utils/Button";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { validationSchemaPassword } from "../../validation/passwordSchema";
 import {
@@ -19,6 +18,7 @@ import {
 } from "../../services/passwords.service";
 import type { Customer } from "../../@types/customer";
 import type { PasswordDTO } from "../../@types/passwors";
+import { Icons } from "../../constants/Icons";
 
 interface Props {
   open: boolean;
@@ -153,10 +153,10 @@ export default function DialogCustomersPasswords({
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
-                <Button onClick={onClose} color="secondary">
-                  Cancelar
-                </Button>
-                <ButtonSubmit text="Guardar" />
+                <ButtonSubmit
+                  text="Registrar"
+                  icon={Icons.addWhite}
+                />
               </DialogActions>
             </form>
           )}

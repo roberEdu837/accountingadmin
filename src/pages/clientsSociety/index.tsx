@@ -1,8 +1,8 @@
-import ClientsInSocietyTable from "../../components/clientsInSociety/ClientsInSociety";
+import TableClientsInSociety from "../../components/clientsInSociety/TableClientsInSociety";
 
 
 export default function ClientsSociety() {
   return (
-   <ClientsInSocietyTable />
+   <TableClientsInSociety />
   )
 }

@@ -16,7 +16,7 @@ import type { MonthlyAccounting } from "../../@types/customer";
 import { formatDate, paymentMethods } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getPaymentsByAccountingId } from "../../services/payments.service";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 import { useEffect, useState } from "react";
 interface Props {
   open: boolean;

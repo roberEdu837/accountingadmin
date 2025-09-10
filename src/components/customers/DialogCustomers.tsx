@@ -16,7 +16,7 @@ import { patchCustomer, PostCustomer } from "../../services/customer.service";
 import { validationSchemaClient } from "../../validation/clientSchema";
 import ButtonSubmit from "../utils/Button";
 import type { Customer } from "../../@types/customer";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import { addFourYears } from "../../utils";
 import { customerInitialValues } from "../../formConfig";

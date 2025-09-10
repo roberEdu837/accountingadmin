@@ -3,7 +3,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 
-export const navItems = [
+export const NavItems = [
   {
     label: "Contabilidad",
     path: "/accounting",

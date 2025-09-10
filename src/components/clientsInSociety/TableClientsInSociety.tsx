@@ -18,7 +18,7 @@ import { getClientInSociety } from "../../services/clientInSociety.service";
 import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 
-export default function ClientsInSocietyTable() {
+export default function TableClientsInSociety() {
   const [flag, setFlag] = useState<boolean>(false);
   const [customers, setCustomers] = useState<any[]>();
   const [total, setTotal] = useState<number>(0);

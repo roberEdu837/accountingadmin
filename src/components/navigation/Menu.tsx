@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../../public/Logo.png";
 import Logout from "./Logout";
-import { navItems } from "../../utils/navItems";
+import { NavItems } from "../utils/navItems";
 
 const drawerWidth = 240;
 
@@ -39,7 +39,7 @@ function Menu(props: any) {
       </Box>
       <Divider />
       <List sx={{ width: "100%", backgroundColor: "#09356f" }}>
-        {navItems.map((item) => (
+        {NavItems.map((item) => (
           <>
             <ListItem
               key={item.label}

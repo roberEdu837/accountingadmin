@@ -24,7 +24,7 @@ import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import ToastNotification from "../../../utils/toast.notification";
+import ToastNotification from "../../utils/Toast.notification";
 import { validationRegister } from "../../../validation/loginSchema";
 
 const RegisterForm = () => {

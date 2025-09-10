@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogActions,
@@ -16,10 +15,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import ButtonSubmit from "../utils/Button";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 import type { MonthlyAccounting } from "../../@types/customer";
 import InfoIcon from "@mui/icons-material/Info";
 import { patchAccounting } from "../../services/accounting.service";
+import { Icons } from "../../constants/Icons";
 
 interface Props {
   open: boolean;
@@ -163,10 +163,7 @@ export default function DialogAccountingEdit({
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
-                <Button onClick={handelClose} color="secondary">
-                  Cancelar
-                </Button>
-                <ButtonSubmit text="Actualizar" />
+                <ButtonSubmit text="Actualizar" icon={Icons.editWhite} />
               </DialogActions>
             </form>
           )}

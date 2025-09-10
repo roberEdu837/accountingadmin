@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogContentText,
 } from "@mui/material";
-import DialogMessageBox from "../components/utils/DialogMessageBox";
+import DialogMessageBox from "./DialogMessageBox";
 
 interface Props {
   open: boolean;

@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogActions,
@@ -16,13 +15,14 @@ import { PostPayment } from "../../services/payments.service";
 import ButtonSubmit from "../utils/Button";
 import { postClientIsSociety } from "../../services/clientInSociety.service";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import ToastNotification from "../../utils/toast.notification";
+import ToastNotification from "../utils/Toast.notification";
 import { patchAccounting } from "../../services/accounting.service";
 import {
   getPaymentSchema,
   getInitialValues,
   type Props,
 } from "../../formConfig";
+import { Icons } from "../../constants/Icons";
 
 export default function DialogPayments({
   onClose,
@@ -51,7 +51,6 @@ export default function DialogPayments({
       monthlyPaymentCompleted: true,
     });
   };
-  
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -94,74 +93,73 @@ export default function DialogPayments({
             touched,
           }) => (
             console.log(values),
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid size={12}>
-                  <TextField
-                    fullWidth
-                    margin="dense"
-                    label="Monto"
-                    name="amount"
-                    type="number"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.amount}
-                    error={Boolean(touched.amount && errors.amount)}
-                    helperText={touched.amount && errors.amount}
-                  />
-                </Grid>
-                <Grid size={12}>
-                  <TextField
-                    fullWidth
-                    label="Fecha de Pago"
-                    name="paymentDate"
-                    type="date"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.paymentDate}
-                    error={Boolean(touched.paymentDate && errors.paymentDate)}
-                    helperText={touched.paymentDate && errors.paymentDate}
-                    slotProps={{
-                      inputLabel: { shrink: true }, 
-                    }}
-                  />
-                </Grid>
-                <Grid size={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="month-select-label">
-                      Método de Pago
-                    </InputLabel>
-                    <Select
-                      labelId="month-select-label"
-                      id="month-select"
-                      value={values.paymentMethod}
-                      label="Método de Pago"
-                      name="paymentMethod"
-                      onChange={handleChange}
+            (
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid size={12}>
+                    <TextField
+                      fullWidth
+                      margin="dense"
+                      label="Monto"
+                      name="amount"
+                      type="number"
                       onBlur={handleBlur}
-                      error={Boolean(
-                        touched.paymentMethod && errors.paymentMethod
+                      onChange={handleChange}
+                      value={values.amount}
+                      error={Boolean(touched.amount && errors.amount)}
+                      helperText={touched.amount && errors.amount}
+                    />
+                  </Grid>
+                  <Grid size={12}>
+                    <TextField
+                      fullWidth
+                      label="Fecha de Pago"
+                      name="paymentDate"
+                      type="date"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.paymentDate}
+                      error={Boolean(touched.paymentDate && errors.paymentDate)}
+                      helperText={touched.paymentDate && errors.paymentDate}
+                      slotProps={{
+                        inputLabel: { shrink: true },
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="month-select-label">
+                        Método de Pago
+                      </InputLabel>
+                      <Select
+                        labelId="month-select-label"
+                        id="month-select"
+                        value={values.paymentMethod}
+                        label="Método de Pago"
+                        name="paymentMethod"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(
+                          touched.paymentMethod && errors.paymentMethod
+                        )}
+                      >
+                        <MenuItem value={0}>Efectivo</MenuItem>
+                        <MenuItem value={1}>Transferencia</MenuItem>
+                        <MenuItem value={2}>Retiro sin tarjeta</MenuItem>
+                      </Select>
+                      {touched.paymentMethod && errors.paymentMethod && (
+                        <FormHelperText sx={{ color: "#d32f2f" }}>
+                          {errors.paymentMethod}
+                        </FormHelperText>
                       )}
-                    >
-                      <MenuItem value={0}>Efectivo</MenuItem>
-                      <MenuItem value={1}>Transferencia</MenuItem>
-                      <MenuItem value={2}>Retiro sin tarjeta</MenuItem>
-                    </Select>
-                    {touched.paymentMethod && errors.paymentMethod && (
-                      <FormHelperText sx={{ color: "#d32f2f" }}>
-                        {errors.paymentMethod}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <DialogActions sx={{ px: 0, pt: 2 }}>
-                <Button onClick={onClose} color="secondary">
-                  Cancelar
-                </Button>
-                <ButtonSubmit text="Agregar Pago" />
-              </DialogActions>
-            </form>
+                <DialogActions sx={{ px: 0, pt: 2 }}>
+                  <ButtonSubmit text="Agregar" icon={Icons.addWhite} />
+                </DialogActions>
+              </form>
+            )
           )}
         </Formik>
       </DialogContent>
