@@ -18,7 +18,7 @@ import ButtonAdd from "../utils/ButtonAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import KeyIcon from "@mui/icons-material/Key";
-import DialogCustomersPasswords from "./DialogCustomersPasswords";
+import DialogCustomersPasswords from "../password/CustomersPasswordsCreate";
 import ModalPasswords from "../password/CustomersPasswords";
 import FilterCustomer from "../filter/FilterCustomer";
 import DialogPdf from "./DialogPdf";

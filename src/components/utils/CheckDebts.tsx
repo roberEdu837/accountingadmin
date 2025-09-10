@@ -67,9 +67,6 @@ export default function CheckDebts({ open, handleClose, setFilter, type }: Props
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={() => handleClose()} color="secondary">
-          Cancelar
-        </Button>
         <Button
           onClick={handleClick}
           autoFocus
