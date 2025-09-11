@@ -5,7 +5,6 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 import { Avatar, IconButton, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/slices/userSlice";
@@ -70,39 +69,48 @@ export default function MenuListComposition() {
   }, [open]);
 
   return (
-    <Stack direction="row" spacing={2}>
-      <div>
-        <IconButton
-          ref={anchorRef}
-          id="composition-button"
-          aria-controls={open ? "composition-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <Avatar
-            alt={user.email}
-            src="logo"
-            sx={{ bgcolor: "#fff", color: "#09356f", fontSize: "1.1em" }}
-          />
-        </IconButton>
-        <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          placement="bottom-start"
-          transition
-          disablePortal
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === "bottom-start" ? "left top" : "left bottom",
-              }}
-            >
-              <Paper
+    <div>
+      <IconButton
+        ref={anchorRef}
+        id="composition-button"
+        aria-controls={open ? "composition-menu" : undefined}
+        aria-expanded={open ? "true" : undefined}
+        aria-haspopup="true"
+        onClick={handleToggle}
+      >
+        <Avatar
+          alt={user.email}
+          src="logo"
+          sx={{ bgcolor: "#fff", color: "#09356f", fontSize: "1.1em" }}
+        />
+      </IconButton>
+   <Popper
+  open={open}
+  anchorEl={anchorRef.current}
+  role={undefined}
+  placement="auto-start"
+  transition
+  disablePortal={false} // 👈 clave: fuerza a que se renderice en body
+  modifiers={[
+    {
+      name: "zIndex",
+      enabled: true,
+      phase: "write",
+      fn: ({ state }) => {
+        state.styles.popper.zIndex = "99999"; // bien arriba
+      },
+    },
+  ]}
+>
+  {({ TransitionProps, placement }) => (
+    <Grow
+      {...TransitionProps}
+      style={{
+        transformOrigin:
+          placement === "bottom-start" ? "left top" : "left bottom",
+      }}
+    >
+      <Paper
                 sx={{
                   display: "flex",
                   flexDirection: "column",
@@ -110,6 +118,7 @@ export default function MenuListComposition() {
                   borderRadius: 2,
                   boxShadow: 5,
                   p: 2,
+                  zIndex: 99999, // asegura que quede encima de todo
                 }}
               >
                 <Avatar
@@ -121,8 +130,7 @@ export default function MenuListComposition() {
                   }}
                   alt={user.email}
                   src="use.email"
-                ></Avatar>
-
+                />
                 <Typography
                   sx={{
                     mt: 1,
@@ -155,15 +163,12 @@ export default function MenuListComposition() {
                   >
                     <MenuItem
                       onClick={handleClose}
-                      className="menuItem"
                       sx={{
                         color: "#fff",
                         fontWeight: "bold",
                         backgroundColor: "#09356f",
                         borderRadius: 1,
-                        ":hover": {
-                          color: "#09356f",
-                        },
+                        ":hover": { color: "#09356f" },
                       }}
                     >
                       Cerrar Sesión
@@ -171,10 +176,11 @@ export default function MenuListComposition() {
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
-    </Stack>
+    </Grow>
+  )}
+</Popper>
+
+
+    </div>
   );
 }
