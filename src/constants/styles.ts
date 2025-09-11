@@ -1,6 +1,11 @@
 // styles.ts
 export const iconSmallStyle = { color: "#09356f", fontSize: "0.8rem" };
 export const iconLargeStyle = { color: "#09356f", fontSize: "1.5rem" };
+export const iconLargeStyleVertical = {
+  color: "#09356f",
+  fontSize: "1.5rem",
+  transform: "rotate(90deg)",
+};
 export const iconLargeStyleWhite = {
   color: "#FFFFFF",
   fontSize: "1.5rem",

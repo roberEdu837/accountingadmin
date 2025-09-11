@@ -5,6 +5,7 @@ import {
   Tooltip,
   Chip,
   IconButton,
+  Box,
 } from "@mui/material";
 import SelectStatus from "./StatusSelector";
 import IconWithBadge from "../utils/IconWithBadge";
@@ -52,8 +53,20 @@ export default function AccountingTableBody({
         return (
           <TableRow key={id}>
             <Tooltip title="Contraseñas">
-              <TableCell onClick={() => openModalPasswords(customer)}>
-                {customer?.socialReason.toUpperCase()}
+              <TableCell
+                onClick={() => openModalPasswords(customer)}
+                sx={{
+                  whiteSpace: "normal", // permite saltos
+                  wordBreak: "break-word", // corta palabras largas
+                  overflowWrap: "break-word", // refuerzo para navegadores modernos
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{ display: "block", whiteSpace: "normal", width: 150 }}
+                >
+                  {customer?.socialReason.toUpperCase()}
+                </Box>
               </TableCell>
             </Tooltip>
             <TableCell align="center">{periodicity}</TableCell>
@@ -113,6 +126,23 @@ export default function AccountingTableBody({
                 >
                   <IconWithBadge
                     parentIcon={Icons.payment}
+                    childIcon={Icons.visibility}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title={row?.customer.passwords ? "Ver contraseñas" : "Sin contraseñas"}
+              >
+                <IconButton
+                  onClick={() => {
+                    if (row?.customer.passwords && row.customer.passwords.length > 0) {
+                      openModalPasswords(customer);
+                    }
+                  }}
+                  size="small"
+                >
+                  <IconWithBadge
+                    parentIcon={Icons.keyIcon}
                     childIcon={Icons.visibility}
                   />
                 </IconButton>

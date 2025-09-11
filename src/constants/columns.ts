@@ -8,7 +8,7 @@ export const columnsAccounting = [
   { key: "honorary", label: "MONTO", align: "center" },
   { key: "paid", label: "ABONADO", align: "center" },
   { key: "debt", label: "ADEUDO", align: "center" },
-  { key: "isInSociety", label: "EN SOCIEDAD", align: "center" },
+  { key: "isInSociety", label: "SOCIEDAD", align: "center" },
   { key: "actions", label: "OPCIONES", align: "center" },
 ];
 
@@ -29,7 +29,7 @@ export const columnsClients = [
   { key: "rfc", label: "RFC", align: "center" },
   { key: "state", label: "ESTADO", align: "center" },
   { key: "honorary", label: "HONORARIO", align: "center" },
-  { key: "inSociety", label: "EN SOCIEDAD", align: "center" },
+  { key: "inSociety", label: "SOCIEDAD", align: "center" },
   { key: "actions", label: "OPCIONES", align: "center" },
 ];
 

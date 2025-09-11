@@ -17,9 +17,6 @@ import {
 } from "@mui/material";
 import DialogCustomers from "./DialogCustomers";
 import ButtonAdd from "../utils/ButtonAdd";
-import EditIcon from "@mui/icons-material/Edit";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import KeyIcon from "@mui/icons-material/Key";
 import DialogCustomersPasswords from "../password/CustomersPasswordsCreate";
 import ModalPasswords from "../password/CustomersPasswords";
 import FilterCustomer from "../filter/FilterCustomer";
@@ -34,6 +31,8 @@ import { columnsClients } from "../../constants";
 import ToastNotification from "../utils/ToastNotification";
 import { useSelector } from "react-redux";
 import LoadingScreen from "../utils/LoadingScreen";
+import IconWithBadge from "../utils/IconWithBadge";
+import { Icons } from "../utils/Icons";
 
 export default function CustomerTable() {
   const updateModal = useModal<Customer | undefined>();
@@ -59,7 +58,7 @@ export default function CustomerTable() {
   return (
     <Box>
       <FilterCustomer flag={flag} setCustomers={setCustomers} />
-                            {loadingFull && <LoadingScreen  />}
+      {loadingFull && <LoadingScreen />}
 
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         {customer && customer.length > 0 ? (
@@ -75,7 +74,6 @@ export default function CustomerTable() {
                         justifyContent: "space-between",
                       }}
                     >
-
                       <span style={{ fontSize: "1.5rem" }}>Clientes</span>
                     </Box>
                   </th>
@@ -95,11 +93,7 @@ export default function CustomerTable() {
               <TableBody>
                 {customer.map((row) => (
                   <TableRow key={row.id}>
-                    <Tooltip title="Contraseñas">
-                      <TableCell onClick={() => openModalPwd.openModal(row)}>
-                        {row.socialReason.toUpperCase()}
-                      </TableCell>
-                    </Tooltip>
+                    <TableCell>{row.socialReason.toUpperCase()}</TableCell>
                     <TableCell>{row.periodicity}</TableCell>
                     <TableCell align="center">{row.rfc}</TableCell>
                     <TableCell align="center">
@@ -119,7 +113,7 @@ export default function CustomerTable() {
                           onClick={() => updateModal.openModal(row)}
                           size="small"
                         >
-                          <EditIcon sx={{ color: "#09356f" }} />
+                          {Icons.edit}
                         </IconButton>
                       </Tooltip>
 
@@ -128,16 +122,39 @@ export default function CustomerTable() {
                           onClick={() => openDialogPdf.openModal(row)}
                           size="small"
                         >
-                          <PictureAsPdfIcon sx={{ color: "#09356f" }} />
+                          {Icons.pdfIcon}
                         </IconButton>
                       </Tooltip>
 
-                      <Tooltip title="Contraseñas">
+                      <Tooltip title="Nueva Contraseña">
                         <IconButton
                           onClick={() => openModaCreatePwd.openModal(row)}
                           size="small"
                         >
-                          <KeyIcon sx={{ color: "#09356f" }} />
+                          <IconWithBadge
+                            parentIcon={Icons.keyIcon}
+                            childIcon={Icons.add}
+                          />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip
+                        title={
+                          row?.passwords ? "Ver contraseñas" : "Sin contraseñas"
+                        }
+                      >
+                        <IconButton
+                          onClick={() => {
+                            if (row?.passwords && row.passwords.length > 0) {
+                              openModalPwd.openModal(row);
+                            }
+                          }}
+                          size="small"
+                        >
+                          <IconWithBadge
+                            parentIcon={Icons.keyIcon}
+                            childIcon={Icons.visibility}
+                          />
                         </IconButton>
                       </Tooltip>
 
@@ -171,19 +188,18 @@ export default function CustomerTable() {
           >
             <p>No hay clientes para mostrar.</p>
             <ButtonAdd
-            text="Nuevo Cliente"
-            handleClickOpen={updateModal.openModal}
-            icon={<AddIcon />}
-          />
+              text="Nuevo Cliente"
+              handleClickOpen={updateModal.openModal}
+              icon={<AddIcon />}
+            />
           </Box>
         )}
 
-       {
-        customer && customer.length > 0 && (
+        {customer && customer.length > 0 && (
           <Box
             sx={{
               position: "fixed",
-              bottom: 16, 
+              bottom: 16,
               right: 20,
               zIndex: 1200,
             }}
@@ -194,8 +210,7 @@ export default function CustomerTable() {
               icon={<AddIcon />}
             />
           </Box>
-        )
-       }
+        )}
       </Box>
       <DialogCustomers
         onClose={updateModal.closeModal}

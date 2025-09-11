@@ -12,7 +12,7 @@ interface Props {
   customer?: Customer | undefined;
   isEdit: boolean;
   password?: PasswordDTO;
-  setPassword:any
+  setPassword?:any
 }
 
 export default function CustomersPasswordsCreate({

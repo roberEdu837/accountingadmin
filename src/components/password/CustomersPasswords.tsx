@@ -22,7 +22,7 @@ export default function CustomersPasswords({
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogMessageBox
           title="Contraseñas Vinculadas"
-          subtitle={`Cliente: ${customer?.socialReason || ""}`}
+          subtitle={`CLIENTE: ${customer?.socialReason.toUpperCase() || ""}`}
         />
         <DialogContent>
           <TablePassword customer={customer} setFlag={setFlag} flag={flag}/>
