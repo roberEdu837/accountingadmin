@@ -92,7 +92,7 @@ export default function SocietyClientsTable() {
       />
       {loadingFull && <LoadingScreen />}
 
-      <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
+      <Box sx={{ mt: isMobile ? 29 : 10, p: 3 }}>
         <TableContainer component={Paper}>
           <Table className="myTable" size="small" aria-label="caption table">
             <thead>

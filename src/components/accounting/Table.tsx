@@ -123,7 +123,7 @@ export default function AccountingTable() {
       />
       {loadingFull && <LoadingScreen />}
 
-      <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
+      <Box sx={{ mt: isMobile ? 29 : 15, p: 3 }}>
         <TableContainer component={Paper} sx={{ width: "100%" }}>
   <Table className="myTable" size="small" stickyHeader>
     <thead>
