@@ -17,7 +17,6 @@ import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
-import Logo from "../../login/Logo";
 import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -26,6 +25,7 @@ import ToastNotification from "../../utils/ToastNotification";
 import { validationRegister } from "../../../validation/loginSchema";
 import { Icons } from "../../utils/Icons";
 import { login, register } from "../../../services";
+import LogoImage from "../../login/LogoImage";
 
 const RegisterForm = () => {
   const dispatch = useDispatch<any>();
@@ -57,7 +57,7 @@ const RegisterForm = () => {
         justifyContent: "center",
       }}
     >
-      {isMobile && <Logo />}
+      {isMobile && <LogoImage />}
       <Typography
         variant="h4"
         sx={{

@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { HRContable_White } from "../../assets/images";
 
+
 export default function LogoBox() {
   return (
     <Box
