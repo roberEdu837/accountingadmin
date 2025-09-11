@@ -12,6 +12,7 @@ import { initialValues } from "../../formConfig/clientsInSociety";
 import ToastNotification from "../utils/ToastNotification";
 import { patchClientInSociety } from "../../services";
 import { Icons } from "../utils/Icons";
+import CloseButton from "../utils/CloseButton";
 
 interface Props {
   open: boolean;
@@ -42,6 +43,7 @@ export default function PaymentDateGenerator({
         subtitle="Indica la fecha en la que se realizó el pago al contador asociado."
       />
 
+      <CloseButton onClose={onClose} />
       <DialogContent>
         <Formik
           initialValues={initialValues}

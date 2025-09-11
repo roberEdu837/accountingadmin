@@ -6,6 +6,7 @@ import {
   DialogContentText,
 } from "@mui/material";
 import DialogMessageBox from "./DialogMessageBox";
+import CloseButton from "./CloseButton";
 
 interface Props {
   open: boolean;
@@ -14,7 +15,12 @@ interface Props {
   setFilter: any;
 }
 
-export default function CheckDebts({ open, handleClose, setFilter, type }: Props) {
+export default function CheckDebts({
+  open,
+  handleClose,
+  setFilter,
+  type,
+}: Props) {
   const dialogInfo =
     type === 1
       ? {
@@ -59,6 +65,7 @@ export default function CheckDebts({ open, handleClose, setFilter, type }: Props
         title={dialogInfo.title}
         subtitle={dialogInfo.subtitle}
       />
+      <CloseButton onClose={handleClose} />
 
       <DialogContent>
         <DialogContentText sx={{ textAlign: "justify" }}>

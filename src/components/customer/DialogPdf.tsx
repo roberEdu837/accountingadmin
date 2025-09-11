@@ -21,6 +21,7 @@ import type { Customer } from "../../@types/customer";
 import ToastNotification from "../utils/ToastNotification";
 import { getPdfAccountingPayments } from "../../services";
 import { monthsPdf } from "../../constants";
+import CloseButton from "../utils/CloseButton";
 interface PdfProps {
   open: boolean;
   onClose: () => void;
@@ -34,8 +35,7 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
 
   const [value, setValue] = useState("current");
   const [monthSelected, setMonth] = useState(0);
-    const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
 
   // Función para calcular el mes inicial según periodicidad
   const getInitialMonth = () => {
@@ -52,13 +52,13 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
     return 0; // valor por defecto
   };
 
- useEffect(() => {
-  if (open) {
-    // Reinicia la opción al abrir el modal
-    setValue("current");
-    setMonth(getInitialMonth());
-  }
-}, [open, customer]);
+  useEffect(() => {
+    if (open) {
+      // Reinicia la opción al abrir el modal
+      setValue("current");
+      setMonth(getInitialMonth());
+    }
+  }, [open, customer]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
@@ -94,8 +94,8 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
         `No se encontró el estado de cuenta para el mes seleccionado`,
         "error"
       );
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,6 +111,8 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
         title={`Estado de cuenta ${customer?.periodicity}`}
         subtitle={`Cliente:  ${customer?.socialReason}`}
       />
+      <CloseButton onClose={onClose} />
+
       <DialogContent>
         <Grid container spacing={2}>
           <Grid size={12}>

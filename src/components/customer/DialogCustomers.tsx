@@ -2,6 +2,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import type { Customer } from "../../@types/customer";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import CustomerForm from "../Forms/customer/Customer";
+import CloseButton from "../utils/CloseButton";
 
 interface Props {
   open: boolean;
@@ -30,7 +31,8 @@ export default function DialogCustomers({
             : "Llena los campos para agregar un nuevo cliente."
         }
       />
-
+       <CloseButton onClose={onClose} />
+ 
       <DialogContent>
         <CustomerForm
           customer={customer}

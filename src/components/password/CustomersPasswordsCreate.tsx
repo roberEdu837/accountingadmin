@@ -3,6 +3,7 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import type { Customer } from "../../@types/customer";
 import type { PasswordDTO } from "../../@types/passwors";
 import PasswordForm from "../Forms/password/PasswordForm";
+import CloseButton from "../utils/CloseButton";
 
 interface Props {
   open: boolean;
@@ -12,7 +13,7 @@ interface Props {
   customer?: Customer | undefined;
   isEdit: boolean;
   password?: PasswordDTO;
-  setPassword?:any
+  setPassword?: any;
 }
 
 export default function CustomersPasswordsCreate({
@@ -23,7 +24,7 @@ export default function CustomersPasswordsCreate({
   customer,
   isEdit,
   password,
-  setPassword
+  setPassword,
 }: Props) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -31,14 +32,11 @@ export default function CustomersPasswordsCreate({
         title={isEdit ? "Editar Contraseña" : "Registrar Contraseña"}
         subtitle={
           isEdit
-            ? `Modifica los datos para la contraseña del cliente ${
-                customer?.socialReason 
-              }.`
-            : `Llena los campos para agregar una nueva contraseña al cliente ${
-                customer?.socialReason
-              }.`
+            ? `Modifica los datos para la contraseña del cliente ${customer?.socialReason}.`
+            : `Llena los campos para agregar una nueva contraseña al cliente ${customer?.socialReason}.`
         }
       />
+      <CloseButton onClose={onClose} />
 
       <DialogContent>
         <PasswordForm

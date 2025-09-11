@@ -114,9 +114,8 @@ export default function AccountingTableBody({
                   />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={"Ver Pagos"}>
+              <Tooltip title={paymets?.length?"Ver Pagos":'Sin pagos'}>
                 <IconButton
-                  disabled={!paymets}
                   onClick={() => {
                     if (paymets?.length) {
                       handleOpenPaymentsList(true);
@@ -131,11 +130,18 @@ export default function AccountingTableBody({
                 </IconButton>
               </Tooltip>
               <Tooltip
-                title={row?.customer.passwords ? "Ver contraseñas" : "Sin contraseñas"}
+                title={
+                  row?.customer.passwords
+                    ? "Ver contraseñas"
+                    : "Sin contraseñas"
+                }
               >
                 <IconButton
                   onClick={() => {
-                    if (row?.customer.passwords && row.customer.passwords.length > 0) {
+                    if (
+                      row?.customer.passwords &&
+                      row.customer.passwords.length > 0
+                    ) {
                       openModalPasswords(customer);
                     }
                   }}

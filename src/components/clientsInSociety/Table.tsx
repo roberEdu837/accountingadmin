@@ -20,6 +20,9 @@ import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import { getClientInSociety } from "../../services";
 import { columnsclientsInSociety } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoadingFull } from "../../redux/slices/userSlice";
+import LoadingScreen from "../utils/LoadingScreen";
 
 export default function SocietyClientsTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -39,6 +42,9 @@ export default function SocietyClientsTable() {
     monthlyPaymentCompleted: undefined, // ahora ok, porque FilterAccounting permite boolean | undefined
   });
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+  const dispatch = useDispatch<any>();
+
+  const { loadingFull } = useSelector((state: any) => state.user);
 
   useEffect(() => {
     if (customers) {
@@ -54,6 +60,8 @@ export default function SocietyClientsTable() {
   }, [customers]);
 
   const getAccounting = async () => {
+    dispatch(setLoadingFull(true));
+
     try {
       const { month, search, year, monthlyPaymentCompleted } = filter;
       const { data } = await getClientInSociety({
@@ -64,7 +72,8 @@ export default function SocietyClientsTable() {
       });
       setCustomers(data);
     } catch (error) {
-      console.error(error);
+    } finally {
+      dispatch(setLoadingFull(false));
     }
   };
 
@@ -81,6 +90,8 @@ export default function SocietyClientsTable() {
         flag={flag}
         type=""
       />
+      {loadingFull && <LoadingScreen />}
+
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         <TableContainer component={Paper}>
           <Table className="myTable" size="small" aria-label="caption table">

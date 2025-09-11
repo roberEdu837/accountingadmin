@@ -10,7 +10,11 @@ import {
 import LoginIcon from "@mui/icons-material/Login";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import LockOpenIcon from '@mui/icons-material/LockOpen';export const Icons = {
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import CloseIcon from '@mui/icons-material/Close';
+
+
+export const Icons = {
   edit: <EditOutlinedIcon sx={iconLargeStyle} />,
   payment: <PaymentIcon sx={iconLargeStyle} />,
   add: <AddIcon sx={iconSmallStyle} />,
@@ -21,4 +25,6 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';export const Icons = {
   pdfIcon: <PictureAsPdfIcon sx={iconLargeStyle} />,
   keyIcon: <LockOpenIcon sx={iconLargeStyle} />,
   keyIconvertical: <LockOpenIcon sx={iconLargeStyleVertical} />,
+  closeIcon: <CloseIcon sx={iconLargeStyle} />,
+
 };

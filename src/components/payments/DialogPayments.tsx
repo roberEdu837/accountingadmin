@@ -20,8 +20,13 @@ import {
   type Props,
 } from "../../formConfig";
 import { Icons } from "../utils/Icons";
-import { patchAccounting, postClientIsSociety, postPayment } from "../../services";
+import {
+  patchAccounting,
+  postClientIsSociety,
+  postPayment,
+} from "../../services";
 import { useState } from "react";
+import CloseButton from "../utils/CloseButton";
 
 export default function DialogPayments({
   onClose,
@@ -32,8 +37,8 @@ export default function DialogPayments({
   debt,
   isInSociety,
 }: Props) {
-    const [loading, setLoading] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+
   const handlePostPayment = async (values: any) => {
     await postPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");
@@ -59,12 +64,14 @@ export default function DialogPayments({
         title="Pago de cliente"
         subtitle="Registra un nuevo pago realizado por el cliente."
       />
+      <CloseButton onClose={onClose} />
+
       <DialogContent>
         <Formik
           initialValues={getInitialValues(id)}
           validationSchema={getPaymentSchema(debt)}
           onSubmit={async (values, { setSubmitting }) => {
-            setLoading(true)
+            setLoading(true);
             try {
               const { amount } = values;
               await handlePostPayment(values); // 1. Guardar pago
@@ -159,7 +166,11 @@ export default function DialogPayments({
                   </Grid>
                 </Grid>
                 <DialogActions sx={{ px: 0, pt: 2 }}>
-                  <ButtonSubmit text="Agregar" icon={Icons.addWhite} loading={loading}/>
+                  <ButtonSubmit
+                    text="Agregar"
+                    icon={Icons.addWhite}
+                    loading={loading}
+                  />
                 </DialogActions>
               </form>
             )

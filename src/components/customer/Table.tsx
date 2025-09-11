@@ -126,7 +126,7 @@ export default function CustomerTable() {
                         </IconButton>
                       </Tooltip>
 
-                      <Tooltip title="Nueva Contraseña">
+                      <Tooltip title="Nueva contraseña">
                         <IconButton
                           onClick={() => openModaCreatePwd.openModal(row)}
                           size="small"

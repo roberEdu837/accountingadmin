@@ -2,6 +2,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import type { MonthlyAccounting } from "../../@types/customer";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import AccountingForm from "../Forms/accounting/Accounting";
+import CloseButton from "../utils/CloseButton";
 
 interface Props {
   open: boolean;
@@ -19,11 +20,13 @@ export default function DialogUpdate({
   setFlag,
 }: Props) {
   return (
-    <Dialog open={open} onClose={handelClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handelClose} fullWidth maxWidth="xs">
       <DialogMessageBox
         title="Actualizar la Contabilidad"
         subtitle="Modifica la contabilidad mensual."
       />
+      <CloseButton onClose={handelClose} />
+
       <DialogContent>
         <AccountingForm
           accounting={accounting}
