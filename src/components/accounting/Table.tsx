@@ -26,6 +26,9 @@ import {
   getaccounting,
   getHasDebtsAccountings,
 } from "../../services";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingScreen from "../utils/LoadingScreen";
+import { setLoadingFull } from "../../redux/slices/userSlice";
 
 export default function AccountingTable() {
   // --- Modales genéricos ---
@@ -55,6 +58,9 @@ export default function AccountingTable() {
     monthlyPaymentCompleted: undefined,
   });
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+  const dispatch = useDispatch<any>();
+
+  const { loadingFull } = useSelector((state: any) => state.user);
 
   // --- Fetch de accountings ---
   const getAccounting = async () => {
@@ -72,12 +78,16 @@ export default function AccountingTable() {
   };
 
   useEffect(() => {
+    dispatch(setLoadingFull(true));
+
     (async () => {
       try {
         await createAccounting();
         await getAccounting();
       } catch (err) {
         console.error(err);
+      } finally {
+        dispatch(setLoadingFull(false));
       }
     })();
   }, [filter, flag]);
@@ -111,6 +121,7 @@ export default function AccountingTable() {
         filter={filter}
         type="Accounting"
       />
+      {loadingFull && <LoadingScreen />}
 
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
         <TableContainer component={Paper} sx={{ width: "100%" }}>
