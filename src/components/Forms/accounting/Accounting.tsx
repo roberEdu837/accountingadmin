@@ -17,6 +17,7 @@ import { patchAccounting } from "../../../services";
 import ToastNotification from "../../utils/ToastNotification";
 import ButtonSubmit from "../../utils/Button";
 import { Icons } from "../../utils/Icons";
+import { useState } from "react";
 interface Props {
   handleClose: () => void;
   accounting: MonthlyAccounting | undefined;
@@ -24,6 +25,8 @@ interface Props {
   flag?: boolean;
 }
 function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
+  const [loading, setLoading] = useState(false);
+
   function getTotalPayments(accounting?: MonthlyAccounting): number {
     if (!accounting || !accounting.paymets) return 0;
     return accounting.paymets.reduce((acc, payment) => acc + payment.amount, 0);
@@ -45,6 +48,7 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
           ),
       })}
       onSubmit={async (values, { setSubmitting }) => {
+        setLoading(true);
         try {
           if (!accounting) return null;
           const { honorary, periodicity, isInSociety } = values;
@@ -59,13 +63,15 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
           if (setFlag) setFlag(!flag);
         } catch (error) {
           console.error("Error al enviar el formulario:", error);
+        } finally {
+          setSubmitting(false);
+          setLoading(false);
+          handleClose();
+          ToastNotification(
+            `La contabilidad se actualizó correctamente`,
+            "success"
+          );
         }
-        setSubmitting(false);
-        handleClose();
-        ToastNotification(
-          `La contabilidad se actualizó correctamente`,
-          "success"
-        );
       }}
     >
       {({
@@ -84,7 +90,6 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
                   '"No se puede establecer un honorario menor a la cantidad ya pagada"'
                 }
                 color="warning"
-                arrow
               >
                 <IconButton size="small">
                   <InfoIcon fontSize="small" />
@@ -144,7 +149,11 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
             </Grid>
           </Grid>
           <DialogActions sx={{ px: 0, pt: 2 }}>
-            <ButtonSubmit text="Actualizar" icon={Icons.editWhite} />
+            <ButtonSubmit
+              text="Actualizar"
+              icon={Icons.editWhite}
+              loading={loading}
+            />
           </DialogActions>
         </form>
       )}

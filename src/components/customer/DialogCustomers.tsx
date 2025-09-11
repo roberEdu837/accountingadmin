@@ -18,7 +18,9 @@ export default function DialogCustomers({
   flag,
   customer,
 }: Props) {
+  
   return (
+    
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
         title={customer?.id ? "Actualizar Cliente" : "Registro de Cliente"}

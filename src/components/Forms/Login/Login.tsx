@@ -18,20 +18,20 @@ import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router";
 import { validationSchema } from "../../../validation";
-//import Logo from "../../login/Logo";
 import ButtonSubmit from "../../utils/Button";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { Icons } from "../../utils/Icons";
 import { login } from "../../../services";
-import Logo from "../../Login/LogoImage";
+import LogoImage from "../../Login/LogoImage";
 
 const LoginForm = () => {
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -54,12 +54,14 @@ const LoginForm = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      {isMobile && <Logo />}
-      <Typography variant="h4" sx={{ fontSize: "xx-large", fontWeight: 300 }}>
-        Inicio de Sesión
+      <Typography variant="h4" sx={{ fontSize: "xx-large", fontWeight: 100 }}>
+        Inicio de sesión
       </Typography>
+
+      {isMobile && <LogoImage />}
 
       <Formik
         initialValues={{
@@ -68,6 +70,7 @@ const LoginForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
+          setLoading(true);
           const { email, password } = values;
 
           try {
@@ -81,8 +84,11 @@ const LoginForm = () => {
             );
           } catch (error) {
             console.error("Error al iniciar sesión");
-          }
+          }finally{
+          setLoading(false)
           setSubmitting(false);
+
+          }
         }}
       >
         {({
@@ -149,7 +155,7 @@ const LoginForm = () => {
             <CardActions
               sx={{ display: "flex", justifyContent: "center", mt: 2 }}
             >
-              <ButtonSubmit text="Iniciar Sesión" icon={Icons.payment}/>
+              <ButtonSubmit text="Acceder" icon={Icons.loginIcon} loading={loading}/>
             </CardActions>
           </form>
         )}

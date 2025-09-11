@@ -13,6 +13,7 @@ import { Icons } from "../../utils/Icons";
 import type { PasswordDTO } from "../../../@types/passwors";
 import type { Customer } from "../../../@types/customer";
 import { getInitialValuesPwd, validationSchemaPwd } from "../../../formConfig";
+import { useState } from "react";
 interface Props {
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
@@ -31,12 +32,14 @@ export default function PasswordForm({
   setFlag,
 }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+   const [loading, setLoading] = useState(false);
 
   return (
     <Formik
       initialValues={getInitialValuesPwd(customer, password)}
       validationSchema={validationSchemaPwd}
       onSubmit={async (values, { setSubmitting }) => {
+        setLoading(true);
         try {
           if (isEdit && password?.id) {
             await patchPasswordById(password?.id, values);
@@ -58,7 +61,7 @@ export default function PasswordForm({
                 }" se creó correctamente`,
             "success"
           );
-
+          setLoading(false);
           onClose();
         }
       }}
@@ -123,6 +126,7 @@ export default function PasswordForm({
             <ButtonSubmit
               text={isEdit ? "Actualizar" : "Agregar"}
               icon={Icons.addWhite}
+              loading={loading}
             />
           </DialogActions>
         </form>

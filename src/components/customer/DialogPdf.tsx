@@ -34,6 +34,8 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
 
   const [value, setValue] = useState("current");
   const [monthSelected, setMonth] = useState(0);
+    const [loading, setLoading] = useState(false);
+
 
   // Función para calcular el mes inicial según periodicidad
   const getInitialMonth = () => {
@@ -76,6 +78,7 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
   };
 
   const downloadFile = async () => {
+    setLoading(true);
     try {
       const { data } = await getPdfAccountingPayments(
         customer?.id,
@@ -91,6 +94,8 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
         `No se encontró el estado de cuenta para el mes seleccionado`,
         "error"
       );
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -125,6 +130,7 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
                   text="Descargar"
                   icon={<ArrowCircleDownIcon />}
                   disabled={monthSelected === 0}
+                  loading={loading}
                 />
               </Box>
 

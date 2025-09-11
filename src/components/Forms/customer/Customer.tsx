@@ -18,6 +18,7 @@ import ToastNotification from "../../utils/ToastNotification";
 import { addFourYears } from "../../../utils";
 import ButtonSubmit from "../../utils/Button";
 import { Icons } from "../../utils/Icons";
+import { useState } from "react";
 interface Props {
   onClose: () => void;
   setFlag?: (flag: boolean) => void;
@@ -27,6 +28,8 @@ interface Props {
 
 export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+    const [loading, setLoading] = useState(false);
+
  const handleCreateCustomer = async (v: any) => {
     const customerData: Customer = {
       ...v,
@@ -61,6 +64,7 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
       initialValues={customerInitialValues(customer)}
       validationSchema={validationSchemaClient}
       onSubmit={async (values, { setSubmitting }) => {
+        setLoading(true);
         try {
           if (customer?.id) {
             await handleUpdateCustomer(values);
@@ -70,6 +74,7 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
         } catch (error) {
         } finally {
           onClose();
+          setLoading(false)
           setSubmitting(false);
           if (setFlag) setFlag(!flag);
         }
@@ -222,6 +227,7 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
             <ButtonSubmit
               text={customer?.id ? "Actualizar" : "Agregar"}
               icon={customer?.id ? Icons.editWhite : Icons.addWhite}
+              loading={loading}
             />
           </DialogActions>
         </form>

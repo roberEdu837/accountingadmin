@@ -101,8 +101,9 @@ export default function AccountingTableBody({
                   />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={paymets?.length ? "Ver Pagos" : "No hay pagos"}>
+              <Tooltip title={"Ver Pagos"}>
                 <IconButton
+                  disabled={!paymets}
                   onClick={() => {
                     if (paymets?.length) {
                       handleOpenPaymentsList(true);
@@ -110,10 +111,15 @@ export default function AccountingTableBody({
                     }
                   }}
                 >
-                  <IconWithBadge
+                  {
+                    paymets ?(<IconWithBadge
                     parentIcon={Icons.payment}
                     childIcon={Icons.visibility}
-                  />
+                  />):(<IconWithBadge
+                    parentIcon={Icons.payment}
+                    childIcon={Icons.visibility}
+                  />)
+                  }
                 </IconButton>
               </Tooltip>
             </TableCell>

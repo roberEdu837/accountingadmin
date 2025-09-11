@@ -4,6 +4,7 @@ interface Props {
   handleClickOpen: () => void;
   icon: React.ReactNode;
   disabled?: boolean;
+  loading: boolean
 }
 
 export default function ButtonAdd({
@@ -11,10 +12,12 @@ export default function ButtonAdd({
   text,
   icon,
   disabled,
+  loading
 }: Props) {
   return (
     <Tooltip title={text}>
       <IconButton
+        loading={loading}
         disabled={disabled}
         onClick={handleClickOpen}
         sx={{

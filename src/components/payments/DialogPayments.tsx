@@ -21,6 +21,7 @@ import {
 } from "../../formConfig";
 import { Icons } from "../utils/Icons";
 import { patchAccounting, postClientIsSociety, postPayment } from "../../services";
+import { useState } from "react";
 
 export default function DialogPayments({
   onClose,
@@ -31,6 +32,8 @@ export default function DialogPayments({
   debt,
   isInSociety,
 }: Props) {
+    const [loading, setLoading] = useState(false);
+  
   const handlePostPayment = async (values: any) => {
     await postPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");
@@ -61,6 +64,7 @@ export default function DialogPayments({
           initialValues={getInitialValues(id)}
           validationSchema={getPaymentSchema(debt)}
           onSubmit={async (values, { setSubmitting }) => {
+            setLoading(true)
             try {
               const { amount } = values;
               await handlePostPayment(values); // 1. Guardar pago
@@ -79,6 +83,7 @@ export default function DialogPayments({
             } finally {
               setSubmitting(false);
               onClose();
+              setLoading(false);
             }
           }}
         >
@@ -154,7 +159,7 @@ export default function DialogPayments({
                   </Grid>
                 </Grid>
                 <DialogActions sx={{ px: 0, pt: 2 }}>
-                  <ButtonSubmit text="Agregar" icon={Icons.addWhite} />
+                  <ButtonSubmit text="Agregar" icon={Icons.addWhite} loading={loading}/>
                 </DialogActions>
               </form>
             )

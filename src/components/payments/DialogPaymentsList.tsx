@@ -34,7 +34,7 @@ function DialogPaymentsList({
   setFlag,
 }: Props) {
   const [payments, setPayments] = useState<any[]>([]);
-  console.log(accounting);
+    const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPayments(accounting?.paymets || []);
@@ -42,6 +42,7 @@ function DialogPaymentsList({
 
   const deletePayment = async (id: number | undefined) => {
     if (!id) return;
+    setLoading(true);
 
     await getPaymentsByAccountingId(id);
 
@@ -53,6 +54,7 @@ function DialogPaymentsList({
     });
     setPayments(payment);
     setFlag(!flag);
+    setLoading(false);
   };
 
   return (
@@ -94,7 +96,7 @@ function DialogPaymentsList({
 
                     <TableCell align="center">
                       <Tooltip title="Eliminar">
-                        <IconButton onClick={() => deletePayment(row.id)}>
+                        <IconButton onClick={() => deletePayment(row.id)} loading={loading}>
                           <DeleteIcon sx={{ color: "#09356f" }} />
                         </IconButton>
                       </Tooltip>
