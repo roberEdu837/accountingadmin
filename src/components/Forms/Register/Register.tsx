@@ -25,7 +25,7 @@ import ToastNotification from "../../utils/ToastNotification";
 import { validationRegister } from "../../../validation/loginSchema";
 import { Icons } from "../../utils/Icons";
 import { login, register } from "../../../services";
-import LogoImage from "../../login/LogoImage";
+import LogoImage from "../../Login/LogoImage";
 
 const RegisterForm = () => {
   const dispatch = useDispatch<any>();

@@ -25,7 +25,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { Icons } from "../../utils/Icons";
 import { login } from "../../../services";
-import Logo from "../../login/LogoImage";
+import Logo from "../../Login/LogoImage";
 
 const LoginForm = () => {
   const dispatch = useDispatch<any>();
