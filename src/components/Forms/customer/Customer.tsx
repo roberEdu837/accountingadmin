@@ -26,11 +26,16 @@ interface Props {
   customer: Customer | undefined;
 }
 
-export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
+export default function CustomerForm({
+  customer,
+  onClose,
+  flag,
+  setFlag,
+}: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
- const handleCreateCustomer = async (v: any) => {
+  const handleCreateCustomer = async (v: any) => {
     const customerData: Customer = {
       ...v,
       isInSociety: v.isInSociety === 0 ? false : true,
@@ -74,7 +79,7 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
         } catch (error) {
         } finally {
           onClose();
-          setLoading(false)
+          setLoading(false);
           setSubmitting(false);
           if (setFlag) setFlag(!flag);
         }
@@ -144,12 +149,11 @@ export default function CustomerForm({customer,onClose,flag,setFlag}:Props) {
               />
             </Grid>
             <Grid size={isMobile ? 12 : 6}>
-              <FormControl fullWidth sx={{mt:1}}>
-                <InputLabel id="demo-simple-select-label" >
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <InputLabel id="demo-simple-select-label">
                   Periodicidad
                 </InputLabel>
                 <Select
-                
                   labelId="demo-simple-select-label"
                   value={values.periodicity}
                   label="Periodicidad"

@@ -111,15 +111,10 @@ export default function AccountingTableBody({
                     }
                   }}
                 >
-                  {
-                    paymets ?(<IconWithBadge
+                  <IconWithBadge
                     parentIcon={Icons.payment}
                     childIcon={Icons.visibility}
-                  />):(<IconWithBadge
-                    parentIcon={Icons.payment}
-                    childIcon={Icons.visibility}
-                  />)
-                  }
+                  />
                 </IconButton>
               </Tooltip>
             </TableCell>

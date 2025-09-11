@@ -13,6 +13,7 @@ export const customer = {
 
 export function customerInitialValues(c?: Customer | undefined) {
   if (!c?.id) return customer;
+  console.log(customer)
   const {
     id,
     socialReason,
@@ -24,14 +25,16 @@ export function customerInitialValues(c?: Customer | undefined) {
     isInSociety,
   } = c;
 
+  console.log(creationDate, renewalDate);
+
   return {
     id: id || 0,
     socialReason: socialReason || "",
     rfc: rfc || "",
     honorary: honorary || 0,
     periodicity: periodicity || "",
-    creationDate: creationDate,
-    renewalDate: renewalDate,
+    creationDate: creationDate || "",
+    renewalDate: renewalDate || "",
     isInSociety: isInSociety === false ? 0 : 1,
   };
 }
