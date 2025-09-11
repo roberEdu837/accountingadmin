@@ -13,6 +13,7 @@ import ToastNotification from "../utils/ToastNotification";
 import { patchClientInSociety } from "../../services";
 import { Icons } from "../utils/Icons";
 import CloseButton from "../utils/CloseButton";
+import { useState } from "react";
 
 interface Props {
   open: boolean;
@@ -28,6 +29,8 @@ export default function PaymentDateGenerator({
   flag,
   id,
 }: Props) {
+
+  const [loading, setLoading] = useState(false);
   const generatePaymentDate = async (value: any) => {
     try {
       await patchClientInSociety(id, value.paymentDate);
@@ -39,8 +42,8 @@ export default function PaymentDateGenerator({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
-        title="Registro de Fecha de Pago"
-        subtitle="Indica la fecha en la que se realizó el pago al contador asociado."
+        title="Registrar Fecha de Pago"
+        subtitle="Indica la fecha del pago realizado al contador asociado."
       />
 
       <CloseButton onClose={onClose} />
@@ -48,6 +51,7 @@ export default function PaymentDateGenerator({
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { setSubmitting }) => {
+            setLoading(true);
             await generatePaymentDate(values);
             setSubmitting(false);
 
@@ -57,6 +61,7 @@ export default function PaymentDateGenerator({
               "Fecha de pago generada correctamente.",
               "success"
             );
+            setLoading(false);
             onClose();
           }}
         >
@@ -85,7 +90,7 @@ export default function PaymentDateGenerator({
                 </Grid>
               </Grid>
               <DialogActions sx={{ px: 0, pt: 2 }}>
-                <ButtonSubmit text="Agregar" icon={Icons.addWhite} />
+                <ButtonSubmit text="Agregar" icon={Icons.addWhite} loading={loading}/>
               </DialogActions>
             </form>
           )}

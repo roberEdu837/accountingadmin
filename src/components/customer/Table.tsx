@@ -61,7 +61,7 @@ export default function CustomerTable() {
       {loadingFull && <LoadingScreen />}
 
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
-        {customer && customer.length > 0 ? (
+        {
           <TableContainer component={Paper}>
             <Table className="myTable" size="small" aria-label="caption table">
               <thead>
@@ -89,112 +89,122 @@ export default function CustomerTable() {
                   ))}
                 </TableRow>
               </TableHead>
-
               <TableBody>
-                {customer.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.socialReason.toUpperCase()}</TableCell>
-                    <TableCell>{row.periodicity}</TableCell>
-                    <TableCell align="center">{row.rfc}</TableCell>
-                    <TableCell align="center">
-                      <Chip
-                        label={row.status ? "ACTIVO" : "INACTIVO"}
-                        color={row.status ? "success" : "default"}
-                        variant="outlined"
-                      />
-                    </TableCell>
-                    <TableCell align="center">${row.honorary}</TableCell>
-                    <TableCell align="center">
-                      {row.isInSociety ? "SI" : "NO"}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip title="Actualizar">
-                        <IconButton
-                          onClick={() => updateModal.openModal(row)}
-                          size="small"
-                        >
-                          {Icons.edit}
-                        </IconButton>
-                      </Tooltip>
+                {customer && customer.length > 0 ? (
+                  customer.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.socialReason.toUpperCase()}</TableCell>
+                      <TableCell>{row.periodicity}</TableCell>
+                      <TableCell align="center">{row.rfc}</TableCell>
+                      <TableCell align="center">
+                        <Chip
+                          label={row.status ? "ACTIVO" : "INACTIVO"}
+                          color={row.status ? "success" : "default"}
+                          variant="outlined"
+                        />
+                      </TableCell>
+                      <TableCell align="center">${row.honorary}</TableCell>
+                      <TableCell align="center">
+                        {row.isInSociety ? "SI" : "NO"}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Tooltip title="Actualizar">
+                          <IconButton
+                            onClick={() => updateModal.openModal(row)}
+                            size="small"
+                          >
+                            {Icons.edit}
+                          </IconButton>
+                        </Tooltip>
 
-                      <Tooltip title="Estado de cuenta">
-                        <IconButton
-                          onClick={() => openDialogPdf.openModal(row)}
-                          size="small"
-                        >
-                          {Icons.pdfIcon}
-                        </IconButton>
-                      </Tooltip>
+                        <Tooltip title="Estado de cuenta">
+                          <IconButton
+                            onClick={() => openDialogPdf.openModal(row)}
+                            size="small"
+                          >
+                            {Icons.pdfIcon}
+                          </IconButton>
+                        </Tooltip>
 
-                      <Tooltip title="Nueva contraseña">
-                        <IconButton
-                          onClick={() => openModaCreatePwd.openModal(row)}
-                          size="small"
-                        >
-                          <IconWithBadge
-                            parentIcon={Icons.keyIcon}
-                            childIcon={Icons.add}
-                          />
-                        </IconButton>
-                      </Tooltip>
+                        <Tooltip title="Nueva contraseña">
+                          <IconButton
+                            onClick={() => openModaCreatePwd.openModal(row)}
+                            size="small"
+                          >
+                            <IconWithBadge
+                              parentIcon={Icons.keyIcon}
+                              childIcon={Icons.add}
+                            />
+                          </IconButton>
+                        </Tooltip>
 
-                      <Tooltip
-                        title={
-                          row?.passwords ? "Ver contraseñas" : "Sin contraseñas"
-                        }
-                      >
-                        <IconButton
-                          onClick={() => {
-                            if (row?.passwords && row.passwords.length > 0) {
-                              openModalPwd.openModal(row);
+                        <Tooltip
+                          title={
+                            row?.passwords
+                              ? "Ver contraseñas"
+                              : "Sin contraseñas"
+                          }
+                        >
+                          <IconButton
+                            onClick={() => {
+                              if (row?.passwords && row.passwords.length > 0) {
+                                openModalPwd.openModal(row);
+                              }
+                            }}
+                            size="small"
+                          >
+                            <IconWithBadge
+                              parentIcon={Icons.keyIcon}
+                              childIcon={Icons.visibility}
+                            />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title={row.status ? "Desactivar" : "Activar"}>
+                          <IconButton
+                            onClick={() =>
+                              handleDesactivate(row.id, !row.status)
                             }
-                          }}
-                          size="small"
-                        >
-                          <IconWithBadge
-                            parentIcon={Icons.keyIcon}
-                            childIcon={Icons.visibility}
-                          />
-                        </IconButton>
-                      </Tooltip>
-
-                      <Tooltip title={row.status ? "Desactivar" : "Activar"}>
-                        <IconButton
-                          onClick={() => handleDesactivate(row.id, !row.status)}
-                          size="small"
-                        >
-                          {!row.status ? (
-                            <CheckCircleIcon sx={{ color: "#09356f" }} />
-                          ) : (
-                            <BlockIcon sx={{ color: "#09356f" }} />
-                          )}
-                        </IconButton>
-                      </Tooltip>
+                            size="small"
+                          >
+                            {!row.status ? (
+                              <CheckCircleIcon sx={{ color: "#09356f" }} />
+                            ) : (
+                              <BlockIcon sx={{ color: "#09356f" }} />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} align="center">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 1, 
+                          py: 2, 
+                        }}
+                      >
+                        <span>
+                          No hay registros que coincidan con los filtros.
+                        </span>
+                        <ButtonAdd
+                          text="Nuevo Cliente"
+                          handleClickOpen={updateModal.openModal}
+                          icon={<AddIcon />}
+                        />
+                      </Box>
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>
-        ) : (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "200px",
-              flexDirection: "column",
-            }}
-          >
-            <p>No hay clientes para mostrar.</p>
-            <ButtonAdd
-              text="Nuevo Cliente"
-              handleClickOpen={updateModal.openModal}
-              icon={<AddIcon />}
-            />
-          </Box>
-        )}
-
+        }
         {customer && customer.length > 0 && (
           <Box
             sx={{
