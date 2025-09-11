@@ -56,6 +56,7 @@ function FilterCustomer({ flag, setCustomers }: Props) {
         <Grid container spacing={2}>
           <Grid size={isMobile ? 12 : 3}>
             <TextField
+              size={isMobile ? "small" : "medium"}
               fullWidth
               label="Buscar por razón social"
               variant="outlined"
@@ -71,6 +72,7 @@ function FilterCustomer({ flag, setCustomers }: Props) {
             <FormControl fullWidth>
               <InputLabel id="status-select-label">Cliente asociado</InputLabel>
               <Select
+                size={isMobile ? "small" : "medium"}
                 labelId="status-select-label"
                 id="status-select"
                 value={
@@ -109,6 +111,7 @@ function FilterCustomer({ flag, setCustomers }: Props) {
             <FormControl fullWidth>
               <InputLabel id="status-select-label">Estado</InputLabel>
               <Select
+                size={isMobile ? "small" : "medium"}
                 labelId="status-select-label"
                 id="status-select"
                 value={status === true ? "true" : "false"}

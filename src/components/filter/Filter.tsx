@@ -39,7 +39,6 @@ export default function Filter({
             <TextField
               size={isMobile ? "small" : "medium"}
               fullWidth
-              
               label="Buscar por razón social"
               variant="outlined"
               value={search}
