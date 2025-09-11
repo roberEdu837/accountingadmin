@@ -21,6 +21,7 @@ interface Props {
   customer?: Customer | undefined;
   isEdit: boolean;
   password?: PasswordDTO;
+  setPassword:any
 }
 
 export default function PasswordForm({
@@ -30,9 +31,10 @@ export default function PasswordForm({
   onClose,
   flag,
   setFlag,
+  setPassword
 }: Props) {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <Formik
@@ -43,6 +45,10 @@ export default function PasswordForm({
         try {
           if (isEdit && password?.id) {
             await patchPasswordById(password?.id, values);
+              setPassword((prev:any) =>
+                prev?.map((p:any) => (p.id === password?.id ? values : p))
+              );
+            
           } else {
             await postPasswordByCustomer(values);
           }
@@ -53,12 +59,8 @@ export default function PasswordForm({
           if (setFlag) setFlag(!flag);
           ToastNotification(
             isEdit
-              ? `La contraseña para el cliente "${
-                  customer?.socialReason || password?.customer.socialReason
-                }" se actualizó correctamente`
-              : `La contraseña para el cliente "${
-                  customer?.socialReason || password?.customer.socialReason
-                }" se creó correctamente`,
+              ? `La contraseña para el cliente "${customer?.socialReason}" se actualizó correctamente`
+              : `La contraseña para el cliente "${customer?.socialReason}" se creó correctamente`,
             "success"
           );
           setLoading(false);

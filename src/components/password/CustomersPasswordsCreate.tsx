@@ -12,6 +12,7 @@ interface Props {
   customer?: Customer | undefined;
   isEdit: boolean;
   password?: PasswordDTO;
+  setPassword:any
 }
 
 export default function CustomersPasswordsCreate({
@@ -22,6 +23,7 @@ export default function CustomersPasswordsCreate({
   customer,
   isEdit,
   password,
+  setPassword
 }: Props) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -30,10 +32,10 @@ export default function CustomersPasswordsCreate({
         subtitle={
           isEdit
             ? `Modifica los datos para la contraseña del cliente ${
-                customer?.socialReason || password?.customer.socialReason
+                customer?.socialReason 
               }.`
             : `Llena los campos para agregar una nueva contraseña al cliente ${
-                customer?.socialReason || password?.customer.socialReason
+                customer?.socialReason
               }.`
         }
       />
@@ -46,6 +48,7 @@ export default function CustomersPasswordsCreate({
           password={password}
           setFlag={setFlag}
           isEdit={isEdit}
+          setPassword={setPassword}
         />
       </DialogContent>
     </Dialog>

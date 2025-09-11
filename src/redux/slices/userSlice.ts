@@ -1,10 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { isValidToken } from "../../utils/jwt";
 import type { UserState } from "../../@types/user";
 const initialState: UserState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  loadingFull: false,
 };
 
 export const userSlice = createSlice({
@@ -19,18 +20,21 @@ export const userSlice = createSlice({
     initialize: (state, action) => {
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
-      state.isInitialized= action.payload.isInitialized;
+      state.isInitialized = action.payload.isInitialized;
     },
-     logout: (state) => {
+    logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.isInitialized = true;
+    },
+    setLoadingFull: (state, action: PayloadAction<boolean>) => {
+      state.loadingFull = action.payload;
     },
   },
 });
 
 export default userSlice.reducer;
-export const { login, initialize, logout} = userSlice.actions;
+export const { login, initialize, logout, setLoadingFull } = userSlice.actions;
 
 export const logIn = (userData: any, callback: any) => (dispatch: any) => {
   const { user, token } = userData;
@@ -49,7 +53,6 @@ export const logOut = (callback: any) => async (dispatch: any) => {
 
   callback();
 };
-  
 
 export const initialiceble = () => (dispatch: any) => {
   try {
@@ -62,11 +65,15 @@ export const initialiceble = () => (dispatch: any) => {
     }
 
     if (accessToken && isValidToken(accessToken) && user) {
-      dispatch(initialize({ user: user, isAuthenticated: true ,isInitialized: true}));
-      console.log('si')
+      dispatch(
+        initialize({ user: user, isAuthenticated: true, isInitialized: true })
+      );
+      console.log("si");
     } else {
-      console.log('no')
-      dispatch(initialize({ isAuthenticated: false, user: null,isInitialized:true }));
+      console.log("no");
+      dispatch(
+        initialize({ isAuthenticated: false, user: null, isInitialized: true })
+      );
     }
   } catch (error) {
     console.error(error);

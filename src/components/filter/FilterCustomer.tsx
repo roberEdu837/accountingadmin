@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { getCustomers } from "../../services/customer.service";
 import { headerStyles } from "../../constants";
+import { useDispatch } from "react-redux";
+import { setLoadingFull } from "../../redux/slices/userSlice";
 
 interface Props {
   flag: boolean;
@@ -26,10 +28,11 @@ function FilterCustomer({ flag, setCustomers }: Props) {
     undefined
   );
   const [status, setStatus] = useState<boolean>(true);
+  const dispatch = useDispatch<any>();
 
   const getAccounting = async () => {
+    dispatch(setLoadingFull(true));
     try {
-      console.log("sie enya");
       const { data } = await getCustomers({
         isInSociety,
         search,
@@ -38,6 +41,8 @@ function FilterCustomer({ flag, setCustomers }: Props) {
       setCustomers(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      dispatch(setLoadingFull(false));
     }
   };
 

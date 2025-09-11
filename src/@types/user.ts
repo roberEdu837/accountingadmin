@@ -2,6 +2,7 @@ export type UserState = {
   user: UserLogin | null;
   isAuthenticated: boolean;
   isInitialized: boolean;
+  loadingFull: boolean
 };
 
 export type User = {

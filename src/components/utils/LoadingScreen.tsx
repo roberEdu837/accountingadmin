@@ -6,8 +6,8 @@ export default function LoadingScreen() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "left",
-        alignItems: "left",
+        justifyContent: "center",
+        alignItems: "center",
         height: "100vh",
         backgroundColor: "#fff",
       }}

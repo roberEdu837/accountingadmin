@@ -9,46 +9,39 @@ import {
   Tooltip,
   Paper,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import type { PasswordDTO } from "../../@types/passwors";
+import type { Password, PasswordDTO } from "../../@types/passwors";
 import type { Customer } from "../../@types/customer";
-import { getPasswordsById } from "../../services";
 import { useModal } from "../../hooks";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomersPasswordsCreate from "./CustomersPasswordsCreate";
+import { useEffect, useState } from "react";
 
 interface Props {
   customer: Customer | undefined;
+  setFlag?: (flag: boolean) => void;
+  flag?: boolean;
 }
-export default function TablePassword({ customer }: Props) {
-  const [passwords, setPasswords] = useState<PasswordDTO[]>([]);
+export default function TablePassword({ customer,flag,setFlag }: Props) {
   const openModal = useModal<PasswordDTO>();
-  const [flag, setFlag] = useState(false);
+  const [password, setPassword] = useState<Password[] | undefined>([])
 
-  const getPasswords = async () => {
-    if (customer?.id) {
-      const { data } = await getPasswordsById(customer.id);
-      setPasswords(data);
-    }
-  };
-
-   useEffect(() => {
-    getPasswords();
-  }, [customer, flag]);
+  useEffect(() => {
+  setPassword(customer?.passwords)
+  },[])
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Sistema</TableCell>
-            <TableCell align="center">Usuario</TableCell>
-            <TableCell align="center">Contraseña</TableCell>
-            <TableCell align="center">Acciones</TableCell>
+            <TableCell>SISTEMA</TableCell>
+            <TableCell align="center">USUARIO</TableCell>
+            <TableCell align="center">CONTRASEÑA</TableCell>
+            <TableCell align="center">OPCIONES</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {passwords.map((row: any) => (
+          {password?.map((row: any) => (
             <TableRow
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -70,12 +63,14 @@ export default function TablePassword({ customer }: Props) {
         </TableBody>
       </Table>
       <CustomersPasswordsCreate
+        customer={customer}
         onClose={openModal.closeModal}
         open={openModal.open}
         isEdit={openModal.data ? true : false}
         password={openModal.data}
         setFlag={setFlag}
         flag={flag}
+        setPassword={setPassword}
       />
     </TableContainer>
   );

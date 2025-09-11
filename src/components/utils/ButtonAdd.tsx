@@ -4,7 +4,7 @@ interface Props {
   handleClickOpen: () => void;
   icon: React.ReactNode;
   disabled?: boolean;
-  loading: boolean
+  loading?: boolean
 }
 
 export default function ButtonAdd({

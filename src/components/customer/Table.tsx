@@ -31,6 +31,9 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { desactivateCustomer } from "../../services/customer.service";
 import { useModal } from "../../hooks";
 import { columnsClients } from "../../constants";
+import ToastNotification from "../utils/ToastNotification";
+import { useSelector } from "react-redux";
+import LoadingScreen from "../utils/LoadingScreen";
 
 export default function CustomerTable() {
   const updateModal = useModal<Customer | undefined>();
@@ -40,53 +43,57 @@ export default function CustomerTable() {
   const [customer, setCustomers] = useState<Customer[]>();
   const [flag, setFlag] = useState(false);
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
+  const { loadingFull } = useSelector((state: any) => state.user);
 
   const handleDesactivate = async (id: number | undefined, status: boolean) => {
     await desactivateCustomer(id, status);
     setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
+    const message = status
+      ? "Cliente activado correctamente."
+      : "Cliente desactivado correctamente.";
+
+    ToastNotification(message, status ? "success" : "success");
   };
+  console.log(loadingFull);
 
   return (
     <Box>
       <FilterCustomer flag={flag} setCustomers={setCustomers} />
+                            {loadingFull && <LoadingScreen  />}
 
       <Box sx={{ mt: isMobile ? 35 : 15, p: 3 }}>
-        <TableContainer component={Paper}>
-          <Table className="myTable" size="small" aria-label="caption table">
-            <thead>
-              <tr>
-                <th colSpan={9}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "left",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "1.5rem",
+        {customer && customer.length > 0 ? (
+          <TableContainer component={Paper}>
+            <Table className="myTable" size="small" aria-label="caption table">
+              <thead>
+                <tr>
+                  <th colSpan={9}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "left",
+                        justifyContent: "space-between",
                       }}
                     >
-                      Clientes
-                    </span>
-                  </Box>
-                </th>
-              </tr>
-            </thead>
 
-            <TableHead>
-              <TableRow>
-                {columnsClients?.map((col) => (
-                  <TableCell key={col.key} align={col.align as any}>
-                    {col.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {customer?.map((row) => {
-                return (
+                      <span style={{ fontSize: "1.5rem" }}>Clientes</span>
+                    </Box>
+                  </th>
+                </tr>
+              </thead>
+
+              <TableHead>
+                <TableRow>
+                  {columnsClients?.map((col) => (
+                    <TableCell key={col.key} align={col.align as any}>
+                      {col.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {customer.map((row) => (
                   <TableRow key={row.id}>
                     <Tooltip title="Contraseñas">
                       <TableCell onClick={() => openModalPwd.openModal(row)}>
@@ -106,13 +113,10 @@ export default function CustomerTable() {
                     <TableCell align="center">
                       {row.isInSociety ? "SI" : "NO"}
                     </TableCell>
-
                     <TableCell align="center">
                       <Tooltip title="Actualizar">
                         <IconButton
-                          onClick={() => {
-                            updateModal.openModal(row);
-                          }}
+                          onClick={() => updateModal.openModal(row)}
                           size="small"
                         >
                           <EditIcon sx={{ color: "#09356f" }} />
@@ -130,14 +134,13 @@ export default function CustomerTable() {
 
                       <Tooltip title="Contraseñas">
                         <IconButton
-                          onClick={() => {
-                            openModaCreatePwd.openModal(row);
-                          }}
+                          onClick={() => openModaCreatePwd.openModal(row)}
                           size="small"
                         >
                           <KeyIcon sx={{ color: "#09356f" }} />
                         </IconButton>
                       </Tooltip>
+
                       <Tooltip title={row.status ? "Desactivar" : "Activar"}>
                         <IconButton
                           onClick={() => handleDesactivate(row.id, !row.status)}
@@ -152,25 +155,47 @@ export default function CustomerTable() {
                       </Tooltip>
                     </TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Box
-          sx={{
-            position: "fixed",
-            bottom: 16,
-            right: 20,
-            zIndex: 1200,
-          }}
-        >
-          <ButtonAdd
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+              flexDirection: "column",
+            }}
+          >
+            <p>No hay clientes para mostrar.</p>
+            <ButtonAdd
             text="Nuevo Cliente"
             handleClickOpen={updateModal.openModal}
             icon={<AddIcon />}
           />
-        </Box>
+          </Box>
+        )}
+
+       {
+        customer && customer.length > 0 && (
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 16, 
+              right: 20,
+              zIndex: 1200,
+            }}
+          >
+            <ButtonAdd
+              text="Nuevo Cliente"
+              handleClickOpen={updateModal.openModal}
+              icon={<AddIcon />}
+            />
+          </Box>
+        )
+       }
       </Box>
       <DialogCustomers
         onClose={updateModal.closeModal}
@@ -185,13 +210,18 @@ export default function CustomerTable() {
         open={openModaCreatePwd.open}
         customer={openModaCreatePwd.data}
         isEdit={false}
+        flag={flag}
+        setFlag={setFlag}
       />
 
       <ModalPasswords
         customer={openModalPwd.data}
         handleClose={openModalPwd.closeModal}
         open={openModalPwd.open}
+        flag={flag}
+        setFlag={setFlag}
       />
+
       <DialogPdf
         open={openDialogPdf.open}
         onClose={openDialogPdf.closeModal}

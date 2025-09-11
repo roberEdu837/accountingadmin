@@ -1,3 +1,4 @@
+import type { Password } from "./passwors";
 import type { Payments } from "./payments";
 
 export type Customer = {
@@ -11,6 +12,7 @@ export type Customer = {
   renewalDate: string;
   isInSociety: boolean;
   notificationSent?: boolean;
+  passwords:Password[]
 };
 
 export type MonthlyAccounting = {

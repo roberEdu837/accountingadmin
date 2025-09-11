@@ -27,7 +27,7 @@ function App() {
     init();
   }, [dispatch]);
 
-  if (!isInitialized) {
+  if (!isInitialized ) {
     return <LoadingScreen />;
   }
 
