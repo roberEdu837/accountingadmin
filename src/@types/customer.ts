@@ -27,6 +27,7 @@ export type MonthlyAccounting = {
   paymets: Payments[];
   periodicity: string;
   isInSociety: boolean;
+  monthlyPaymentCompleted:boolean
 };
 
 export type FilterCustomer = {

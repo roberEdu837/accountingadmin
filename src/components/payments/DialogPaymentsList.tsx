@@ -17,7 +17,7 @@ import { formatDate, paymentMethods } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToastNotification from "../utils/ToastNotification";
 import { useEffect, useState } from "react";
-import { getPaymentsByAccountingId } from "../../services";
+import { getPaymentsByAccountingId, patchAccounting } from "../../services";
 interface Props {
   open: boolean;
   handleClose: any;
@@ -34,7 +34,7 @@ function DialogPaymentsList({
   setFlag,
 }: Props) {
   const [payments, setPayments] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPayments(accounting?.paymets || []);
@@ -43,6 +43,13 @@ function DialogPaymentsList({
   const deletePayment = async (id: number | undefined) => {
     if (!id) return;
     setLoading(true);
+    if (accounting?.monthlyPaymentCompleted === true) {
+      await patchAccounting(accounting?.id || 0, {
+        monthlyPaymentCompleted: false,
+      });
+    }
+
+    //Cambie el estado de pago completado
 
     await getPaymentsByAccountingId(id);
 
@@ -96,7 +103,10 @@ function DialogPaymentsList({
 
                     <TableCell align="center">
                       <Tooltip title="Eliminar">
-                        <IconButton onClick={() => deletePayment(row.id)} loading={loading}>
+                        <IconButton
+                          onClick={() => deletePayment(row.id)}
+                          loading={loading}
+                        >
                           <DeleteIcon sx={{ color: "#09356f" }} />
                         </IconButton>
                       </Tooltip>
