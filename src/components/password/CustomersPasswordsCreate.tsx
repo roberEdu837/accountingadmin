@@ -29,7 +29,7 @@ export default function CustomersPasswordsCreate({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogMessageBox
-        title={isEdit ? "Editar Contraseña" : "Registrar Contraseña"}
+        title={isEdit ? "EDITAR CONTRASEÑA" : "AGREGAR CONTRASEÑA"}
         subtitle={
           isEdit
             ? `Modifica los datos para la contraseña del cliente ${customer?.socialReason}.`

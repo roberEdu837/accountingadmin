@@ -4,7 +4,7 @@ import { addFourYears, getTodayDate } from "../utils/formatDate";
 export const customer = {
   socialReason: "",
   rfc: "",
-  honorary: 0,
+  honorary: null,
   periodicity: "",
   creationDate: getTodayDate(),
   renewalDate: addFourYears(getTodayDate()),

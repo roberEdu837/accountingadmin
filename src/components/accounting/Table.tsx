@@ -125,59 +125,58 @@ export default function AccountingTable() {
 
       <Box sx={{ mt: isMobile ? 29 : 15, p: 3 }}>
         <TableContainer component={Paper} sx={{ width: "100%" }}>
-  <Table className="myTable" size="small" stickyHeader>
-    <thead>
-      <tr>
-        <th colSpan={9}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "left",
-              justifyContent: "space-between",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "1.5rem",
-              }}
-            >
-              Contabilidad Mensual
-            </span>
-          </Box>
-        </th>
-      </tr>
-    </thead>
-    <TableHead>
-      <TableRow>
-        {columnsAccounting?.map((col) => (
-          <TableCell key={col.key} align={col.align as any}>
-            {col.label}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
+          <Table className="myTable" size="small" stickyHeader>
+            <thead>
+              <tr>
+                <th colSpan={9}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "left",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      Contabilidad Mensual
+                    </span>
+                  </Box>
+                </th>
+              </tr>
+            </thead>
+            <TableHead>
+              <TableRow>
+                {columnsAccounting?.map((col) => (
+                  <TableCell key={col.key} align={col.align as any}>
+                    {col.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
 
-      {accountings && accountings.length > 0 ? (
-        <AccountingTableBody
-          accountings={accountings}
-          openModalPasswords={passwordsModal.openModal}
-          openModalEditAccounting={editAccountingModal.openModal}
-          handleAddPayment={handleAddPayment}
-          setCurrentAccounting={paymentsListModal.setData}
-          handleOpenPaymentsList={paymentsListModal.openModal}
-          flag={flag}
-          setFlag={setFlag}
-        />
-      ) : (
-        <TableRow>
-          <TableCell colSpan={columnsAccounting.length} align="center">
-            No hay registros que coincidan con los filtros.
-          </TableCell>
-        </TableRow>
-      )}
-  </Table>
-</TableContainer>
-
+            {accountings && accountings.length > 0 ? (
+              <AccountingTableBody
+                accountings={accountings}
+                openModalPasswords={passwordsModal.openModal}
+                openModalEditAccounting={editAccountingModal.openModal}
+                handleAddPayment={handleAddPayment}
+                setCurrentAccounting={paymentsListModal.setData}
+                handleOpenPaymentsList={paymentsListModal.openModal}
+                flag={flag}
+                setFlag={setFlag}
+              />
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columnsAccounting.length} align="center">
+                  No hay registros que coincidan con los filtros.
+                </TableCell>
+              </TableRow>
+            )}
+          </Table>
+        </TableContainer>
       </Box>
 
       {/* Modales */}

@@ -92,7 +92,7 @@ export default function SocietyClientsTable() {
       />
       {loadingFull && <LoadingScreen />}
 
-      <Box sx={{ mt: isMobile ? 29 : 10, p: 3 }}>
+      <Box sx={{ mt: isMobile ? 29 : 15, p: 3 }}>
         <TableContainer component={Paper}>
           <Table className="myTable" size="small" aria-label="caption table">
             <thead>
@@ -134,7 +134,7 @@ export default function SocietyClientsTable() {
             </TableHead>
 
             <TableBody>
-              {customers &&
+              {customers && customers.length > 0 ? (
                 customers.map((row) => {
                   const associatePayment = (row.amount / 100) * 30;
                   return (
@@ -178,7 +178,14 @@ export default function SocietyClientsTable() {
                       </TableCell>
                     </TableRow>
                   );
-                })}
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={8} align="center">
+                    No hay registros que coincidan con los filtros.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

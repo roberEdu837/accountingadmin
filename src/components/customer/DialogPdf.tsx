@@ -108,7 +108,7 @@ export default function DialogPdf({ onClose, open, customer }: PdfProps) {
       sx={{ width: "100%" }}
     >
       <DialogMessageBox
-        title={`Estado de cuenta ${customer?.periodicity}`}
+        title={`ESTADO DE CUENTA ${customer?.periodicity}`}
         subtitle={`Cliente:  ${customer?.socialReason}`}
       />
       <CloseButton onClose={onClose} />

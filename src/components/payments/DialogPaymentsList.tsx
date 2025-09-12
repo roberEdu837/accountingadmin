@@ -18,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ToastNotification from "../utils/ToastNotification";
 import { useEffect, useState } from "react";
 import { getPaymentsByAccountingId, patchAccounting } from "../../services";
+import CloseButton from "../utils/CloseButton";
 interface Props {
   open: boolean;
   handleClose: any;
@@ -49,8 +50,6 @@ function DialogPaymentsList({
       });
     }
 
-    //Cambie el estado de pago completado
-
     await getPaymentsByAccountingId(id);
 
     ToastNotification(`El pago se eliminó correctamente`, "success");
@@ -68,20 +67,21 @@ function DialogPaymentsList({
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogMessageBox
-          title="Pagos asociados"
-          subtitle={`Cliente: ${accounting?.customer?.socialReason || ""}`}
+          title="PAGOS REGISTRADOS"
+          subtitle={`CLIENTE: ${accounting?.customer?.socialReason || ""}`}
         />
+        <CloseButton onClose={handleClose} />
 
         <DialogContent>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell align="center">Monto</TableCell>
-                  <TableCell align="center">Fecha de pago</TableCell>
-                  <TableCell align="center">Metodo de pago</TableCell>
-                  <TableCell align="center">Opciones</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell align="center">MONTO</TableCell>
+                  <TableCell align="center">FECHA DE PAGO</TableCell>
+                  <TableCell align="center">METODO DE PAGO</TableCell>
+                  <TableCell align="center">OPCIONES</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -98,7 +98,7 @@ function DialogPaymentsList({
                       {formatDate(row.paymentDate)}
                     </TableCell>
                     <TableCell align="center">
-                      {paymentMethods[row.paymentMethod] || "Desconocido"}
+                      {paymentMethods[row.paymentMethod].toUpperCase() || "Desconocido"}
                     </TableCell>
 
                     <TableCell align="center">

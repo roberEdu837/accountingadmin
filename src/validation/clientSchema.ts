@@ -20,7 +20,7 @@ export const validationSchemaClient = Yup.object({
   honorary: Yup.number()
     .typeError("Debe ser un número")
     .required("El monto de honorarios es requerido")
-    .min(0, "No puede ser negativo"),
+    .min(1, "El monto de honorarios es requerido"),
 
   periodicity: Yup.string()
     .required("La periodicidad es requerida")

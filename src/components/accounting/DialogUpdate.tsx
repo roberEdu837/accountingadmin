@@ -22,7 +22,7 @@ export default function DialogUpdate({
   return (
     <Dialog open={open} onClose={handelClose} fullWidth maxWidth="xs">
       <DialogMessageBox
-        title="Actualizar la Contabilidad"
+        title="ACTUALIZAR CONTABILIDAD"
         subtitle="Modifica la contabilidad mensual."
       />
       <CloseButton onClose={handelClose} />

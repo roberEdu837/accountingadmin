@@ -24,7 +24,7 @@ export default function CheckDebts({
   const dialogInfo =
     type === 1
       ? {
-          title: "Revisa tus Pagos con Asociados",
+          title: "PAGOS PENDIENTE",
           subtitle:
             "Tienes clientes en colaboración y es momento de repartir los ingresos.",
           content:
@@ -32,7 +32,7 @@ export default function CheckDebts({
           buttonText: "Ver Deudas",
         }
       : {
-          title: "Pagos Pendientes de Clientes",
+          title: "COBROS PENDIENTES",
           subtitle:
             "Tu contabilidad está lista, pero algunos clientes no han pagado aún",
           content:

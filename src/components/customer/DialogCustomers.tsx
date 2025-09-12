@@ -24,7 +24,7 @@ export default function DialogCustomers({
     
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogMessageBox
-        title={customer?.id ? "Actualizar Cliente" : "Registro de Cliente"}
+        title={customer?.id ? "ACTUALIZAR CLIENTE" : "REGISTAR CLIENTE"}
         subtitle={
           customer?.id
             ? "Modifica los campos para actualizar al cliente."

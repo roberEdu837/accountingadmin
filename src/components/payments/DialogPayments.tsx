@@ -40,12 +40,16 @@ export default function DialogPayments({
   const [loading, setLoading] = useState(false);
 
   const handlePostPayment = async (values: any) => {
-    await postPayment(values);
     ToastNotification(`El pago se agregó correctamente`, "success");
+    return await postPayment(values);
   };
 
-  const handlePostClientInSociety = async (id: number) => {
-    await postClientIsSociety(id);
+  const handlePostClientInSociety = async (
+    id: number,
+    amount: number,
+    paymetId: number
+  ) => {
+    await postClientIsSociety(id,amount,paymetId);
     ToastNotification(
       `Se agregó un registro en Cliente en Sociedad`,
       "success"
@@ -61,7 +65,7 @@ export default function DialogPayments({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogMessageBox
-        title="Pago de cliente"
+        title="PAGO DE CLIENTE"
         subtitle="Registra un nuevo pago realizado por el cliente."
       />
       <CloseButton onClose={onClose} />
@@ -74,10 +78,10 @@ export default function DialogPayments({
             setLoading(true);
             try {
               const { amount } = values;
-              await handlePostPayment(values); // 1. Guardar pago
+              const { data } = await handlePostPayment(values); // 1. Guardar pago
 
-              if (debt === amount && isInSociety) {
-                await handlePostClientInSociety(id); // 2. Cliente en sociedad
+              if ( isInSociety) {
+                await handlePostClientInSociety(id, amount, data.id); // 2. Cliente en sociedad
               }
 
               if (debt === amount) {
@@ -102,7 +106,6 @@ export default function DialogPayments({
             errors,
             touched,
           }) => (
-            console.log(values),
             (
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
