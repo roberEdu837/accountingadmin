@@ -10,7 +10,7 @@ import DialogMessageBox from "../utils/DialogMessageBox";
 import ButtonSubmit from "../utils/Button";
 import { initialValues } from "../../formConfig/clientsInSociety";
 import ToastNotification from "../utils/ToastNotification";
-import { patchClientInSociety } from "../../services";
+import { patchClientInSocietyById } from "../../services";
 import { Icons } from "../utils/Icons";
 import CloseButton from "../utils/CloseButton";
 import { useState } from "react";
@@ -33,7 +33,7 @@ export default function PaymentDateGenerator({
   const [loading, setLoading] = useState(false);
   const generatePaymentDate = async (value: any) => {
     try {
-      await patchClientInSociety(id, value.paymentDate);
+      await patchClientInSocietyById(id, value.paymentDate);
     } catch (error) {
       console.error(error);
     }

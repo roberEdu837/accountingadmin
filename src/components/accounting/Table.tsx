@@ -59,17 +59,21 @@ export default function AccountingTable() {
   });
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const dispatch = useDispatch<any>();
+  const [total, setTotal] = useState<number>(0);
 
   const { loadingFull } = useSelector((state: any) => state.user);
-
+  const priority: Record<string, number> = {
+    PENDIENTE: 0,
+    INCONCLUSO: 1,
+    REALIZADO: 2,
+  };
   // --- Fetch de accountings ---
   const getAccounting = async () => {
     try {
       const { data } = await getaccounting(filter);
       const ordered = data.sort(
         (a: MonthlyAccounting, b: MonthlyAccounting) =>
-          (a.stateObligation === "REALIZADO" ? 1 : 0) -
-          (b.stateObligation === "REALIZADO" ? 1 : 0)
+          priority[a.stateObligation] - priority[b.stateObligation]
       );
       setAccountings(ordered);
     } catch (err) {
@@ -112,6 +116,51 @@ export default function AccountingTable() {
     checkDebts();
   }, []);
 
+  const CalculateTotalDebt = () => {
+    let totaldebit = 0;
+
+    accountings.forEach((item) => {
+      const payments = item.paymets?.reduce((sum, p) => sum + p.amount, 0) || 0;
+      const debt = item.honorary - payments;
+      totaldebit += debt;
+    });
+    setTotal(totaldebit);
+  };
+
+  const CalculateHonorary = () => {
+    const totalValue = accountings.reduce((acc, row) => {
+      const associatePayment = row.honorary;
+
+      return acc + associatePayment;
+    }, 0);
+    setTotal(totalValue);
+  };
+
+  const CalculatePaid = () =>{
+     let paid = 0;
+
+    accountings.forEach((item) => {
+      const payments = item.paymets?.reduce((sum, p) => sum + p.amount, 0) || 0;
+      paid += payments;
+    });
+    setTotal(paid);
+  }
+
+  useEffect(() => {
+    if (accountings) {
+      if (filter.monthlyPaymentCompleted === false) {
+        CalculateTotalDebt();
+      }
+      if (filter.monthlyPaymentCompleted === undefined) {
+        CalculateHonorary();
+      }
+
+      if(filter.monthlyPaymentCompleted){
+        CalculatePaid()
+      }
+    }
+  }, [accountings]);
+
   return (
     <Box>
       <Filter
@@ -124,24 +173,24 @@ export default function AccountingTable() {
       {loadingFull && <LoadingScreen />}
 
       <Box sx={{ mt: isMobile ? 29 : 15, p: 3 }}>
-        <TableContainer component={Paper} sx={{ width: "100%" }}>
+        <TableContainer component={Paper}>
           <Table className="myTable" size="small" stickyHeader>
             <thead>
               <tr>
-                <th colSpan={9}>
+                <th colSpan={12}>
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "left",
                       justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: "1.5rem",
-                      }}
-                    >
+                    <span style={{ fontSize: "1.5rem" }}>
                       Contabilidad Mensual
+                    </span>
+                    <span style={{ fontSize: "1.5rem" }}>
+                      {" "}
+                      ${total.toFixed(2)}
                     </span>
                   </Box>
                 </th>

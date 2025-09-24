@@ -12,9 +12,16 @@ export const postClientIsSociety = (
   return axiosInstance.post("client-in-societies", { monthlyAccountingId: id,amount,paymetId });
 };
 
-export const patchClientInSociety = (id: number, paymentDate: Date) => {
+export const patchClientInSocietyById = (id: number, paymentDate: Date) => {
   return axiosInstance.patch(`client-in-societies/${id}`, {
     paymentDate: paymentDate,
     status: true,
   });
 };
+
+export const patchClientInSociety = (ids:Array<number> = [],paymentDate: string) => {
+ return axiosInstance.patch('client-in-societies',{
+  ids,
+  fecha:paymentDate
+ })
+}

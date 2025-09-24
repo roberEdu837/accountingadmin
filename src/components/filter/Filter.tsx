@@ -126,7 +126,7 @@ export default function Filter({
                 <MenuItem value="false">
                   {type === "Accounting" ? "Por cobrar" : "Por pagar"}{" "}
                 </MenuItem>
-                <MenuItem value="true">Pagado</MenuItem>
+                <MenuItem value="true">Cobrado</MenuItem>
               </Select>
             </FormControl>
           </Grid>

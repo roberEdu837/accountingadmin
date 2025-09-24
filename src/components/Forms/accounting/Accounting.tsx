@@ -31,6 +31,7 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
     if (!accounting || !accounting.paymets) return 0;
     return accounting.paymets.reduce((acc, payment) => acc + payment.amount, 0);
   }
+  console.log(accounting);
   return (
     <Formik
       initialValues={{
@@ -57,7 +58,11 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
             periodicity,
             isInSociety: isInSociety === 0 ? false : true,
             monthlyPaymentCompleted:
-              honorary > accounting.honorary ? false : true, // true si el pago es suficiente
+              honorary > accounting.honorary
+                ? false
+                : honorary === getTotalPayments(accounting)
+                ? true
+                : undefined,
           });
 
           if (setFlag) setFlag(!flag);

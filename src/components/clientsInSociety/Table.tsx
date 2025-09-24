@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Chip,
   Paper,
   TableRow,
@@ -12,17 +11,24 @@ import {
   Table,
   useMediaQuery,
   useTheme,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import DialogClientsInSociety from "./PaymentDateGenerator";
 import PaymentIcon from "@mui/icons-material/Payment";
-import { formatFullDate, getMonthLabel } from "../../utils/formatDate";
+import {
+  formatFullDate,
+  getMonthLabel,
+  getTodayDate,
+} from "../../utils/formatDate";
 import Filter from "../filter/Filter";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
-import { getClientInSociety } from "../../services";
+import { getClientInSociety, patchClientInSociety } from "../../services";
 import { columnsclientsInSociety } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoadingFull } from "../../redux/slices/userSlice";
 import LoadingScreen from "../utils/LoadingScreen";
+import ToastNotification from "../utils/ToastNotification";
 
 export default function SocietyClientsTable() {
   const [flag, setFlag] = useState<boolean>(false);
@@ -31,7 +37,7 @@ export default function SocietyClientsTable() {
   const [selectedId, setSelectedId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const today = new Date();
-  const currentMonth = today.getMonth() + 1; // 1-12
+  const currentMonth = today.getMonth() + 1;
   const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
   const year =
     currentMonth === 1 ? today.getFullYear() - 1 : today.getFullYear();
@@ -39,7 +45,7 @@ export default function SocietyClientsTable() {
     search: "",
     year: year,
     month: previousMonth,
-    monthlyPaymentCompleted: undefined, // ahora ok, porque FilterAccounting permite boolean | undefined
+    monthlyPaymentCompleted: undefined,
   });
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const dispatch = useDispatch<any>();
@@ -74,6 +80,17 @@ export default function SocietyClientsTable() {
     } catch (error) {
     } finally {
       dispatch(setLoadingFull(false));
+    }
+  };
+
+  const handlePayAll = async () => {
+    try {
+      const Ids: number[] = customers?.map((row) => row.id) || [];
+      await patchClientInSociety(Ids, getTodayDate());
+    } catch (error) {
+    } finally {
+      setFlag(!flag)
+      ToastNotification("Fechas de pago generadas correctamente.", "success");
     }
   };
 
@@ -118,6 +135,14 @@ export default function SocietyClientsTable() {
                       }}
                     >
                       Adeudo: ${total.toFixed(2)}
+                      <Tooltip title="Pagar Todo" >
+                        <IconButton onClick={handlePayAll} disabled={!total}>
+                          <PaymentIcon sx={{
+    color: total > 0 ? "#09356f" : "grey", // si total > 0 azul, si no gris
+    fontWeight: "bold",
+  }} />
+                        </IconButton>
+                      </Tooltip>
                     </span>
                   </Box>
                 </th>
@@ -167,14 +192,14 @@ export default function SocietyClientsTable() {
                         {formatFullDate(row.paymentDate).toUpperCase()}
                       </TableCell>
                       <TableCell align="center">
-                        <Button
+                        <IconButton
                           onClick={() => {
                             setOpen(true);
                             setSelectedId(row.id);
                           }}
                         >
                           <PaymentIcon sx={{ color: "#09356f" }} />
-                        </Button>
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );

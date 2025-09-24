@@ -7,8 +7,9 @@ export {
 } from "./accounting.service";
 export {
   getClientInSociety,
-  patchClientInSociety,
+  patchClientInSocietyById,
   postClientIsSociety,
+  patchClientInSociety
 } from "./clientInSociety.service";
 export {
   postCustomer,
