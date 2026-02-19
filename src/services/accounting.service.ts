@@ -16,7 +16,7 @@ export const createAccounting = () => {
 };
 
 export const getPdfAccountingPayments = (id: number | undefined) => {
-  return axiosInstance.get(`monthly-accountings/debts/customer/${id}/pdf/`,{
+  return axiosInstance.get(`monthly-accountings/debts/customer/${id}/pdf`,{
   responseType: 'blob', 
  });
 }
