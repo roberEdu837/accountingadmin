@@ -20,7 +20,6 @@ import ButtonAdd from "../utils/ButtonAdd";
 import DialogCustomersPasswords from "../password/CustomersPasswordsCreate";
 import ModalPasswords from "../password/CustomersPasswords";
 import FilterCustomer from "../filter/FilterCustomer";
-import DialogPdf from "./DialogPdf";
 import AddIcon from "@mui/icons-material/Add";
 import BlockIcon from "@mui/icons-material/Block";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -33,12 +32,13 @@ import { useSelector } from "react-redux";
 import LoadingScreen from "../utils/LoadingScreen";
 import IconWithBadge from "../utils/IconWithBadge";
 import { Icons } from "../utils/Icons";
+import { getPdfAccountingPayments } from "../../services";
+import { downloadFileFromBlob } from "./helper";
 
 export default function CustomerTable() {
   const updateModal = useModal<Customer | undefined>();
   const openModalPwd = useModal<Customer | undefined>();
   const openModaCreatePwd = useModal<Customer>();
-  const openDialogPdf = useModal<Customer>();
   const [customer, setCustomers] = useState<Customer[]>();
   const [flag, setFlag] = useState(false);
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
@@ -53,7 +53,15 @@ export default function CustomerTable() {
 
     ToastNotification(message, status ? "success" : "success");
   };
-  console.log(loadingFull);
+
+  const handleDowloadPdt = async (id: number) => {
+    const { data } = await getPdfAccountingPayments(id, 1);
+    downloadFileFromBlob(data, "EstadoCuenta.pdf");
+          ToastNotification(
+            `El estado de cuenta se descargó correctamente`,
+            "success"
+          );
+  };
 
   return (
     <Box>
@@ -119,7 +127,7 @@ export default function CustomerTable() {
 
                         <Tooltip title="Estado de cuenta">
                           <IconButton
-                            onClick={() => openDialogPdf.openModal(row)}
+                            onClick={() => handleDowloadPdt(row.id!)}
                             size="small"
                           >
                             {Icons.pdfIcon}
@@ -185,8 +193,8 @@ export default function CustomerTable() {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          gap: 1, 
-                          py: 2, 
+                          gap: 1,
+                          py: 2,
                         }}
                       >
                         <span>
@@ -245,12 +253,6 @@ export default function CustomerTable() {
         open={openModalPwd.open}
         flag={flag}
         setFlag={setFlag}
-      />
-
-      <DialogPdf
-        open={openDialogPdf.open}
-        onClose={openDialogPdf.closeModal}
-        customer={openDialogPdf.data}
       />
     </Box>
   );
