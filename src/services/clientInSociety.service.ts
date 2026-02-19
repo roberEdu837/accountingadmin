@@ -4,6 +4,7 @@ export const getClientInSociety = (filter: any) => {
   return axiosInstance.post("client-in-societies/search", filter);
 };
 
+
 export const postClientIsSociety = (
   id: number,
   amount: number,
