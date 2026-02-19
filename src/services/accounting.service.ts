@@ -15,8 +15,8 @@ export const createAccounting = () => {
   return axiosInstance.post("monthly-accountings/generate");
 };
 
-export const getPdfAccountingPayments = (id: number | undefined, month: number) => {
-  return axiosInstance.get(`monthly-accountings/debts/customer/${id}/pdf/month/${month}`,{
+export const getPdfAccountingPayments = (id: number | undefined) => {
+  return axiosInstance.get(`monthly-accountings/debts/customer/${id}/pdf/`,{
   responseType: 'blob', 
  });
 }

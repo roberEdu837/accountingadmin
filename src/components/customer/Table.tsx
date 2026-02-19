@@ -55,7 +55,7 @@ export default function CustomerTable() {
   };
 
   const handleDowloadPdt = async (id: number) => {
-    const { data } = await getPdfAccountingPayments(id, 1);
+    const { data } = await getPdfAccountingPayments(id);
     downloadFileFromBlob(data, "EstadoCuenta.pdf");
           ToastNotification(
             `El estado de cuenta se descargó correctamente`,

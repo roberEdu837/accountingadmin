@@ -12,6 +12,9 @@ import IconWithBadge from "../utils/IconWithBadge";
 import { totalPaid, formatDate, getMonthLabel } from "../../utils";
 import type { Customer, MonthlyAccounting } from "../../@types/customer";
 import { Icons } from "../utils/Icons";
+import { downloadFileFromBlob } from "../customer/helper";
+import { getPdfAccountingPayments } from "../../services";
+import ToastNotification from "../utils/ToastNotification";
 interface Props {
   accountings?: MonthlyAccounting[];
   openModalPasswords: (customer: Customer) => void;
@@ -33,7 +36,17 @@ export default function AccountingTableBody({
   flag,
   setFlag,
 }: Props) {
+
+   const handleDowloadPdt = async (id: number) => {
+      const { data } = await getPdfAccountingPayments(id);
+      downloadFileFromBlob(data, "EstadoCuenta.pdf");
+            ToastNotification(
+              `El estado de cuenta se descargó correctamente`,
+              "success"
+            );
+    };
   return (
+    
     <TableBody>
       {accountings?.map((row: MonthlyAccounting) => {
         const {
@@ -114,6 +127,14 @@ export default function AccountingTableBody({
                   />
                 </IconButton>
               </Tooltip>
+               <Tooltip title="Estado de cuenta">
+                          <IconButton
+                            onClick={() => handleDowloadPdt(row.customer.id!)}
+                            size="small"
+                          >
+                            {Icons.pdfIcon}
+                          </IconButton>
+                        </Tooltip>
               <Tooltip title={paymets?.length?"Ver Pagos":'Sin pagos'}>
                 <IconButton
                   onClick={() => {

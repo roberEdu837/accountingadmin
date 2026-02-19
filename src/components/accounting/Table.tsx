@@ -31,7 +31,6 @@ import LoadingScreen from "../utils/LoadingScreen";
 import { setLoadingFull } from "../../redux/slices/userSlice";
 
 export default function AccountingTable() {
-  // --- Modales genéricos ---
   const editAccountingModal = useModal<MonthlyAccounting>();
   const passwordsModal = useModal<Customer>();
   const paymentModal = useModal<{
@@ -67,7 +66,6 @@ export default function AccountingTable() {
     INCONCLUSO: 1,
     REALIZADO: 2,
   };
-  // --- Fetch de accountings ---
   const getAccounting = async () => {
     try {
       const { data } = await getaccounting(filter);
@@ -96,7 +94,6 @@ export default function AccountingTable() {
     })();
   }, [filter, flag]);
 
-  // --- Handlers ---
   const handleAddPayment = (row: MonthlyAccounting, pending: number) => {
     paymentModal.openModal({
       id: row.id,
@@ -160,6 +157,8 @@ export default function AccountingTable() {
       }
     }
   }, [accountings]);
+
+  
 
   return (
     <Box>
