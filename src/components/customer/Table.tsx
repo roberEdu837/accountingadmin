@@ -54,14 +54,19 @@ export default function CustomerTable() {
     ToastNotification(message, status ? "success" : "success");
   };
 
-  const handleDowloadPdt = async (id: number) => {
-    const { data } = await getPdfAccountingPayments(id);
-    downloadFileFromBlob(data, "EstadoCuenta.pdf");
-          ToastNotification(
-            `El estado de cuenta se descargó correctamente`,
-            "success"
-          );
-  };
+    const handleDowloadPdt = async (id: number) => {
+       try{
+     const { data } = await getPdfAccountingPayments(id);
+       downloadFileFromBlob(data, "EstadoCuenta.pdf");
+             
+       }catch(error){
+         console.error("Error al descargar el estado de cuenta:", error);
+         ToastNotification(
+               `El cliente no tiene un estado de cuenta disponible`,
+               "success"
+             );
+       }
+     };
 
   return (
     <Box>

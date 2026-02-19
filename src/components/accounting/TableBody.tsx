@@ -38,12 +38,17 @@ export default function AccountingTableBody({
 }: Props) {
 
    const handleDowloadPdt = async (id: number) => {
-      const { data } = await getPdfAccountingPayments(id);
+      try{
+    const { data } = await getPdfAccountingPayments(id);
       downloadFileFromBlob(data, "EstadoCuenta.pdf");
-            ToastNotification(
-              `El estado de cuenta se descargó correctamente`,
+            
+      }catch(error){
+        console.error("Error al descargar el estado de cuenta:", error);
+        ToastNotification(
+              `El cliente no tiene un estado de cuenta disponible`,
               "success"
             );
+      }
     };
   return (
     
