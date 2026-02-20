@@ -74,9 +74,9 @@ export default function AccountingTableBody({
               <TableCell
                 onClick={() => openModalPasswords(customer)}
                 sx={{
-                  whiteSpace: "normal", // permite saltos
-                  wordBreak: "break-word", // corta palabras largas
-                  overflowWrap: "break-word", // refuerzo para navegadores modernos
+                  whiteSpace: "normal", 
+                  wordBreak: "break-word", 
+                  overflowWrap: "break-word", 
                 }}
               >
                 <Box
@@ -103,8 +103,8 @@ export default function AccountingTableBody({
             <TableCell align="center">
               {formatDate(rfcTaxPaymentDate)}
             </TableCell>
-            <TableCell align="center">${honorary}</TableCell>
-            <TableCell align="center">${totalPaid(row)}</TableCell>
+            <TableCell align="center">${honorary.toLocaleString('es-MX', {minimumFractionDigits: 2})}</TableCell>
+            <TableCell align="center">${totalPaid(row).toLocaleString('es-MX', {minimumFractionDigits: 2})}</TableCell>
             <TableCell align="center">
               {pending === 0 ? (
                 <Chip
@@ -114,7 +114,7 @@ export default function AccountingTableBody({
                   variant="outlined"
                 />
               ) : (
-                `$${pending}`
+                `$${pending.toLocaleString('es-MX', {minimumFractionDigits: 2})}`
               )}
             </TableCell>
             <TableCell align="center">{isInSociety ? "SI" : "NO"}</TableCell>

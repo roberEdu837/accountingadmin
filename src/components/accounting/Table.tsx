@@ -189,7 +189,7 @@ export default function AccountingTable() {
                     </span>
                     <span style={{ fontSize: "1.5rem" }}>
                       {" "}
-                      ${total.toFixed(2)}
+                      ${total.toLocaleString('es-MX', {minimumFractionDigits: 2})}
                     </span>
                   </Box>
                 </th>

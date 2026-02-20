@@ -116,7 +116,7 @@ export default function CustomerTable() {
                           variant="outlined"
                         />
                       </TableCell>
-                      <TableCell align="center">${row.honorary}</TableCell>
+                      <TableCell align="center">${row.honorary.toLocaleString('es-MX', {minimumFractionDigits: 2})}</TableCell>
                       <TableCell align="center">
                         {row.isInSociety ? "SI" : "NO"}
                       </TableCell>

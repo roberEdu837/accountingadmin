@@ -89,7 +89,7 @@ export default function SocietyClientsTable() {
       await patchClientInSociety(Ids, getTodayDate());
     } catch (error) {
     } finally {
-      setFlag(!flag)
+      setFlag(!flag);
       ToastNotification("Fechas de pago generadas correctamente.", "success");
     }
   };
@@ -134,13 +134,18 @@ export default function SocietyClientsTable() {
                         fontSize: "1.5rem",
                       }}
                     >
-                      Adeudo: ${total.toFixed(2)}
-                      <Tooltip title="Pagar Todo" >
+                      Adeudo: $
+                      {total.toLocaleString("es-MX", {
+                        minimumFractionDigits: 2,
+                      })}
+                      <Tooltip title="Pagar Todo">
                         <IconButton onClick={handlePayAll} disabled={!total}>
-                          <PaymentIcon sx={{
-    color: total > 0 ? "#09356f" : "grey", // si total > 0 azul, si no gris
-    fontWeight: "bold",
-  }} />
+                          <PaymentIcon
+                            sx={{
+                              color: total > 0 ? "#09356f" : "grey", // si total > 0 azul, si no gris
+                              fontWeight: "bold",
+                            }}
+                          />
                         </IconButton>
                       </Tooltip>
                     </span>
@@ -170,7 +175,7 @@ export default function SocietyClientsTable() {
                       <TableCell align="left">
                         {getMonthLabel(
                           row.monthlyAccounting.month,
-                          row.monthlyAccounting.periodicity === "BIMESTRAL"
+                          row.monthlyAccounting.periodicity === "BIMESTRAL",
                         ).toUpperCase()}
                       </TableCell>
                       <TableCell align="center">
@@ -185,9 +190,11 @@ export default function SocietyClientsTable() {
                         />
                       </TableCell>
                       <TableCell align="center">
-                        ${associatePayment.toFixed(2)}
+                        ${associatePayment.toLocaleString("es-MX", {
+                          minimumFractionDigits: 2,
+                        })}
                       </TableCell>
-                      <TableCell align="center">${row.amount}</TableCell>
+                      <TableCell align="center">${row.amount.toLocaleString("es-MX", {minimumFractionDigits: 2})}</TableCell>
                       <TableCell align="center">
                         {formatFullDate(row.paymentDate).toUpperCase()}
                       </TableCell>
