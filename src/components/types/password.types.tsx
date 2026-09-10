@@ -34,7 +34,7 @@ export interface ModalPasswordsProps extends BasePasswordProps {
   onClose: () => void;
   isEdit?: boolean;
   password?: PasswordDTO;
-  setPassword?: Dispatch<SetStateAction<PasswordDTO | undefined>>;
+  setPassword?: any;
   handleClose?: () => void; 
 }
 
