@@ -25,7 +25,7 @@ import type { PasswordDTO } from "../../@types/passwors";
 // 1. Interfaz Base con todas las propiedades requeridas para el manejo de contraseñas
 export interface BasePasswordProps {
   open: boolean;
-  customer?: Customer;
+  customer?: Customer | undefined;
   flag?: boolean;
   setFlag?: Dispatch<SetStateAction<boolean>> | ((flag: boolean) => void);
 }

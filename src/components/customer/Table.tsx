@@ -258,6 +258,7 @@ export default function CustomerTable() {
         open={openModalPwd.open}
         flag={flag}
         setFlag={setFlag}
+        onClose={openModalPwd.closeModal}
       />
     </Box>
   );
