@@ -35,7 +35,6 @@ export interface ModalPasswordsProps extends BasePasswordProps {
   isEdit?: boolean;
   password?: PasswordDTO;
   setPassword?: any;
-  handleClose?: () => void; 
 }
 
 export type Props = ModalPasswordsProps;

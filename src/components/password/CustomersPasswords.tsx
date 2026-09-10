@@ -6,7 +6,7 @@ import type { Props } from "../types/password.types";
 
 
 export default function CustomersPasswords({
-  handleClose,
+  onClose,
   open,
   customer,
   flag,
@@ -14,15 +14,15 @@ export default function CustomersPasswords({
 }: Props) {
   return (
     <>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
         <DialogMessageBox
           title="Contraseñas Vinculadas"
           subtitle={`CLIENTE: ${customer?.socialReason.toUpperCase() || ""}`}
         />
-        <CloseButton onClose={handleClose} />
+        <CloseButton onClose={onClose} />
 
         <DialogContent>
-          <TablePassword customer={customer} setFlag={setFlag} flag={flag} />
+          <TablePassword customer={customer} setFlag={setFlag} flag={flag}  />
         </DialogContent>
       </Dialog>
     </>

@@ -254,7 +254,6 @@ export default function CustomerTable() {
 
       <ModalPasswords
         customer={openModalPwd.data}
-        handleClose={openModalPwd.closeModal}
         open={openModalPwd.open}
         flag={flag}
         setFlag={setFlag}
