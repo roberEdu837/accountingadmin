@@ -5,14 +5,14 @@ export const columnsAccounting = [
   { key: "month", label: "MES", align: "center" },
   { key: "stateObligation", label: "OBLIGACIONES", align: "center" },
   { key: "rfcTaxPaymentDate", label: "F. CUMPLIMIENTO", align: "center" },
-  { key: "honorary", label: "MONTO", align: "center" },
-  { key: "paid", label: "ABONADO", align: "center" },
-  { key: "debt", label: "ADEUDO", align: "center" },
+  { key: "honorary", label: "TOTAL A COBRAR", align: "center" },
+  { key: "paid", label: "TOTAL PAGADO", align: "center" },
+  { key: "debt", label: "DEUDA TOTAL", align: "center" },
   { key: "isInSociety", label: "SOCIEDAD", align: "center" },
   { key: "actions", label: "OPCIONES", align: "center" },
 ];
 
-export const columnsclientsInSociety= [
+export const columnsclientsInSociety = [
   { key: "socialReason", label: "RAZÓN SOCIAL", align: "left" },
   { key: "month", label: "MES", align: "center" },
   { key: "periodicity", label: "PERIODICIDAD", align: "center" },
@@ -33,3 +33,18 @@ export const columnsClients = [
   { key: "actions", label: "OPCIONES", align: "center" },
 ];
 
+export const columnsServices = [
+  { key: "id", label: "ID", align: "left" },
+  { key: "name", label: "Nombre", align: "center" },
+  { key: "description", label: "DESCRIPCIÓN", align: "center" },
+  { key: "actions", label: "OPCIONES", align: "center" },
+];
+
+
+export const columnsServicesAccounting = [
+  { key: "id", label: "ID", align: "left" },
+  { key: "name", label: "NOMBRE", align: "center" },
+  { key: "price", label: "PRECIO", align: "center" },
+  { key: "actions", label: "OPCIONES", align: "center" },
+
+];

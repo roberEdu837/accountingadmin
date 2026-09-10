@@ -18,8 +18,8 @@ export const headerStyles = {
   left: 0,
   right: 0,
   zIndex: 1200,
-  backgroundColor: "transparent", // semi-transparente
-  backdropFilter: "blur(6px)", // desenfoque del fondo
+  backgroundColor: "transparent", 
+  backdropFilter: "blur(6px)", 
   boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
   display: "flex",
   justifyContent: "space-between",

@@ -1,20 +1,8 @@
 import { Dialog, DialogContent } from "@mui/material";
 import DialogMessageBox from "../utils/DialogMessageBox";
-import type { Customer } from "../../@types/customer";
-import type { PasswordDTO } from "../../@types/passwors";
 import PasswordForm from "../Forms/password/PasswordForm";
 import CloseButton from "../utils/CloseButton";
-
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  setFlag?: (flag: boolean) => void;
-  flag?: boolean;
-  customer?: Customer | undefined;
-  isEdit: boolean;
-  password?: PasswordDTO;
-  setPassword?: any;
-}
+import type { Props } from "../types/password.types";
 
 export default function CustomersPasswordsCreate({
   onClose,

@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 
 import LoadingScreen from "./components/utils/LoadingScreen";
 import Register from "./pages/register";
+import AccountingServices from "./pages/services/Index";
 
 function App() {
   const dispatch = useDispatch<any>();
@@ -63,6 +64,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ClientsSociety />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/accountingServices"
+          element={
+            <ProtectedRoute>
+              <AccountingServices />
             </ProtectedRoute>
           }
         />

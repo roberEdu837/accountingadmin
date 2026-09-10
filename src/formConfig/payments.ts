@@ -2,7 +2,6 @@ import * as Yup from "yup";
 import { getTodayDate } from "../utils";
 
 export const getPaymentSchema = (debt: number) => {
-  console.log(debt,'aqui');
   return Yup.object({
     amount: Yup.number()
       .typeError("Debe ser un número")
@@ -23,12 +22,13 @@ export const getInitialValues = (id: number) => ({
   paymentDate: getTodayDate(),
   paymentMethod: null as string | null,
   monthlyAccountingId: id,
+  accountingServiceId: undefined as number | undefined
 });
 
 export interface Props {
   open: boolean;
   onClose: () => void;
-  id: number;
+  id: any;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
   debt: number;

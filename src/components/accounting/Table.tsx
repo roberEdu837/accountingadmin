@@ -18,30 +18,33 @@ import DialogAccountingEdit from "./DialogUpdate";
 import { columnsAccounting } from "../../constants";
 import AccountingTableBody from "./TableBody";
 import { useModal } from "../../hooks";
-import type { Customer, MonthlyAccounting } from "../../@types/customer";
+import type { Customer, MonthlyAccounting, TableMonthlyAccounting } from "../../@types/customer";
 import type { FilterAccounting } from "../../@types/FilterAccounting";
 import CheckDebts from "../utils/CheckDebts";
 import {
   createAccounting,
   getaccounting,
-  getHasDebtsAccountings,
 } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "../utils/LoadingScreen";
 import { setLoadingFull } from "../../redux/slices/userSlice";
+import DialogAccountingServices from "../accountingServices/DialogAccountingServices";
+import { PRIORITY } from "../../constants/constants";
 
 export default function AccountingTable() {
-  const editAccountingModal = useModal<MonthlyAccounting>();
+  const editAccountingModal = useModal<TableMonthlyAccounting>();
   const passwordsModal = useModal<Customer>();
   const paymentModal = useModal<{
     id: number;
-    debt: number;
+    debtAccounting: number;
     isInSociety: boolean;
   }>();
-  const paymentsListModal = useModal<MonthlyAccounting>();
+  const paymentsListModal = useModal<TableMonthlyAccounting>();
+  const servicesModal = useModal<number>();
+
   const checkModal = useModal();
 
-  const [accountings, setAccountings] = useState<MonthlyAccounting[]>([]);
+  const [accountings, setAccountings] = useState<TableMonthlyAccounting[]>([]);
   const [flag, setFlag] = useState(false);
 
   const today = new Date();
@@ -61,17 +64,15 @@ export default function AccountingTable() {
   const [total, setTotal] = useState<number>(0);
 
   const { loadingFull } = useSelector((state: any) => state.user);
-  const priority: Record<string, number> = {
-    PENDIENTE: 0,
-    INCONCLUSO: 1,
-    REALIZADO: 2,
-  };
+
+
+
   const getAccounting = async () => {
     try {
       const { data } = await getaccounting(filter);
       const ordered = data.sort(
         (a: MonthlyAccounting, b: MonthlyAccounting) =>
-          priority[a.stateObligation] - priority[b.stateObligation]
+          PRIORITY[a.stateObligation] - PRIORITY[b.stateObligation]
       );
       setAccountings(ordered);
     } catch (err) {
@@ -94,24 +95,14 @@ export default function AccountingTable() {
     })();
   }, [filter, flag]);
 
-  const handleAddPayment = (row: MonthlyAccounting, pending: number) => {
+  const handleAddPayment = (row: TableMonthlyAccounting) => {
     paymentModal.openModal({
       id: row.id,
-      debt: pending,
+      debtAccounting: row.debtAccounting,
       isInSociety: row.isInSociety,
     });
   };
 
-  const checkDebts = async () => {
-    const { data } = await getHasDebtsAccountings();
-    if (data === true) {
-      checkModal.openModal(data);
-    }
-  };
-
-  useEffect(() => {
-    checkDebts();
-  }, []);
 
   const CalculateTotalDebt = () => {
     let totaldebit = 0;
@@ -119,46 +110,17 @@ export default function AccountingTable() {
     accountings.forEach((item) => {
       const payments = item.paymets?.reduce((sum, p) => sum + p.amount, 0) || 0;
       const debt = item.honorary - payments;
-      totaldebit += debt;
+      if (item.stateObligation === "REALIZADO") {
+        totaldebit += debt;
+      }
     });
     setTotal(totaldebit);
   };
 
-  const CalculateHonorary = () => {
-    const totalValue = accountings.reduce((acc, row) => {
-      const associatePayment = row.honorary;
-
-      return acc + associatePayment;
-    }, 0);
-    setTotal(totalValue);
-  };
-
-  const CalculatePaid = () =>{
-     let paid = 0;
-
-    accountings.forEach((item) => {
-      const payments = item.paymets?.reduce((sum, p) => sum + p.amount, 0) || 0;
-      paid += payments;
-    });
-    setTotal(paid);
-  }
 
   useEffect(() => {
-    if (accountings) {
-      if (filter.monthlyPaymentCompleted === false) {
-        CalculateTotalDebt();
-      }
-      if (filter.monthlyPaymentCompleted === undefined) {
-        CalculateHonorary();
-      }
-
-      if(filter.monthlyPaymentCompleted){
-        CalculatePaid()
-      }
-    }
-  }, [accountings]);
-
-  
+    CalculateTotalDebt();
+  }, [accountings, filter]);
 
   return (
     <Box>
@@ -189,7 +151,7 @@ export default function AccountingTable() {
                     </span>
                     <span style={{ fontSize: "1.5rem" }}>
                       {" "}
-                      ${total.toLocaleString('es-MX', {minimumFractionDigits: 2})}
+                      ${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                     </span>
                   </Box>
                 </th>
@@ -210,6 +172,7 @@ export default function AccountingTable() {
                 accountings={accountings}
                 openModalPasswords={passwordsModal.openModal}
                 openModalEditAccounting={editAccountingModal.openModal}
+                openModalAccountingServices={servicesModal.openModal}
                 handleAddPayment={handleAddPayment}
                 setCurrentAccounting={paymentsListModal.setData}
                 handleOpenPaymentsList={paymentsListModal.openModal}
@@ -232,7 +195,7 @@ export default function AccountingTable() {
         <DialogPayments
           onClose={paymentModal.closeModal}
           id={paymentModal.data.id}
-          debt={paymentModal.data.debt}
+          debt={paymentModal.data.debtAccounting}
           isInSociety={paymentModal.data.isInSociety}
           open={paymentModal.open}
           flag={flag}
@@ -242,7 +205,7 @@ export default function AccountingTable() {
 
       <ModalPasswords
         customer={passwordsModal.data}
-        handleClose={passwordsModal.closeModal}
+        onClose={passwordsModal.closeModal}
         open={passwordsModal.open}
       />
 
@@ -255,9 +218,19 @@ export default function AccountingTable() {
       />
 
       <DialogPaymentsList
-        accounting={paymentsListModal.data}
         handleClose={paymentsListModal.closeModal}
         open={paymentsListModal.open}
+        flag={flag}
+        setFlag={setFlag}
+        monthlyAccountingId={paymentsListModal.data?.id}
+        monthlyPaymentCompleted={paymentsListModal.data?.monthlyPaymentCompleted}
+        nameCustomer={paymentsListModal.data?.customer?.socialReason}
+      />
+
+      <DialogAccountingServices
+        open={servicesModal.open}
+        onClose={servicesModal.closeModal}
+        id={servicesModal.data ?? 0}
         flag={flag}
         setFlag={setFlag}
       />

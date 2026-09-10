@@ -20,4 +20,10 @@ export const NavItems = [
     path: "/clientsSociety",
     icon: <Diversity3Icon sx={{color: 'white', mr: 2}}/>,
   },
+  {
+   label: "Servicios Contables",
+   path: "/accountingServices",
+   icon: <CalculateIcon sx={{color: 'white', mr: 2}}/>,
+  }
+
 ];

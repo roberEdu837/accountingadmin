@@ -1,16 +1,8 @@
 import { Dialog, DialogContent } from "@mui/material";
-import type { Customer } from "../../@types/customer";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import CustomerForm from "../Forms/customer/Customer";
 import CloseButton from "../utils/CloseButton";
-
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  setFlag?: (flag: boolean) => void;
-  flag?: boolean;
-  customer: Customer | undefined;
-}
+import type { Props } from "../types/customer.types";
 
 export default function DialogCustomers({
   onClose,

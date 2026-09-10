@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+
+
 export function useModal<T>() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<T | undefined>(undefined);
@@ -13,7 +15,7 @@ const closeModal = () => {
   setOpen(false);
   setTimeout(() => {
     setData(undefined);
-  }, 300); // 300ms coincide con la animación de cierre de MUI Dialog
+  }, 300); 
 };
 
 

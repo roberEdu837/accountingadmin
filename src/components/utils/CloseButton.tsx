@@ -1,7 +1,7 @@
 import { IconButton } from "@mui/material";
 import { Icons } from "./Icons";
 interface Props {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function CloseButton({ onClose }: Props) {

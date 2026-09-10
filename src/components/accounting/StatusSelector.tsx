@@ -1,31 +1,21 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { Chip, Menu, MenuItem } from "@mui/material";
 import { patchAccounting } from "../../services";
-
-const opciones = ["PENDIENTE", "INCONCLUSO", "REALIZADO"];
-const colores: Record<string, "error" | "warning" | "success"> = {
-  PENDIENTE: "error",
-  INCONCLUSO: "warning",
-  REALIZADO: "success",
-};
+import { COLORS, OPTIONS } from "../../constants/constants";
+import type { StatusSelectorProps } from "../types/accounting.types";
 
 export default function StatusSelector({
   valorInicial,
   id,
   setFlag,
   flag
-}: {
-  valorInicial: string;
-  id: number;
-  setFlag?: (value: boolean) => void;
-  flag: boolean
-}) {
+}: StatusSelectorProps) {
   const [valor, setValor] = useState(valorInicial);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -47,7 +37,7 @@ export default function StatusSelector({
     <>
       <Chip
         label={valor}
-        color={colores[valor]}
+        color={COLORS[valor]}
         variant="outlined"
         size="small"
         onClick={handleClick}
@@ -66,7 +56,7 @@ export default function StatusSelector({
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
-        {opciones.map((op) => (
+        {OPTIONS.map((op) => (
           <MenuItem key={op} onClick={() => handleClose(op)}>
             {op}
           </MenuItem>

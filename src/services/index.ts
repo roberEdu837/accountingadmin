@@ -24,5 +24,5 @@ export {
   postPasswordByCustomer,
 } from "./passwords.service";
 
-export { postPayment, getPaymentsByAccountingId } from "./payments.service";
+export { postPayment, deletePayment } from "./payments.service";
 export { login,register} from './user.service'

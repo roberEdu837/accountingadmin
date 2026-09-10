@@ -14,14 +14,9 @@ import { patchClientInSocietyById } from "../../services";
 import { Icons } from "../utils/Icons";
 import CloseButton from "../utils/CloseButton";
 import { useState } from "react";
+import type { Props } from "../types/accountingServices.types";
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  id: number;
-  setFlag: (flag: boolean) => void;
-  flag: boolean;
-}
+
 export default function PaymentDateGenerator({
   open,
   onClose,

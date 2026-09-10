@@ -45,10 +45,8 @@ export const logIn = (userData: any, callback: any) => (dispatch: any) => {
 };
 
 export const logOut = (callback: any) => async (dispatch: any) => {
-  // Limpiamos el localStorage para eliminar los datos del usuario
   window.localStorage.removeItem("accounting_user");
   window.localStorage.removeItem("accounting_tkn");
-  // Despachamos la acción 'logout' para actualizar el estado
   dispatch(logout());
 
   callback();
@@ -56,7 +54,6 @@ export const logOut = (callback: any) => async (dispatch: any) => {
 
 export const initialiceble = () => (dispatch: any) => {
   try {
-    // Obtenemos los datos del usuario desde el localStorage
     let user = window.localStorage.getItem("accounting_user");
     let accessToken = window.localStorage.getItem("accounting_tkn");
 
@@ -68,9 +65,7 @@ export const initialiceble = () => (dispatch: any) => {
       dispatch(
         initialize({ user: user, isAuthenticated: true, isInitialized: true })
       );
-      console.log("si");
     } else {
-      console.log("no");
       dispatch(
         initialize({ isAuthenticated: false, user: null, isInitialized: true })
       );

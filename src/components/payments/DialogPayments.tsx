@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  Autocomplete,
 } from "@mui/material";
 import { Formik } from "formik";
 import ButtonSubmit from "../utils/Button";
@@ -25,19 +26,37 @@ import {
   postClientIsSociety,
   postPayment,
 } from "../../services";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseButton from "../utils/CloseButton";
+import type {  TableAccountingService } from "../../@types/services";
+import { getAccountingServicesById, patchAccountingServices } from "../../services/services.service";
 
 export default function DialogPayments({
   onClose,
   open,
   id,
-  flag,
-  setFlag,
   debt,
   isInSociety,
+  flag,
+  setFlag
 }: Props) {
+
   const [loading, setLoading] = useState(false);
+  const [services, setServices] = useState<TableAccountingService[]>([]);
+  const [currentDebt, setCurrentDebt] = useState<number>(0);
+  const defaultOption = { id: '', name: 'Honorarios contables' };
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const { data } = await getAccountingServicesById(id);
+
+      const result = data.filter((item) => item.debt > 0 || item.status === 'PENDING');
+      setServices(result);
+    };
+    fetchServices();
+
+    setCurrentDebt(debt);
+  }, [id]);
 
   const handlePostPayment = async (values: any) => {
     ToastNotification(`El pago se agregó correctamente`, "success");
@@ -49,12 +68,13 @@ export default function DialogPayments({
     amount: number,
     paymetId: number
   ) => {
-    await postClientIsSociety(id,amount,paymetId);
+    await postClientIsSociety(id, amount, paymetId);
     ToastNotification(
       `Se agregó un registro en Cliente en Sociedad`,
       "success"
     );
   };
+
 
   const handlePatchAccounting = async (id: number) => {
     await patchAccounting(id, {
@@ -73,28 +93,29 @@ export default function DialogPayments({
       <DialogContent>
         <Formik
           initialValues={getInitialValues(id)}
-          validationSchema={getPaymentSchema(debt)}
+          validationSchema={getPaymentSchema(currentDebt)}
           onSubmit={async (values, { setSubmitting }) => {
             setLoading(true);
             try {
-              const { amount } = values;
-              const { data } = await handlePostPayment(values); // 1. Guardar pago
+              const { amount, accountingServiceId } = values;
+              const { data } = await handlePostPayment(values);
 
-              if ( isInSociety) {
-                await handlePostClientInSociety(id, amount, data.id); // 2. Cliente en sociedad
+              if (isInSociety) { await handlePostClientInSociety(id, amount, data.id); }
+
+              if (debt === amount && accountingServiceId === undefined ) { await handlePatchAccounting(id); }
+
+              if(currentDebt === amount && accountingServiceId){
+                await patchAccountingServices(accountingServiceId)
               }
 
-              if (debt === amount) {
-                await handlePatchAccounting(id); // 3. Contabilidad completada
-              }
-
-              if (setFlag) setFlag(!flag); // 4. Actualizar flag
             } catch (error) {
               console.error("Error al enviar el formulario:", error);
             } finally {
               setSubmitting(false);
               onClose();
               setLoading(false);
+              if(setFlag)
+              setFlag(!flag)
             }
           }}
         >
@@ -105,11 +126,50 @@ export default function DialogPayments({
             values,
             errors,
             touched,
+            setFieldValue,
           }) => (
             (
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid size={12}>
+
+
+                    <Autocomplete
+                      fullWidth
+                      id="accountingServiceId"
+                      disablePortal
+                      options={services.length > 0 ? services : [defaultOption]}
+
+                      getOptionLabel={(option: any) => {
+                        if (typeof option === 'string') return option;
+                        return option.services?.name || option.name || '';
+                      }}
+
+                      value={
+                        !values.accountingServiceId
+                          ? defaultOption
+                          : services.find((service: any) => service.id === values.accountingServiceId) || null
+                      }
+
+                      onChange={(_, newValue: any) => {
+                        console.log(newValue)
+                        setFieldValue('accountingServiceId', newValue ? newValue.id : '');
+                        setCurrentDebt(newValue?.debt ?? debt)
+                      }}
+                      onBlur={handleBlur}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="accountingServiceId"
+                          label="Servicio"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid size={12}>
+                    <InputLabel id="month-select-label">
+                        Pago a realizar (Deuda actual: ${currentDebt.toLocaleString('es-MX', { minimumFractionDigits: 2 })})
+                      </InputLabel>
                     <TextField
                       fullWidth
                       margin="dense"

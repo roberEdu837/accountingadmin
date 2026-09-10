@@ -12,65 +12,75 @@ import {
 } from "@mui/material";
 import DialogMessageBox from "../utils/DialogMessageBox";
 import Paper from "@mui/material/Paper";
-import type { MonthlyAccounting } from "../../@types/customer";
 import { formatDate, paymentMethods } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToastNotification from "../utils/ToastNotification";
 import { useEffect, useState } from "react";
-import { getPaymentsByAccountingId, patchAccounting } from "../../services";
+import { deletePayment, patchAccounting } from "../../services";
 import CloseButton from "../utils/CloseButton";
-interface Props {
-  open: boolean;
-  handleClose: any;
-  accounting: MonthlyAccounting | undefined;
-  setFlag: (flag: boolean) => void;
-  flag: boolean;
-}
+import type { Payments, Props } from "../../@types/payments";
+import { getPaymentsByAccountingId } from "../../services/payments.service";
+
 
 function DialogPaymentsList({
   handleClose,
   open,
-  accounting,
+  monthlyAccountingId,
   flag,
+  monthlyPaymentCompleted,
+  nameCustomer,
   setFlag,
 }: Props) {
-  const [payments, setPayments] = useState<any[]>([]);
+  const [payments, setPayments] = useState<Payments[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setPayments(accounting?.paymets || []);
-  }, [accounting]);
+    const fetchPayments = async () => {
+      if (monthlyAccountingId) {
+        const response = await getPaymentsByAccountingId(monthlyAccountingId);
+        setPayments(response.data || []);
+      }
+    };
 
-  const deletePayment = async (id: number | undefined) => {
+    fetchPayments();
+  }, [monthlyAccountingId]);
+
+
+
+  const deletePaymentAsync = async (id: number | undefined) => {
     if (!id) return;
     setLoading(true);
-    if (accounting?.monthlyPaymentCompleted === true) {
-      await patchAccounting(accounting?.id || 0, {
+    if (monthlyPaymentCompleted === true) {
+      await patchAccounting(monthlyAccountingId || 0, {
         monthlyPaymentCompleted: false,
       });
     }
 
-    await getPaymentsByAccountingId(id);
+    await deletePayment(id);
 
     ToastNotification(`El pago se eliminó correctamente`, "success");
 
-    // 3. Actualizamos en el padre (setAccountings probablemente tiene la lista de accountings completa)
     const payment = payments.filter((payment) => {
       return payment.id !== id;
     });
     setPayments(payment);
-    setFlag(!flag);
     setLoading(false);
   };
 
+  const onClose = () => {
+    handleClose()
+    setFlag(!flag);
+  }
+
+
   return (
     <>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
         <DialogMessageBox
           title="PAGOS REGISTRADOS"
-          subtitle={`CLIENTE: ${accounting?.customer?.socialReason || ""}`}
+          subtitle={`CLIENTE: ${nameCustomer}`}
         />
-        <CloseButton onClose={handleClose} />
+        <CloseButton onClose={onClose} />
 
         <DialogContent>
           <TableContainer component={Paper}>
@@ -78,6 +88,7 @@ function DialogPaymentsList({
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
+                  <TableCell>CONCEPTO</TableCell>
                   <TableCell align="center">MONTO</TableCell>
                   <TableCell align="center">FECHA DE PAGO</TableCell>
                   <TableCell align="center">METODO DE PAGO</TableCell>
@@ -93,6 +104,7 @@ function DialogPaymentsList({
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
+                    <TableCell align="center">{row.accountingService?.services.name ?? "Honorarios Contables"}</TableCell>
                     <TableCell align="center">{row.amount}</TableCell>
                     <TableCell align="center">
                       {formatDate(row.paymentDate)}
@@ -104,7 +116,7 @@ function DialogPaymentsList({
                     <TableCell align="center">
                       <Tooltip title="Eliminar">
                         <IconButton
-                          onClick={() => deletePayment(row.id)}
+                          onClick={() => deletePaymentAsync(row.id)}
                           loading={loading}
                         >
                           <DeleteIcon sx={{ color: "#09356f" }} />

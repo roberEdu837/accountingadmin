@@ -12,7 +12,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import InfoIcon from "@mui/icons-material/Info";
-import type { MonthlyAccounting } from "../../../@types/customer";
+import type { TableMonthlyAccounting } from "../../../@types/customer";
 import { patchAccounting } from "../../../services";
 import ToastNotification from "../../utils/ToastNotification";
 import ButtonSubmit from "../../utils/Button";
@@ -20,18 +20,14 @@ import { Icons } from "../../utils/Icons";
 import { useState } from "react";
 interface Props {
   handleClose: () => void;
-  accounting: MonthlyAccounting | undefined;
+  accounting: TableMonthlyAccounting | undefined;
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
 }
 function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
   const [loading, setLoading] = useState(false);
 
-  function getTotalPayments(accounting?: MonthlyAccounting): number {
-    if (!accounting || !accounting.paymets) return 0;
-    return accounting.paymets.reduce((acc, payment) => acc + payment.amount, 0);
-  }
-  console.log(accounting);
+
   return (
     <Formik
       initialValues={{
@@ -44,8 +40,8 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
           .typeError("Debe ser un número")
           .required("El honorario es requerido")
           .min(
-            getTotalPayments(accounting),
-            `Debe ser mayor o igual ${getTotalPayments(accounting)}`
+            accounting?.debt || 0,
+            `Debe ser mayor o igual ${accounting?.debt || 0}`
           ),
       })}
       onSubmit={async (values, { setSubmitting }) => {
@@ -60,7 +56,7 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
             monthlyPaymentCompleted:
               honorary > accounting.honorary
                 ? false
-                : honorary === getTotalPayments(accounting)
+                : honorary === accounting.paid
                 ? true
                 : undefined,
           });

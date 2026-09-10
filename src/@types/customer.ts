@@ -1,5 +1,6 @@
 import type { Password } from "./passwors";
 import type { Payments } from "./payments";
+import type { TableAccountingService } from "./services";
 
 export type Customer = {
   id?: number;
@@ -13,6 +14,31 @@ export type Customer = {
   isInSociety: boolean;
   notificationSent?: boolean;
   passwords:Password[]
+};
+
+
+export type TableMonthlyAccounting = {
+  id: number;
+  month: number;
+  year: number;
+  stateObligation: string;
+  honorary: number;
+  customerId: number;
+  customer: Customer;
+  rfcTaxPaymentDate: Date;
+  periodicity: string;
+  isInSociety: boolean;
+  monthlyPaymentCompleted: boolean;
+  // Campos calculados por el backend:
+  paid: number;
+  debt: number;
+  totalToPay: number;
+  paidAccounting: number;
+  paidServices: number;
+  debtAccounting: number;
+  debtServices: number;
+  accountingServices: TableAccountingService[];
+  paymets: Payments[];
 };
 
 export type MonthlyAccounting = {

@@ -19,7 +19,7 @@ interface Props {
   setFlag?: (flag: boolean) => void;
   flag?: boolean;
   customer?: Customer | undefined;
-  isEdit: boolean;
+  isEdit?: boolean;
   password?: PasswordDTO;
   setPassword:any
 }

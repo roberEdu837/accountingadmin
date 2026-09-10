@@ -12,7 +12,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import CloseIcon from '@mui/icons-material/Close';
-
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 export const Icons = {
   edit: <EditOutlinedIcon sx={iconLargeStyle} />,
@@ -26,5 +26,6 @@ export const Icons = {
   keyIcon: <LockOpenIcon sx={iconLargeStyle} />,
   keyIconvertical: <LockOpenIcon sx={iconLargeStyleVertical} />,
   closeIcon: <CloseIcon sx={iconLargeStyle} />,
+  miscellaneousServices: <ReceiptLongIcon sx={iconLargeStyle} />
 
 };
