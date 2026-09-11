@@ -39,10 +39,7 @@ function AccountingForm({ handleClose, accounting, setFlag, flag }: Props) {
         honorary: Yup.number()
           .typeError("Debe ser un número")
           .required("El honorario es requerido")
-          .min(
-            accounting?.debt || 0,
-            `Debe ser mayor o igual ${accounting?.debt || 0}`
-          ),
+         ,
       })}
       onSubmit={async (values, { setSubmitting }) => {
         setLoading(true);
