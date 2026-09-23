@@ -28,7 +28,7 @@ import {
 } from "../../services";
 import { useEffect, useState } from "react";
 import CloseButton from "../utils/CloseButton";
-import type {  TableAccountingService } from "../../@types/services";
+import type { TableAccountingService } from "../../@types/services";
 import { getAccountingServicesById, patchAccountingServices } from "../../services/services.service";
 
 export default function DialogPayments({
@@ -38,6 +38,7 @@ export default function DialogPayments({
   debt,
   isInSociety,
   flag,
+  debtTotal,
   setFlag
 }: Props) {
 
@@ -102,9 +103,9 @@ export default function DialogPayments({
 
               if (isInSociety) { await handlePostClientInSociety(id, amount, data.id); }
 
-              if (debt === amount && accountingServiceId === undefined ) { await handlePatchAccounting(id); }
+              if (debtTotal === amount) { await handlePatchAccounting(id); }
 
-              if(currentDebt === amount && accountingServiceId){
+              if (currentDebt === amount && accountingServiceId) {
                 await patchAccountingServices(accountingServiceId)
               }
 
@@ -114,8 +115,8 @@ export default function DialogPayments({
               setSubmitting(false);
               onClose();
               setLoading(false);
-              if(setFlag)
-              setFlag(!flag)
+              if (setFlag)
+                setFlag(!flag)
             }
           }}
         >
@@ -132,8 +133,6 @@ export default function DialogPayments({
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid size={12}>
-
-
                     <Autocomplete
                       fullWidth
                       id="accountingServiceId"
@@ -168,8 +167,8 @@ export default function DialogPayments({
                   </Grid>
                   <Grid size={12}>
                     <InputLabel id="month-select-label">
-                        Pago a realizar (Deuda actual: ${currentDebt.toLocaleString('es-MX', { minimumFractionDigits: 2 })})
-                      </InputLabel>
+                      Pago a realizar (Deuda actual: ${currentDebt.toLocaleString('es-MX', { minimumFractionDigits: 2 })})
+                    </InputLabel>
                     <TextField
                       fullWidth
                       margin="dense"

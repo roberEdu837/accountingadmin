@@ -33,4 +33,5 @@ export interface Props {
   flag?: boolean;
   debt: number;
   isInSociety: boolean;
+  debtTotal?: number;
 }

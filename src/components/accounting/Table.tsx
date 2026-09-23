@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   TableCell,
@@ -38,6 +38,7 @@ export default function AccountingTable() {
     id: number;
     debtAccounting: number;
     isInSociety: boolean;
+    debtTotal:number
   }>();
   const paymentsListModal = useModal<TableMonthlyAccounting>();
   const servicesModal = useModal<number>();
@@ -62,9 +63,11 @@ export default function AccountingTable() {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("md"));
   const dispatch = useDispatch<any>();
   const [total, setTotal] = useState<number>(0);
+  const [todalDebts, setTotalDebts] = useState<number>(0);
+  const [todalPaid, setTotalPaid] = useState<number>(0);
+
 
   const { loadingFull } = useSelector((state: any) => state.user);
-
 
 
   const getAccounting = async () => {
@@ -100,27 +103,30 @@ export default function AccountingTable() {
       id: row.id,
       debtAccounting: row.debtAccounting,
       isInSociety: row.isInSociety,
-    });
+      debtTotal: row.debt
+    }); 
   };
 
+  const calculateTotals = useCallback(() => {
+    const sumDebt = accountings.reduce((sum, item) => sum + (Number(item.debt) || 0), 0);
+    const sumPaid = accountings.reduce((sum, item) => sum + (Number(item.paid) || 0), 0);
 
-  const CalculateTotalDebt = () => {
-    let totaldebit = 0;
+    setTotalDebts(sumDebt);
+    setTotalPaid(sumPaid);
 
-    accountings.forEach((item) => {
-      const payments = item.paymets?.reduce((sum, p) => sum + p.amount, 0) || 0;
-      const debt = item.honorary - payments;
-      if (item.stateObligation === "REALIZADO") {
-        totaldebit += debt;
-      }
-    });
-    setTotal(totaldebit);
-  };
+    if (filter.monthlyPaymentCompleted === undefined) {
 
+      setTotal(0);
+    } else if (filter.monthlyPaymentCompleted === false) {
+      setTotal(sumDebt);
+    } else if (filter.monthlyPaymentCompleted === true) {
+      setTotal(sumPaid);
+    }
+  }, [accountings, filter?.monthlyPaymentCompleted]);
 
   useEffect(() => {
-    CalculateTotalDebt();
-  }, [accountings, filter]);
+    calculateTotals();
+  }, [calculateTotals]);
 
   return (
     <Box>
@@ -149,21 +155,34 @@ export default function AccountingTable() {
                     <span style={{ fontSize: "1.5rem" }}>
                       Contabilidad Mensual
                     </span>
-                    <span style={{ fontSize: "1.5rem" }}>
-                      {" "}
-                      ${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                    </span>
+                    {total > 0 && (
+                      <span style={{ fontSize: "1.5rem" }}>
+                        ${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                      </span>
+                    )}
                   </Box>
                 </th>
               </tr>
             </thead>
             <TableHead>
               <TableRow>
-                {columnsAccounting?.map((col) => (
-                  <TableCell key={col.key} align={col.align as any}>
-                    {col.label}
-                  </TableCell>
-                ))}
+                {columnsAccounting?.map((col) => {
+                  const isTotalCobrar = col.label === 'TOTAL A COBRAR';
+                  const isTotalPagado = col.label === 'TOTAL PAGADO';
+                  const { monthlyPaymentCompleted } = filter;
+
+                  return (
+                    <TableCell key={col.key} align={col.align as any}>
+                      <div style={{ fontWeight: 'bold', minHeight: '20px', marginBottom: '4px' }}>
+                        {monthlyPaymentCompleted === undefined && isTotalCobrar && todalDebts !== undefined &&
+                          `$` + Number(todalDebts).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                        {monthlyPaymentCompleted === undefined && isTotalPagado && todalPaid !== undefined &&
+                          `$` + Number(todalPaid).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                      </div>
+                      <div>{col.label}</div>
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHead>
 
@@ -200,6 +219,7 @@ export default function AccountingTable() {
           open={paymentModal.open}
           flag={flag}
           setFlag={setFlag}
+          debtTotal={paymentModal.data.debtTotal}
         />
       )}
 
